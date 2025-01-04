@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://t6xwa6fxikjk"]
+
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_d5ssp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rwfdx"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.74902)
+
+[node name="systemUI" type="Node"]
+
+[node name="cl" type="CanvasLayer" parent="."]
+
+[node name="Top" type="Control" parent="cl"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="cl/Top"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 21.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rwfdx")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="cl/Top/Panel"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="cl/Top/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_fonts/normal_font = ExtResource("1_d5ssp")
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "System Message!"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

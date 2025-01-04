@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://buo50yytlpp8c"]
+
+[ext_resource type="Texture2D" uid="uid://ctmudicgkuy65" path="res://icon.svg" id="1_0a2jk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hdpvp"]
+
+[node name="Projectile" type="RigidBody2D"]
+top_level = true
+y_sort_enabled = true
+collision_layer = 0
+collision_mask = 0
+gravity_scale = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_hdpvp")
+debug_color = Color(1, 0, 0, 0.419608)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("1_0a2jk")

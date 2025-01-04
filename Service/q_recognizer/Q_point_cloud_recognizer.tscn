@@ -1,0 +1,11 @@
+[gd_scene load_steps=6 format=3 uid="uid://h738q350bg6b"]
+
+[ext_resource type="Script" path="res://Service/q_recognizer/q_point_cloud_recognizer.gd" id="1_l0wts"]
+[ext_resource type="Resource" path="res://Service/gesture_templates/arrow_1.tres" id="2_s5bv7"]
+[ext_resource type="Resource" path="res://Service/gesture_templates/arrow_2.tres" id="3_fcvqt"]
+[ext_resource type="Resource" path="res://Service/gesture_templates/heart_1.tres" id="4_j2y5j"]
+[ext_resource type="Resource" path="res://Service/gesture_templates/heart_2.tres" id="5_feew2"]
+
+[node name="Node" type="Node"]
+script = ExtResource("1_l0wts")
+gesture_set = Array[Resource("res://Service/q_recognizer/gesture.gd")]([ExtResource("2_s5bv7"), ExtResource("3_fcvqt"), ExtResource("4_j2y5j"), ExtResource("5_feew2")])

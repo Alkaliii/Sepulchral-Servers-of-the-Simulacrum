@@ -1,0 +1,53 @@
+[gd_scene load_steps=2 format=3 uid="uid://6qqjdm8g8tg3"]
+
+[ext_resource type="Script" path="res://Game/playroom.gd" id="1_rcbqc"]
+
+[node name="Playroom" type="Node"]
+script = ExtResource("1_rcbqc")
+
+[node name="PRUI" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="LobbyUI" type="Control" parent="PRUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PRUI/LobbyUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RoomInput" type="LineEdit" parent="PRUI/LobbyUI/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "ROOM"
+
+[node name="JoinRoom" type="Button" parent="PRUI/LobbyUI/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="Queue" type="Button" parent="PRUI/LobbyUI/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Queue"
+
+[node name="debug" type="TextEdit" parent="PRUI/LobbyUI"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[connection signal="pressed" from="PRUI/LobbyUI/VBoxContainer/JoinRoom" to="." method="_on_join_room_pressed"]

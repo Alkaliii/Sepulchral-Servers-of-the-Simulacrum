@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://csx8nqe467f47"]
+
+[ext_resource type="Script" path="res://Game/hit_detector.gd" id="1_p40ga"]
+
+[node name="HitDetector" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_p40ga")
