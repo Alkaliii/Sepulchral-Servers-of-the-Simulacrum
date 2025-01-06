@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@export var monster_data : system_monster
+@export var monster_weapon : system_weapon
 
 @export var SPEED = 80.0
 @export var SPEED_MULTIPLIER := 1.0
@@ -8,13 +10,73 @@ extends CharacterBody2D
 @export var ACCELERATION := 0.3
 var DIRECTION : Vector2 = Vector2.ZERO
 
+@onready var hit_detector = $HitDetector
+@onready var healthbar = $CanvasLayer/stats/MarginContainer/VBoxContainer/healthbar
+
 #behaviours are processed on host
+
+const FTXT = preload("res://Game/float_text.tscn")
+
+var halfway_dead := false
+var dead := false
+
+func _ready():
+	monster_data.status.setup(monster_data.base_health)
+	healthbar.max_value = monster_data.base_health
+	healthbar.value = monster_data.status.health
+	hit_detector.DAMAGED.connect(on_damage)
+	#hit_detector.AFFLICTED.connect()
+	
+	await get_tree().create_timer(3.0).timeout
+	roar(str("You encounter [shake]",monster_data.name))
+
+func on_damage(amt : int, click : int):
+	#check condition before validating
+	monster_data.status._damage(amt)
+	disp_ftxt(str(amt),global_position - Vector2(0,45),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
+	healthbar.value = monster_data.status.health
+	
+	var cam = get_tree().get_first_node_in_group("camera")
+	match click:
+		0: cam.add_trauma(0.4,0.9)
+		1: cam.add_trauma(1,0.8)
+	
+	check_progress()
+
+func check_progress():
+	if monster_data.status.health <= 0 and !dead:
+		dead = true
+		roar()
+	elif monster_data.status.health < (monster_data.status.max_health * .5) and !halfway_dead:
+		halfway_dead = true
+		roar(str(monster_data.name," is weak!"))
+
+func roar(msg : String = "!!!"):
+	SystemUI.play_message(msg,6)
+	App.can_click = false
+	var cam = get_tree().get_first_node_in_group("camera")
+	cam.set_target($Sprite,Vector2(0,-45))
+	await get_tree().create_timer(0.5).timeout
+	cam.add_trauma(10)
+	await get_tree().create_timer(2.5).timeout
+	cam.set_target(get_tree().get_first_node_in_group("player"))
+	App.can_click = true
+
+func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingText.a.FLOAT, outline : Dictionary = {}):
+	var new = FTXT.instantiate()
+	new.inital_position = pos
+	new.anim = anim
+	new.text = text
+	if outline:
+		new.outline_color = outline.color
+		new.outline_size = outline.size
+	add_child(new)
 
 func _physics_process(delta):
 	if Plyrm.PLAYERData and !Plyrm.Playroom.isHost():
 		set_physics_process(false)
 		return
-	chase(delta)
+	#chase(delta)
 
 func set_behaviour_time(new_dura : float):
 	behaviour_time_elapse = 0.0

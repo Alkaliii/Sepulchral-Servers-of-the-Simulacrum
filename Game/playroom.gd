@@ -10,10 +10,11 @@ signal PR_INSERT_COIN
 signal PR_SESSION_END
 signal PR_DISCONNECT
 
-var PLAYERData : Dictionary = {}
+var PLAYER : Dictionary = {}
 var sync_objs : Array = []
 
-var players : Array = []
+var connected_players : Array = []
+var connected : bool = false
 
 # Keep a reference to the callback so it doesn't get garbage collected
 var jsBridgeReferences = []
@@ -31,17 +32,20 @@ func blog(txt : String):
 
 # Called when the host has started the game
 func onInsertCoin(args):
+	connected = true
 	print("Coin Inserted!")
 	blog("Coin Inserted!")
 	Playroom.onPlayerJoin(bridgeToJS(onPlayerJoin))
 	PR_INSERT_COIN.emit()
 
 func onSessionEnd(args):
+	connected = false
 	print("Session has ended, ",args)
 	blog(str("Session has ended, ",args))
 	PR_SESSION_END.emit()
 
 func onDisconnect(args):
+	connected = false
 	print("Disconnect!", args.code," ",args.reason)
 	blog(str("Disconnect!", args.code," ",args.reason))
 	PR_DISCONNECT.emit(args)
@@ -49,7 +53,7 @@ func onDisconnect(args):
 # Called when a new player joins the game
 func onPlayerJoin(args):
 	var state = args[0]
-	players.append(state)
+	connected_players.append(state)
 	print("new player joined: ", state.id)
 	blog(str("new player joined: ", state.id))
 	PR_PLAYER_JOIN.emit(args)
@@ -58,7 +62,7 @@ func onPlayerJoin(args):
  
 func onPlayerQuit(args):
 	var state = args[0];
-	players.erase(state)
+	connected_players.erase(state)
 	print("player quit: ", state.id)
 	blog(str("player quit: ", state.id))
 	PR_PLAYER_QUIT.emit(args)
@@ -70,7 +74,7 @@ func _on_join_room_pressed():
 	join_room.release_focus()
 	join_room.disabled = true
 	JavaScriptBridge.eval("")
-	var initOptions = JavaScriptBridge.create_object("Object");
+	var initOptions = JavaScriptBridge.create_object("Object")
 	
 	var config = ConfigFile.new()
 	var err = config.load("res://.env")
@@ -86,9 +90,9 @@ func _on_join_room_pressed():
 	initOptions.gameId = config.get_value("playroom/enviroment_variables","gameId")
 	initOptions.skipLobby = true
 	initOptions.maxPlayersPerRoom = 2
- 
+
 	#Insert Coin
-	Playroom.insertCoin(initOptions, bridgeToJS(onInsertCoin), bridgeToJS(onSessionEnd));
+	Playroom.insertCoin(initOptions, bridgeToJS(onInsertCoin), bridgeToJS(onSessionEnd))
 	
 	$PRUI/LobbyUI/VBoxContainer.hide()
 	await PR_INSERT_COIN
@@ -99,8 +103,9 @@ func _on_join_room_pressed():
 	var player = Playroom.me()
 	var pd : Dictionary = {
 		"id":player.id,
-		"host":Playroom.isHost()
+		"host":Playroom.isHost(),
+		"state":player
 	}
-	PLAYERData = pd
+	PLAYER = pd
 	Playroom.onDisconnect(bridgeToJS(onDisconnect))
 	blog(str(pd))

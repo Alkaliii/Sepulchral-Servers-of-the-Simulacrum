@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+App="*res://application.gd"
 Plyrm="*res://Game/playroom.tscn"
 SystemUI="*res://Game/system_ui.tscn"
 

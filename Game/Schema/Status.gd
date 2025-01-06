@@ -33,6 +33,20 @@ func setup(maxh : int):
 	max_health = maxh
 	health = maxh
 
+func _damage(amt : int):
+	if amt < 0: 
+		_heal(amt)
+		return
+	health -= amt
+	health = clampi(health,0,max_health)
+
+func _heal(amt : int):
+	if amt < 0:
+		_damage(amt)
+		return
+	health += amt
+	health = clampi(health,0,max_health)
+
 func process_current(delta):
 	for e in current_effects:
 		current_effects[e] -= delta

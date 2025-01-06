@@ -12,7 +12,7 @@ enum j {
 	## Can left click on players to give armor effect
 	KNIGHT,
 	
-	## Charge by 3, Max 3, Mid Damage (2)
+	## Charge by 3, Max 3, Low Damage (1)
 	## Health starts at 6
 	## Can left click on players to remove bad effects
 	MAGE,
@@ -43,7 +43,7 @@ enum j {
 	## Left click will give armor effect
 	GUARDIAN, #Knight + Knight
 	
-	## Charge by 5, Max 5, High Damage (3)
+	## Charge by 5, Max 5, Mid Damage (2)
 	## Health starts at 7
 	## Left click will clear bad effects
 	SIBYL, #Mage + Mage
@@ -69,6 +69,7 @@ enum j {
 @export var can_clear : bool = false
 @export var can_heal : bool = false
 @export var can_parry : bool = false #click attack to...?
+@export var need_sight : bool = false #clicks only validate if a raycast can be drawn from player to subject
 
 var m_pc : int = 3
 var pc_c : int = 1
@@ -88,11 +89,12 @@ func setup():
 			health = 7
 			base_dmg = 3
 			can_guard = true
+			need_sight = true
 		j.MAGE:
 			m_pc = 3
 			pc_c = 3
 			health = 6
-			base_dmg = 2
+			base_dmg = 1
 			can_clear = true
 		j.SAINT:
 			m_pc = 4
@@ -107,6 +109,7 @@ func setup():
 			base_dmg = 3
 			can_guard = true
 			can_clear = true
+			need_sight = true
 		j.DIVINE_SAGE:
 			m_pc = 4
 			pc_c = 4
@@ -127,18 +130,21 @@ func setup():
 			health = 7
 			base_dmg = 4
 			can_guard = true
+			need_sight = true
 		j.SIBYL:
 			m_pc = 5
 			pc_c = 5
 			health = 7
-			base_dmg = 3
+			base_dmg = 2
 			can_clear = true
+			need_sight = true
 		j.ORACLE:
 			m_pc = 6
 			pc_c = 3
 			health = 7
 			base_dmg = 2
 			can_heal = true
+			need_sight = true
 		j.LEGIONNAIRE: pass
 		j.ARCANE_MYSTIC: pass
 		j.OCCULT_PSYCHIC: pass

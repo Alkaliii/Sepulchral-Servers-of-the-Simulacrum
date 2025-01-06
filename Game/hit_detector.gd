@@ -17,25 +17,44 @@ signal GUARDED #like guarded lol
 signal CLICKED
 
 @export var hd_for = hdf.UNASSIGNED
+@export var sight_subject : Node2D
+@onready var cs = $CollisionShape2D
 
 var pseudo_control : Control = Control.new()
 
 func _ready():
 	add_child(pseudo_control)
+	mouse_exited.connect(on_exit)
+	if !sight_subject: 
+		sight_subject = get_parent()
 
+var exit : bool = false
 func _input_event(viewport, event, shape_idx):
+	if !App.can_click: return
 	if event is InputEventMouseButton:
-		if Input.is_action_pressed("ACTIONB"):
-			while Input.is_action_pressed("ACTIONB"):
-				if player_callback(0): 
-					print("ACTION B Intercepted.")
-					pseudo_control.accept_event()
-				await get_tree().create_timer(0.5).timeout
-				if !Input.is_action_pressed("ACTIONB"): break
+		if Input.is_action_just_pressed("ACTIONB"):
+			exit = false
+			repeat()
 		if Input.is_action_pressed("ACTIONC"):
 			if player_callback(1): 
 				print("ACTION C Intercepted.")
 				pseudo_control.accept_event()
+
+func repeat():
+	var increment := 0.5
+	while Input.is_action_pressed("ACTIONB") and !Input.is_action_just_released("ACTIONB"):
+		increment += get_process_delta_time()
+		await get_tree().process_frame
+		if increment > 0.5: 
+			increment = 0.0
+			if player_callback(0): 
+				print("ACTION B Intercepted.")
+				pseudo_control.accept_event()
+		if !Input.is_action_pressed("ACTIONB"): break
+		if exit: break
+
+func on_exit():
+	exit = true
 
 func player_callback(click : int = 0) -> bool:
 	if !is_inside_tree(): return false
@@ -59,6 +78,7 @@ func determine_and_signal_outcome(p : system_controller, c : int) -> bool:
 			if p.job and p.job.can_guard: GUARDED.emit() #free
 			print("AID! ",delta)
 		hdf.ENEMY:
+			if p.job.need_sight and !p.can_see(sight_subject): return false
 			match c:
 				0: #light
 					if p.discharge():

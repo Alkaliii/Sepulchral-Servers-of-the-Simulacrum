@@ -1,9 +1,24 @@
-[gd_scene load_steps=7 format=3 uid="uid://jvlvkbccv6ur"]
+[gd_scene load_steps=12 format=3 uid="uid://jvlvkbccv6ur"]
 
 [ext_resource type="Script" path="res://Game/boss.gd" id="1_5lnwp"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="1_yr56s"]
+[ext_resource type="Script" path="res://Game/Schema/Monster.gd" id="2_44a56"]
 [ext_resource type="Script" path="res://Game/hit_detector.gd" id="2_354gp"]
+[ext_resource type="Script" path="res://Game/Schema/Status.gd" id="3_fi5qo"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="3_xghth"]
+[ext_resource type="PackedScene" uid="uid://oas5aab7on8x" path="res://Game/damage_radius.tscn" id="6_1htco"]
+
+[sub_resource type="Resource" id="Resource_83p26"]
+script = ExtResource("3_fi5qo")
+health = 5
+current_effects = {}
+immunity = Array[int]([])
+
+[sub_resource type="Resource" id="Resource_4md7q"]
+script = ExtResource("2_44a56")
+name = "Unit Test"
+base_health = 100
+status = SubResource("Resource_83p26")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yofi6"]
 radius = 15.0
@@ -15,6 +30,16 @@ radius = 25.0
 y_sort_enabled = true
 motion_mode = 1
 script = ExtResource("1_5lnwp")
+monster_data = SubResource("Resource_4md7q")
+
+[node name="HitDetector" type="Area2D" parent="."]
+scale = Vector2(4, 4)
+script = ExtResource("2_354gp")
+hd_for = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
+position = Vector2(0, -13)
+shape = SubResource("CircleShape2D_yofi6")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 y_sort_enabled = true
@@ -25,36 +50,28 @@ hframes = 3
 vframes = 3
 frame = 1
 
-[node name="HitDetector" type="Area2D" parent="Sprite"]
-script = ExtResource("2_354gp")
-hd_for = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/HitDetector"]
-position = Vector2(0, -13)
-shape = SubResource("CircleShape2D_yofi6")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -15)
 shape = SubResource("CircleShape2D_k8ypm")
 debug_color = Color(1, 0, 0, 0.0784314)
 
-[node name="stats" type="Control" parent="."]
+[node name="DamageRadius" parent="." instance=ExtResource("6_1htco")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="stats" type="Control" parent="CanvasLayer"]
+visible = false
 z_index = 1
 custom_minimum_size = Vector2(640, 360)
 layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -320.0
-offset_top = -180.0
-offset_right = 320.0
-offset_bottom = 180.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="stats"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/stats"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -66,16 +83,16 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 90
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="stats/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/stats/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="healthbar" type="ProgressBar" parent="stats/MarginContainer/VBoxContainer"]
+[node name="healthbar" type="ProgressBar" parent="CanvasLayer/stats/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 show_percentage = false
 
-[node name="namelbl" type="RichTextLabel" parent="stats/MarginContainer/VBoxContainer"]
+[node name="namelbl" type="RichTextLabel" parent="CanvasLayer/stats/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_fonts/normal_font = ExtResource("3_xghth")

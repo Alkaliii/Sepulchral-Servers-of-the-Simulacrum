@@ -31,12 +31,13 @@ var BDMG : int = 2
 @onready var sprite = $Sprite
 @onready var tspin_vfx = $topSpinVFX
 @onready var bspin_vfx = $bottomSpinVFX
-@onready var camera = $Camera2D
 @onready var gesture = $Gesture
 
 @onready var s_cache_lbl = $UI/Stats/MarginContainer/VBoxContainer/sCache
 @onready var charge_bar = $UI/Stats/MarginContainer/VBoxContainer/Charge
+@onready var p_cache_bar = $UI/Stats/pCacheBar
 @onready var cooldown = $UI/Stats/MarginContainer/VBoxContainer/Cooldown
+@onready var p_cooldown_bar = $UI/Stats/pCooldownBar
 
 const FTXT = preload("res://Game/float_text.tscn")
 
@@ -52,7 +53,9 @@ func _ready():
 	
 	set_job()
 	charge_bar.max_value = MAX_PCACHE
+	p_cache_bar.max_value = MAX_PCACHE
 	charge_bar.value = CURRENT_PCACHE
+	p_cache_bar.value = CURRENT_PCACHE
 
 func set_job():
 	if job:
@@ -77,13 +80,13 @@ func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingTex
 func calc_light_dmg() -> int:
 	var d : int = BDMG
 	if weapon: d = weapon.calc_damage(BDMG)
-	disp_ftxt(str(d),get_global_mouse_position(),FloatingText.a.FLOAT)
+	#disp_ftxt(str(d),get_global_mouse_position(),FloatingText.a.FLOAT)
 	return d
 
 func calc_heavy_dmg(s : float) -> int:
 	var d : int = int(floor((float(BDMG) + s) * s))
 	if weapon: d = weapon.calc_heavy_damage(BDMG,s)
-	disp_ftxt(str(d),get_global_mouse_position(),FloatingText.a.POP_SHOOT)
+	#disp_ftxt(str(d),get_global_mouse_position(),FloatingText.a.POP_SHOOT)
 	return d
 
 func calc_heal() -> int:
@@ -95,6 +98,17 @@ func calc_inflict(c : int) -> Array:
 	if weapon: return weapon.calc_inflict(BDMG,c)
 	return [system_status.effects.NONE,0.0]
 
+@onready var sight = $Sight
+func can_see(sub : Node2D) -> bool:
+	sight.target_position = sub.global_position - sight.global_position
+	#await get_tree().process_frame
+	if sight.is_colliding() and sight.get_collider() != sub:
+		print_rich("[color=red]can't see!")
+		return false
+	else: 
+		#print("can see!")
+		return true
+
 func _process(delta):
 	if SCACHE > 0.0 and decay:
 		SCACHE -= 0.001
@@ -102,7 +116,8 @@ func _process(delta):
 
 func _physics_process(delta):
 	#WACKY
-	DIRECTION = isometrize(Input.get_vector("MLEFT", "MRIGHT", "MUP", "MDOWN").rotated(deg_to_rad(-45))).normalized()
+	if App.can_input:
+		DIRECTION = isometrize(Input.get_vector("MLEFT", "MRIGHT", "MUP", "MDOWN").rotated(deg_to_rad(-45))).normalized()
 	#DON"T ROTATE FOR NORMAL
 	
 	#if Input.is_action_just_pressed("ACTIONB"):
@@ -130,12 +145,14 @@ func _physics_process(delta):
 				discharge()
 			dash_cooldown = new_cooldown
 			cooldown.max_value = dash_cooldown
+			p_cooldown_bar.max_value = dash_cooldown
 			kill_spin()
 		else:
 			print("on cooldown ", dash_cooldown)
 	elif dash_cooldown > 0.0:
-		dash_cooldown -= delta
 		cooldown.value = dash_cooldown
+		p_cooldown_bar.value = dash_cooldown
+		dash_cooldown -= delta
 	if dash_cooldown <= 0.0 and (tspin_vfx.modulate.a == 0.0 or bspin_vfx.modulate.a == 0.0):
 		stw = create_tween()
 		stw.tween_property(tspin_vfx,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN_OUT)
@@ -158,16 +175,17 @@ func charge():
 		CURRENT_PCACHE += CHARGE_AMOUNT
 		CURRENT_PCACHE = clamp(CURRENT_PCACHE,0,MAX_PCACHE)
 		print(CURRENT_PCACHE)
-		disp_ftxt(str("[font_size=10]+",CHARGE_AMOUNT,"!"),global_position + Vector2(0,25),FloatingText.a.POP)
+		disp_ftxt(str("+"),global_position + Vector2(0,25),FloatingText.a.POP)
 	else:
 		disp_ftxt("MAX!",global_position + Vector2(0,25),FloatingText.a.POP)
 		print(CURRENT_PCACHE," MAX!")
 	charge_bar.value = CURRENT_PCACHE
+	p_cache_bar.value = CURRENT_PCACHE
 
 func s_charge():
 	if !decay: return
-	var minc = 0.1 * pow(2.718,-0.8 * SCACHE)
-	var maxc = 0.45 * pow(2.718,-0.8 * SCACHE)
+	var minc = 0.1 * pow(2.718,-0.9 * (SCACHE - 2.0))
+	var maxc = 0.45 * pow(2.718,-0.9 * (SCACHE - 2.0))
 	var val = randf_range(minc,maxc)
 	SCACHE += val
 	s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
@@ -178,6 +196,7 @@ func update_s_charge():
 	s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
 
 func s_discharge() -> float:
+	if !decay: return 0.0
 	var amt = SCACHE
 	if amt != 0.0:
 		decrease_s_cache()
@@ -205,27 +224,28 @@ func discharge() -> bool:
 	if CURRENT_PCACHE > 0:
 		CURRENT_PCACHE -= 1
 		charge_bar.value = CURRENT_PCACHE
+		p_cache_bar.value = CURRENT_PCACHE
 		#disp_ftxt(str("[font_size=10][color=orange]-1!"),global_position + Vector2(0,25),FloatingText.a.POP)
 		return true
 	print("EMPTY!")
 	disp_ftxt("[color=orange]!",global_position + Vector2(0,25),FloatingText.a.POP)
 	return false
 
-func shoot():
-	if !discharge(): return
-	var shoot_dir = camera.get_global_mouse_position() - global_position
-	
-	#Knockback
-	velocity -= (shoot_dir.normalized() * SPEED) * 6.0
-	
-	var pro = preload("res://Game/projectile.tscn")
-	var new = pro.instantiate()
-	add_child(new)
-	new.apply_central_impulse(shoot_dir.normalized() * 300.0)
-	new.position = global_position
-	await get_tree().create_timer(2.0).timeout
-	remove_child(new)
-	new.queue_free()
+#func shoot():
+	#if !discharge(): return
+	#var shoot_dir = camera.get_global_mouse_position() - global_position
+	#
+	##Knockback
+	#velocity -= (shoot_dir.normalized() * SPEED) * 6.0
+	#
+	#var pro = preload("res://Game/projectile.tscn")
+	#var new = pro.instantiate()
+	#add_child(new)
+	#new.apply_central_impulse(shoot_dir.normalized() * 300.0)
+	#new.position = global_position
+	#await get_tree().create_timer(2.0).timeout
+	#remove_child(new)
+	#new.queue_free()
 
 var stw : Tween
 func kill_spin():

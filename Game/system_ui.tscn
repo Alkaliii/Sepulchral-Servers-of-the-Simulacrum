@@ -1,15 +1,49 @@
-[gd_scene load_steps=3 format=3 uid="uid://t6xwa6fxikjk"]
+[gd_scene load_steps=9 format=3 uid="uid://t6xwa6fxikjk"]
 
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_d5ssp"]
+[ext_resource type="Script" path="res://Game/system_ui.gd" id="1_lreom"]
+[ext_resource type="Script" path="res://Game/mouse_follow.gd" id="2_puh6d"]
+[ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="3_dhot8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rwfdx"]
 content_margin_left = 10.0
 content_margin_top = 5.0
-content_margin_right = 5.0
+content_margin_right = 10.0
 content_margin_bottom = 5.0
 bg_color = Color(0.168627, 0.168627, 0.14902, 0.74902)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4s2lq"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_q1l5l"]
+height = 64
+seamless = true
+noise = SubResource("FastNoiseLite_4s2lq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_le2fx"]
+shader = ExtResource("3_dhot8")
+shader_parameter/mask = false
+shader_parameter/wscale = 1.0
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 1.0
+shader_parameter/time_scale = 1.0
+shader_parameter/auto_fade = true
+shader_parameter/direction = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/pulse_max_scale = 0.4
+shader_parameter/pulse_offset = 0.0
+shader_parameter/outer_feather = 0.1
+shader_parameter/inner_feather = 0.1
+shader_parameter/ss_edges = Vector2(0, 0)
+shader_parameter/mix_strength = 0.0
+shader_parameter/col_ovr_dis_str = 0.0
+shader_parameter/polarize_opacity_noise = true
+shader_parameter/animate_opacity_noise = Vector3(0, 0, 0)
+shader_parameter/scale_opacity_noise = Vector2(1, 1)
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_q1l5l")
+
 [node name="systemUI" type="Node"]
+script = ExtResource("1_lreom")
 
 [node name="cl" type="CanvasLayer" parent="."]
 
@@ -25,16 +59,20 @@ mouse_filter = 2
 [node name="Panel" type="PanelContainer" parent="cl/Top"]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
-offset_bottom = 21.0
+anchor_bottom = 1.0
+offset_top = -21.0
 grow_horizontal = 2
+grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_rwfdx")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="cl/Top/Panel"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="cl/Top/Panel/HBoxContainer"]
+[node name="system_msg" type="RichTextLabel" parent="cl/Top/Panel/HBoxContainer"]
+clip_contents = false
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_fonts/normal_font = ExtResource("1_d5ssp")
@@ -44,3 +82,39 @@ text = "System Message!"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[node name="Control" type="Control" parent="cl/Top/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="recent_chat" type="RichTextLabel" parent="cl/Top/Panel/HBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_fonts/normal_font = ExtResource("1_d5ssp")
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "Recent Chat Message!"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MouseFollow" type="Node2D" parent="."]
+script = ExtResource("2_puh6d")
+
+[node name="ClickBurst" type="ColorRect" parent="MouseFollow"]
+top_level = true
+z_index = 10
+z_as_relative = false
+material = SubResource("ShaderMaterial_le2fx")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
