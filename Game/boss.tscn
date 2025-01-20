@@ -56,6 +56,10 @@ shape = SubResource("CircleShape2D_k8ypm")
 debug_color = Color(1, 0, 0, 0.0784314)
 
 [node name="DamageRadius" parent="." instance=ExtResource("6_1htco")]
+visible = false
+
+[node name="Sight" type="RayCast2D" parent="."]
+collision_mask = 7
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

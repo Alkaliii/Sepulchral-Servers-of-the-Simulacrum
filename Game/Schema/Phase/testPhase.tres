@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="Phase" load_steps=7 format=3 uid="uid://ddrbub0gysbo6"]
+
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/attackOption.gd" id="1_76ppn"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase.gd" id="1_gefcf"]
+[ext_resource type="Script" path="res://Game/Schema/DamageSettings.gd" id="2_2isu6"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkCircle.gd" id="3_8y2mq"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Condition/conditionOption.gd" id="4_26tkn"]
+
+[sub_resource type="Resource" id="Resource_k0kl5"]
+script = ExtResource("3_8y2mq")
+attack_points = 6
+radius = 200.0
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("2_2isu6")]([])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[resource]
+script = ExtResource("1_gefcf")
+MOVEMENT_OPTIONS = 0
+ATTACK_OPTIONS = Array[ExtResource("1_76ppn")]([SubResource("Resource_k0kl5")])
+SUB_ATTACK_OPTIONS = 0
+SPECIAL_OPTIONS = 0
+CONDITION_OPTIONS = Array[ExtResource("4_26tkn")]([])

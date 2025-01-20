@@ -67,6 +67,12 @@ func set_job():
 		CHARGE_AMOUNT = job.final_pc_c
 		BDMG = job.final_base_dmg
 
+func on_damage(amt : int):
+	status._damage(amt)
+	disp_ftxt(str("[color=#e34262]",amt),global_position + Vector2(0,25),FloatingText.a.POP)
+	#set health bar here
+	#print(status.health)
+
 func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingText.a.FLOAT, outline : Dictionary = {}):
 	var new = FTXT.instantiate()
 	new.inital_position = pos
@@ -168,7 +174,9 @@ func sync_state():
 		"on_cooldown": !(dash_cooldown <= 0.0),
 		"direction":var_to_str(DIRECTION)
 	}
-	if Plyrm.PLAYERData: Plyrm.Playroom.setState(str("pState_",Plyrm.PLAYERData.id),JSON.stringify(state))
+	if Plyrm.PLAYER: 
+		#Plyrm.Playroom.setState(str("pState_",Plyrm.PLAYERData.id),JSON.stringify(state))
+		Plyrm.PLAYER.state.setState("pState",JSON.stringify(state))
 
 func charge():
 	if CURRENT_PCACHE >= 0 and CURRENT_PCACHE < MAX_PCACHE:
@@ -197,6 +205,7 @@ func update_s_charge():
 
 func s_discharge() -> float:
 	if !decay: return 0.0
+	if !discharge(): return 0.0
 	var amt = SCACHE
 	if amt != 0.0:
 		decrease_s_cache()

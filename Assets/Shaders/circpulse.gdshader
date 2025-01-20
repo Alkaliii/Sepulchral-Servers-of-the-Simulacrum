@@ -3,6 +3,7 @@ render_mode unshaded;
 
 uniform bool mask = false;
 uniform sampler2D world_masked_texture : source_color, repeat_enable;
+uniform vec2 mask_scroll = vec2(0.0);
 varying vec2 world_position;
 uniform float wscale = 1.0; //1/texture size
 
@@ -158,7 +159,7 @@ void fragment() {
 	vec3 co = texture(color_overlay,cod).rgb * mix_strength + clamp((1.0 * (1.0-mix_strength)),0.0,1.0);
 	
 	if (mask == true) {
-		vec4 mt = texture(world_masked_texture,world_position * wscale);
+		vec4 mt = texture(world_masked_texture,world_position * wscale + (mask_scroll * TIME));
 		COLOR.rgb = mt.rgb;
 		alpha *= mt.a;
 	} else {

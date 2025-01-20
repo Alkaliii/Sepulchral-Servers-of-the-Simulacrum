@@ -1,7 +1,9 @@
 extends CharacterBody2D
+class_name system_monster_controller
 
 @export var monster_data : system_monster
 @export var monster_weapon : system_weapon
+@export var phases : Array[Phase] = []
 
 @export var SPEED = 80.0
 @export var SPEED_MULTIPLIER := 1.0
@@ -20,7 +22,13 @@ const FTXT = preload("res://Game/float_text.tscn")
 var halfway_dead := false
 var dead := false
 
+# On host, phase is selected, this is propagated via RPC to client bosses
+# During phase an attack is called, this is also propagated via RPC to client bosses
+# The RPC call may send additional data about the attack so the one performed on the client side is similar to host
+# Using the phase movement, the host will move, clients will sync using state
+
 func _ready():
+	add_to_group("monster")
 	monster_data.status.setup(monster_data.base_health)
 	healthbar.max_value = monster_data.base_health
 	healthbar.value = monster_data.status.health
@@ -29,11 +37,32 @@ func _ready():
 	
 	await get_tree().create_timer(3.0).timeout
 	roar(str("You encounter [shake]",monster_data.name))
+	test_phase()
 
-func on_damage(amt : int, click : int):
+func test_phase():
+	if phases.is_empty(): return
+	
+	for i in phases:
+		i.setup()
+	
+	while true:
+		phases[0].ATTACK_OPTIONS[0].attack(self)
+		await phases[0].ATTACK_OPTIONS[0].attack_complete
+		phases[0].MOVEMENT_OPTIONS[0].move(self)
+		await phases[0].MOVEMENT_OPTIONS[0].movement_complete
+
+@onready var sight = $Sight
+func check_position(pos : Vector2) -> Vector2:
+	sight.target_position = pos - sight.global_position
+	if sight.is_colliding():
+		return sight.get_collision_point()
+	else:
+		return pos
+
+func on_damage(amt : int, click : int): #send player data in
 	#check condition before validating
 	monster_data.status._damage(amt)
-	disp_ftxt(str(amt),global_position - Vector2(0,45),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
+	disp_ftxt(str(amt,"!" if click == 1 else ""),global_position - Vector2(0,45),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
 	healthbar.value = monster_data.status.health
 	
 	var cam = get_tree().get_first_node_in_group("camera")
@@ -73,7 +102,7 @@ func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingTex
 	add_child(new)
 
 func _physics_process(delta):
-	if Plyrm.PLAYERData and !Plyrm.Playroom.isHost():
+	if Plyrm.PLAYER and !Plyrm.Playroom.isHost():
 		set_physics_process(false)
 		return
 	#chase(delta)

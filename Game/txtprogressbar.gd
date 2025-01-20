@@ -33,7 +33,7 @@ func tween_value():
 	await tw.finished
 	old_value = value
 
-func ssv(nv : float):
+func ssv(nv : float): #set shader value
 	if invert:
 		fill.material.set_shader_parameter("value",1.0 - nv)
 	else: fill.material.set_shader_parameter("value",nv)

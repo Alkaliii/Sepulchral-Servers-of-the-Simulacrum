@@ -18,16 +18,15 @@ func on_quit(args):
 		queue_free()
 
 func _process(delta):
-	if my_id:
-		state = Plyrm.Playroom.getState(str("pState_",my_id))
-	
 	if state:
-		var data = JSON.parse_string(state)
+		var data
+		var puppet_state = state.getState("pState")
+		if puppet_state: data = JSON.parse_string(puppet_state)
+		else: return
+		
 		var pos = Vector2(data.pos_x,data.pos_y)
-		#var dir = (global_position - pos).normalized()
 		manage_animation(str_to_var(data.direction))
 		manage_spin(data.on_cooldown)
-		#global_position = lerp(global_position,pos,1.0)
 		create_tween().tween_property(self,"global_position",pos,0.1).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 
 var stw : Tween

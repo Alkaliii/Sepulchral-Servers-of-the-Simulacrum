@@ -35,7 +35,7 @@ func click():
 		new.z_index = 10
 		new.z_as_relative = false
 		new.global_position = get_global_mouse_position() - Vector2(20,20)
-		var sspn = func(nv):
+		var sspn = func(nv): #set shader progress new
 			new.material.set_shader_parameter("progress",nv)
 		await create_tween().tween_method(sspn,0.0,1.0,1.0).finished
 		remove_child(new)
@@ -45,5 +45,5 @@ func click():
 		create_tween().tween_method(ssp,0.0,1.0,1.0)
 
 
-func ssp(nv : float):
+func ssp(nv : float): #set shader progress
 	click_burst.material.set_shader_parameter("progress",nv)

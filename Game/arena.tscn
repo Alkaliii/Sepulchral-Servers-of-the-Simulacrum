@@ -1,11 +1,18 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbaje3tan2k7o"]
+[gd_scene load_steps=21 format=3 uid="uid://bbaje3tan2k7o"]
 
 [ext_resource type="PackedScene" uid="uid://dgyaxcfmcseek" path="res://Game/player.tscn" id="1_f8ne3"]
 [ext_resource type="Script" path="res://Game/arena.gd" id="1_idpkm"]
 [ext_resource type="Script" path="res://Game/Schema/Job.gd" id="3_4dmae"]
 [ext_resource type="PackedScene" uid="uid://jvlvkbccv6ur" path="res://Game/boss.tscn" id="3_ly78x"]
 [ext_resource type="Script" path="res://Game/Schema/Weapon.gd" id="4_r7r2p"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase.gd" id="6_151od"]
 [ext_resource type="Script" path="res://Game/game_camera.gd" id="6_cmqed"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/attackOption.gd" id="7_kgwd8"]
+[ext_resource type="Script" path="res://Game/Schema/DamageSettings.gd" id="8_wt75w"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkFocus.gd" id="9_lxfpf"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Condition/conditionOption.gd" id="10_et5r3"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/movementOption.gd" id="11_ur4n2"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveRoam.gd" id="12_dn7jd"]
 
 [sub_resource type="Resource" id="Resource_tdh4b"]
 script = ExtResource("3_4dmae")
@@ -27,6 +34,44 @@ secondary_damage = 0
 tertiary_damage = 0
 inflict_status = 0
 
+[sub_resource type="Resource" id="Resource_80r88"]
+script = ExtResource("8_wt75w")
+dmg = 1
+radius = 60
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+
+[sub_resource type="Resource" id="Resource_djtya"]
+script = ExtResource("9_lxfpf")
+attack_number = 6
+intra_spawn_delay = 1.0
+spawn_position = 1
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_80r88")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_3xlxl"]
+script = ExtResource("12_dn7jd")
+roam_limit = Vector2(300, 300)
+roam_speed = 60.0
+move_ease = 2
+move_trans = 5
+
+[sub_resource type="Resource" id="Resource_7fry3"]
+script = ExtResource("6_151od")
+MOVEMENT_OPTIONS = Array[ExtResource("11_ur4n2")]([SubResource("Resource_3xlxl")])
+ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_djtya")])
+SUB_ATTACK_OPTIONS = 0
+SPECIAL_OPTIONS = 0
+CONDITION_OPTIONS = Array[ExtResource("10_et5r3")]([])
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_f7y7t"]
 noise_type = 3
 
@@ -41,6 +86,7 @@ job = SubResource("Resource_tdh4b")
 weapon = SubResource("Resource_yplev")
 
 [node name="Boss" parent="." instance=ExtResource("3_ly78x")]
+phases = Array[ExtResource("6_151od")]([SubResource("Resource_7fry3")])
 
 [node name="GameCamera" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
 ignore_rotation = false

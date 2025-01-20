@@ -22,6 +22,7 @@ noise = SubResource("FastNoiseLite_4s2lq")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_le2fx"]
 shader = ExtResource("3_dhot8")
 shader_parameter/mask = false
+shader_parameter/mask_scroll = Vector2(0, 0)
 shader_parameter/wscale = 1.0
 shader_parameter/progress = 0.0
 shader_parameter/derive_progress = 0.0

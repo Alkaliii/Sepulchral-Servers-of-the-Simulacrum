@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://dgyaxcfmcseek"]
+[gd_scene load_steps=51 format=3 uid="uid://dgyaxcfmcseek"]
 
 [ext_resource type="Script" path="res://Game/player.gd" id="1_75war"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="2_7yrue"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://djdpv1l4374xl" path="res://Assets/Temp/cooldown_back.png" id="10_edhwv"]
 [ext_resource type="Texture2D" uid="uid://bqx5trm0iullw" path="res://Assets/Temp/cooldown_fill.png" id="11_kb5rs"]
 [ext_resource type="Texture2D" uid="uid://ci1wy6dekujgw" path="res://Assets/Temp/circle_guide.png" id="12_bum1a"]
+[ext_resource type="Script" path="res://Game/tracker.gd" id="13_cb3h4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pxs6c"]
 atlas = ExtResource("2_nc3th")
@@ -291,6 +292,13 @@ shader_parameter/smooth_size = 0.2
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/mask = ExtResource("11_kb5rs")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cfeeq"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 3
@@ -329,6 +337,7 @@ script = ExtResource("5_ew3k5")
 hd_for = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
+visible = false
 position = Vector2(0, -12)
 shape = SubResource("CircleShape2D_h07ks")
 debug_color = Color(0, 0.0823529, 0.701961, 0.419608)
@@ -404,6 +413,35 @@ texture = ExtResource("10_edhwv")
 material = SubResource("ShaderMaterial_65b6y")
 layout_mode = 2
 texture = ExtResource("11_kb5rs")
+
+[node name="Tracker" type="Control" parent="UI/Stats" node_paths=PackedStringArray("player")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("13_cb3h4")
+player = NodePath("../../..")
+
+[node name="Panel" type="Panel" parent="UI/Stats/Tracker"]
+modulate = Color(1, 1, 1, 0.101961)
+custom_minimum_size = Vector2(5, 5)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.5
+offset_top = -100.0
+offset_right = 2.5
+offset_bottom = -95.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cfeeq")
 
 [node name="Guide" type="TextureRect" parent="UI/Stats"]
 visible = false
