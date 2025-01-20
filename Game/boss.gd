@@ -36,20 +36,65 @@ func _ready():
 	#hit_detector.AFFLICTED.connect()
 	
 	await get_tree().create_timer(3.0).timeout
-	roar(str("You encounter [shake]",monster_data.name))
+	await roar(str("You encounter [shake]",monster_data.name))
 	test_phase()
 
 func test_phase():
 	if phases.is_empty(): return
 	
 	for i in phases:
-		i.setup()
+		i.setup(self)
 	
-	while true:
-		phases[0].ATTACK_OPTIONS[0].attack(self)
-		await phases[0].ATTACK_OPTIONS[0].attack_complete
-		phases[0].MOVEMENT_OPTIONS[0].move(self)
-		await phases[0].MOVEMENT_OPTIONS[0].movement_complete
+	await App.process_frame()
+	
+	phases[0].is_active = true
+	phases[0].play_phase()
+	
+	#while true:
+		#phases[0].ATTACK_OPTIONS[0].attack(self)
+		#await phases[0].ATTACK_OPTIONS[0].attack_complete
+		#phases[0].SPECIAL_OPTIONS[0].perfrom_special(self)
+		#await phases[0].SPECIAL_OPTIONS[0].special_complete
+		#phases[0].MOVEMENT_OPTIONS[0].move(self)
+		#await phases[0].MOVEMENT_OPTIONS[0].movement_complete
+
+func change_phase(new_phase : int = -1):
+	print("CHANGING PHASE!"," RANDOM" if new_phase == -1 else new_phase)
+	var phs : Phase
+	if new_phase and new_phase != -1: phs = phases[new_phase]
+	else: phs = phases.pick_random()
+	
+	start_phase(phs)
+
+func start_phase(phs : Phase):
+	phs.clean_actions()
+	phs.is_active = true
+	phs.cancel = false
+	phs.last_phase_action = false
+	phs.phase_idx = 0
+	phs.play_phase()
+
+func kill_phase():
+	for phs in phases: phs.kill_phase()
+
+#@onready var boss_sprite = $Sprite
+var dtw : Tween
+func disappear(state : bool):
+	if dtw: dtw.kill()
+	dtw = create_tween()
+	match state:
+		true:
+			set_collision_layer_value(1,false)
+			hit_detector.disabled = true
+			dtw.tween_property(self,"scale",Vector2.ZERO,0.25).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
+			await dtw.finished
+			hide()
+		false:
+			show()
+			dtw.tween_property(self,"scale",Vector2.ONE,0.25).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
+			await dtw.finished
+			set_collision_layer_value(1,true)
+			hit_detector.disabled = false
 
 @onready var sight = $Sight
 func check_position(pos : Vector2) -> Vector2:
@@ -68,17 +113,23 @@ func on_damage(amt : int, click : int): #send player data in
 	var cam = get_tree().get_first_node_in_group("camera")
 	match click:
 		0: cam.add_trauma(0.4,0.9)
-		1: cam.add_trauma(1,0.8)
+		1: 
+			cam.add_trauma(1,0.8)
+			for p in phases:
+				p.on_heavy_received()
 	
 	check_progress()
 
 func check_progress():
 	if monster_data.status.health <= 0 and !dead:
+		kill_phase()
 		dead = true
-		roar()
+		await roar()
 	elif monster_data.status.health < (monster_data.status.max_health * .5) and !halfway_dead:
+		kill_phase()
 		halfway_dead = true
-		roar(str(monster_data.name," is weak!"))
+		await roar(str(monster_data.name," is weak!"))
+		start_phase(phases.pick_random())
 
 func roar(msg : String = "!!!"):
 	SystemUI.play_message(msg,6)

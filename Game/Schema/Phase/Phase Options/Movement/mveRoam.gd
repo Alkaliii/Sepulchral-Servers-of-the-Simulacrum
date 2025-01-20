@@ -17,7 +17,7 @@ func move(monster : system_monster_controller):
 	
 	mTween.tween_property(monster,"global_position",npos,spd).set_ease(move_ease).set_trans(move_trans)
 	await mTween.finished
-	movement_complete.emit()
+	movement_complete.emit(self)
 
 func randpos() -> Vector2:
 	var rpos : Vector2 = Vector2.ZERO

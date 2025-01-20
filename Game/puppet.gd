@@ -17,6 +17,9 @@ func on_quit(args):
 		get_parent().remove_child(self)
 		queue_free()
 
+func knockback(from : Vector2, strr : float = 10):
+	pass #to client?
+
 func _process(delta):
 	if state:
 		var data

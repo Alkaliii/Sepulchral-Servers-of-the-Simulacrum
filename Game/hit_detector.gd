@@ -21,6 +21,7 @@ signal CLICKED
 @onready var cs = $CollisionShape2D
 
 var pseudo_control : Control = Control.new()
+var disabled := false
 
 func _ready():
 	add_child(pseudo_control)
@@ -30,6 +31,7 @@ func _ready():
 
 var exit : bool = false
 func _input_event(viewport, event, shape_idx):
+	if disabled: return
 	if !App.can_click: return
 	if event is InputEventMouseButton:
 		if Input.is_action_just_pressed("ACTIONB"):

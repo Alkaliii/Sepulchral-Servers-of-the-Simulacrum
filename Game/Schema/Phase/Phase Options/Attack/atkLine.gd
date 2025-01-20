@@ -48,7 +48,7 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 					new.settings.radius = new.settings.radius * (grow_factor * (growth_index))
 					if !bifurcate: growth_index += 1
 			
-			_monster.add_child(new)
+			_monster.get_parent().add_child(new)
 			new.top_level = true
 			new.global_position = i
 			new.warn()
@@ -61,10 +61,11 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 				await App.process_frame()
 			else:
 				await App.time_delay(intra_spawn_delay)
+			if cancel: return
 	
 	_check_complete()
 	await App.time_delay(attack_start_delay)
-	attack_started.emit()
+	attack_started.emit(self)
 
 
 func line(origin : Vector2, _m : system_monster_controller) -> Array[Vector2]:

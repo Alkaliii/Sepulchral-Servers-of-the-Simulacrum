@@ -115,6 +115,18 @@ func can_see(sub : Node2D) -> bool:
 		#print("can see!")
 		return true
 
+var knocked : bool = false
+func knockback(from : Vector2, strr : float = 10):
+	knocked = true
+	var kbdir = global_position - from
+	velocity += kbdir.normalized() * strr
+	await get_tree().create_timer(0.7).timeout
+	knocked = false
+
+func drag(to : Vector2, strr : float = 10):
+	var drgdir = to - global_position
+	velocity += drgdir.normalized() * strr
+
 func _process(delta):
 	if SCACHE > 0.0 and decay:
 		SCACHE -= 0.001
@@ -122,7 +134,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	#WACKY
-	if App.can_input:
+	if App.can_input and !knocked:
 		DIRECTION = isometrize(Input.get_vector("MLEFT", "MRIGHT", "MUP", "MDOWN").rotated(deg_to_rad(-45))).normalized()
 	#DON"T ROTATE FOR NORMAL
 	

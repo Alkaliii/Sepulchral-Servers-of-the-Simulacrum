@@ -40,8 +40,8 @@ enum c { #PHASE CONDITION
 enum r { #PHASE REACTION (what to do when something happens (on heavy attack, on light attack, on afflict, on close distance (phase defines), on half, on far distance (phase defines))
 	NONE,
 	RANDOM_PHASE, #switches to another phase the monster has
-	SET_PHASE, #switches to a sub phase contained within
-	CALL_OPTIONS,
+	SET_PHASE, #switches to a set idx
+	ROLLBACK, #moves to earlier part of phase (on a good day, it's random as shit lol)
 }
 
 #@export_group("Main Options","PHASE")
@@ -51,16 +51,210 @@ enum r { #PHASE REACTION (what to do when something happens (on heavy attack, on
 #@export var PHASE_SPECIAL : s = s.NONE
 #@export var PHASE_CONDITION : c = c.NORMAL
 
+enum ord {
+	MOVE, #picks a random movement option and performs it
+	ATTACK, #picks a random attack option and performs it
+	SUB_ATTACK, #picks a random sub attack option and performs it, will move onto next step after start
+	SPECIAL, #picks a random special option and performs it
+	WAIT, #waits
+}
+
+@export var schedule : Array[ord] = [ord.MOVE,ord.SPECIAL,ord.SUB_ATTACK,ord.ATTACK,ord.WAIT]
+@export var on_heavy : r = r.NONE
+@export var on_end : r = r.NONE #will repeat
+@export var chance_to_stop : float = 0
+## on heavy set phase idx
+@export var ohspi : int = -1
+## on end set phase idx
+@export var oespi : int = -1
+@export var wait_range : Vector2 = Vector2(0.5,2.0)
+
 @export var MOVEMENT_OPTIONS : Array[phaseMovementOption] = []
 @export var ATTACK_OPTIONS : Array[phaseAttackOption] = []
-@export var SUB_ATTACK_OPTIONS : int
-@export var SPECIAL_OPTIONS : int
+@export var SUB_ATTACK_OPTIONS : Array[phaseAttackOption] = []
+@export var SPECIAL_OPTIONS : Array[phaseSpecialOption] = [] #only one is performed at a time?
 @export var CONDITION_OPTIONS : Array[phaseConditionOption] = []
 
 var is_active := false
+var last_phase_action := false
+var my_monster : system_monster_controller
 
 #phase order MOVE -> ATTACK or ATTACK -> MOVE
 
-func setup():
-	for a in ATTACK_OPTIONS: 
-		a.my_phase = self
+var phase_idx : int = 0
+var cur_option = null
+
+func setup(mos : system_monster_controller):
+	my_monster = mos
+	for atk in ATTACK_OPTIONS: 
+		atk.my_phase = self
+	for atk in SUB_ATTACK_OPTIONS:
+		atk.my_phase = self
+	for mve in MOVEMENT_OPTIONS:
+		mve.my_phase = self
+	
+	for sc in schedule:
+		match sc:
+			ord.MOVE:
+				if MOVEMENT_OPTIONS.is_empty(): schedule.erase(sc)
+			ord.ATTACK:
+				if ATTACK_OPTIONS.is_empty(): schedule.erase(sc)
+			ord.SUB_ATTACK:
+				if SUB_ATTACK_OPTIONS.is_empty(): schedule.erase(sc)
+			ord.SPECIAL:
+				if SPECIAL_OPTIONS.is_empty(): schedule.erase(sc)
+
+func clean_actions():
+	for atk in ATTACK_OPTIONS:
+		atk.cancel = false
+	for atk in SUB_ATTACK_OPTIONS:
+		atk.cancel = false
+	for spc in SPECIAL_OPTIONS:
+		spc.cancel = false
+
+func kill_phase():
+	#arbitrarirly stop a phase
+	cancel = true
+	#cancel current phase
+	dconr(cur_option)
+	if cur_option is phaseMovementOption:
+		cancel_movement()
+	if cur_option is phaseSpecialOption:
+		cur_option.cancel = true
+	if cur_option is phaseAttackOption:
+		cur_option.cancel = true
+	
+	is_active = false
+
+func play_phase(retrn = null):
+	if retrn: dconr(retrn)
+	if cancel or !is_active: return
+	
+	if phase_idx == 0 and last_phase_action: # last, perform on end
+		match on_end:
+			r.NONE:
+				if randf_range(0,100) < chance_to_stop:
+					pass
+				else:
+					kill_phase()
+					my_monster.change_phase()
+					return
+			r.RANDOM_PHASE:
+				kill_phase()
+				my_monster.change_phase()
+				return
+			r.SET_PHASE:
+				kill_phase()
+				my_monster.change_phase(oespi)
+				return
+			r.ROLLBACK:
+				phase_idx = 0
+	
+	match schedule[phase_idx]:
+		ord.MOVE:
+			pMOVE()
+		ord.ATTACK:
+			pATTACK()
+		ord.SUB_ATTACK:
+			pSUBATTACK()
+		ord.SPECIAL:
+			pSPECIAL()
+		ord.WAIT:
+			pWAIT()
+	
+	if phase_idx == (schedule.size() - 1):
+		print("LAST ACTION")
+		last_phase_action = true
+	phase_idx = (phase_idx + 1) % schedule.size()
+
+func dconr(retrn = null):
+	if retrn is phaseMovementOption:
+		retrn.movement_complete.disconnect(play_phase)
+	if retrn is phaseAttackOption:
+		if retrn.attack_started.is_connected(play_phase):
+			retrn.attack_started.disconnect(play_phase)
+		if retrn.attack_complete.is_connected(play_phase):
+			retrn.attack_complete.disconnect(play_phase)
+	if retrn is phaseSpecialOption:
+		retrn.special_complete.disconnect(play_phase)
+
+func pWAIT():
+	cur_option = null
+	var wait_time = randf_range(wait_range.x,wait_range.y)
+	while true:
+		if wait_time <= 0: break
+		if cancel: return
+		wait_time -= my_monster.get_process_delta_time()
+		print("I'M WAITIN! ", wait_time)
+		await App.process_frame()
+	
+	play_phase()
+
+func pMOVE():
+	var mve : phaseMovementOption = MOVEMENT_OPTIONS.pick_random()
+	mve.movement_complete.connect(play_phase)
+	mve.move(my_monster)
+	print("I'M MOVIN! ", phase_idx)
+	cur_option = mve
+
+func pATTACK():
+	var atk : phaseAttackOption = ATTACK_OPTIONS.pick_random()
+	atk.attack_complete.connect(play_phase)
+	atk.attack(my_monster)
+	print("I'M ATTACKIN! ", phase_idx)
+	if atk.cancel: print("CANCELLED")
+	cur_option = atk
+
+func pSUBATTACK():
+	var satk : phaseAttackOption = SUB_ATTACK_OPTIONS.pick_random()
+	satk.attack_started.connect(play_phase)
+	satk.attack(my_monster)
+	print("I'M ATTACKIN AGAIN! ", phase_idx)
+	if satk.cancel: print("CANCELLED")
+	cur_option = satk
+
+func pSPECIAL():
+	print("I'M DOING SOMETHIN! ", phase_idx)
+	var spc : phaseSpecialOption = SPECIAL_OPTIONS.pick_random()
+	spc.special_complete.connect(play_phase)
+	spc.perform_special(my_monster)
+	if spc.cancel: print("CANCELLED")
+	cur_option = spc
+
+var cancel := false
+func on_heavy_received():
+	if cancel or !is_active: return
+	cancel = true
+	#cancel current phase
+	dconr(cur_option)
+	if cur_option is phaseMovementOption:
+		cancel_movement()
+	if cur_option is phaseSpecialOption:
+		cur_option.cancel = true
+	if cur_option is phaseAttackOption:
+		cur_option.cancel = true
+	
+	#do on heavy action
+	print("HEAVY!")
+	await App.time_delay(0.25)
+	match on_heavy:
+		r.NONE:
+			cancel = false
+			play_phase()
+		r.RANDOM_PHASE:
+			kill_phase()
+			my_monster.change_phase()
+		r.SET_PHASE:
+			kill_phase()
+			my_monster.change_phase(ohspi)
+		r.ROLLBACK:
+			cancel = false
+			var ps = schedule.duplicate()
+			ps.erase(schedule[phase_idx])
+			phase_idx = schedule.find(ps.pick_random())
+			play_phase()
+
+func cancel_movement(caller = null):
+	for mve in MOVEMENT_OPTIONS:
+		if mve == caller: continue
+		mve.cancel_movement()

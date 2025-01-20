@@ -21,7 +21,7 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 		for i in c:
 			var new = DAMAGE_RADIUS.instantiate()
 			new.settings = _get_settings(c.find(i))
-			_monster.add_child(new)
+			_monster.get_parent().add_child(new)
 			new.top_level = true
 			new.global_position = i + p
 			new.warn()
@@ -34,10 +34,11 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 				await App.process_frame()
 			else:
 				await App.time_delay(intra_spawn_delay)
+			if cancel: return
 	
 	_check_complete()
 	await App.time_delay(attack_start_delay)
-	attack_started.emit()
+	attack_started.emit(self)
 
 
 func circ() -> Array[Vector2]:

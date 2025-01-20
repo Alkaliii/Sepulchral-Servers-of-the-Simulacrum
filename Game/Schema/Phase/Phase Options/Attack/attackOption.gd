@@ -39,6 +39,8 @@ var my_phase : Phase
 
 var my_radi : Array[Area2D] = []
 
+var cancel : bool = false
+
 func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 	#Spawn an attack when called
 	#Use monster to get player positions
@@ -53,7 +55,7 @@ func _check_complete():
 		if !my_phase.is_active: pass #return here
 		await App.process_frame()
 	
-	attack_complete.emit()
+	attack_complete.emit(self)
 
 func _on_damage_finished(d : Area2D):
 	my_radi.erase(d)
@@ -67,6 +69,7 @@ func _get_settings(idx : int) -> DamageRadiusSettings:
 	return damage_settings[0]
 
 func _condition_augment(_m : system_monster_controller):
+	cancel = false
 	var d_up : int = 0
 	var infl : system_status.effects = system_status.effects.NONE
 	for c in my_phase.CONDITION_OPTIONS:
