@@ -121,12 +121,27 @@ func knockback(from : Vector2, strr : float = 10):
 	knocked = true
 	var kbdir = global_position - from
 	velocity += kbdir.normalized() * strr
-	await get_tree().create_timer(0.7).timeout
+	await get_tree().create_timer(1.2).timeout
 	knocked = false
 
 func drag(to : Vector2, strr : float = 10):
 	var drgdir = to - global_position
 	velocity += drgdir.normalized() * strr
+
+var rd_target : Array #[Node,Path]
+func remote_drag():
+	#Boss Drag
+	var boss_drag_data
+	var boss_drag_state = Plyrm.Playroom.getState("bDrag")
+	if boss_drag_state: 
+		boss_drag_data = JSON.parse_string(boss_drag_state)
+		if boss_drag_data["is_drag"]:
+			if !rd_target or rd_target[1] != boss_drag_data["to"]:
+				rd_target = []
+				rd_target.append(get_node_or_null(boss_drag_data["to"]))
+				rd_target.append(boss_drag_data["to"])
+			drag(rd_target[0].global_position,boss_drag_data["strr"])
+		else: rd_target.clear()
 
 func _process(delta):
 	if SCACHE > 0.0 and decay:
@@ -179,6 +194,7 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	sync_state()
+	if Plyrm.PLAYER and !Plyrm.PLAYER.host: remote_drag()
 
 func sync_state():
 	var state = {

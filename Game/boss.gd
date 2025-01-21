@@ -29,10 +29,10 @@ var dead := false
 
 func _ready():
 	App.start_boss.connect(test_start)
-	Plyrm.PR_PLAYER_JOIN.connect(check_host)
-	Plyrm.PR_PLAYER_QUIT.connect(check_host)
-	Plyrm.PR_SESSION_END.connect(check_host)
-	Plyrm.PR_DISCONNECT.connect(check_host)
+	#Plyrm.PR_PLAYER_JOIN.connect(check_host)
+	#Plyrm.PR_PLAYER_QUIT.connect(check_host)
+	#Plyrm.PR_SESSION_END.connect(check_host)
+	#Plyrm.PR_DISCONNECT.connect(check_host)
 	
 	add_to_group("monster")
 	monster_data.status.setup(monster_data.base_health)
@@ -125,10 +125,7 @@ func check_position(pos : Vector2) -> Vector2:
 
 func on_damage(amt : int, click : int): #send player data in
 	#check condition before validating
-	monster_data.status._damage(amt)
 	disp_ftxt(str(amt,"!" if click == 1 else ""),global_position - Vector2(0,45),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
-	healthbar.value = monster_data.status.health
-	
 	var cam = get_tree().get_first_node_in_group("camera")
 	match click:
 		0: cam.add_trauma(0.4,0.9)
@@ -136,8 +133,32 @@ func on_damage(amt : int, click : int): #send player data in
 			cam.add_trauma(1,0.8)
 			for p in phases:
 				p.on_heavy_received()
+	if Plyrm.PLAYER and !Plyrm.PLAYER.host: 
+		sync_damage(amt,click)
+		return
+	
+	monster_data.status._damage(amt)
+	healthbar.value = monster_data.status.health
+	
 	
 	check_progress()
+
+func sync_damage(amt : int, click : int):
+	var data : Array = []
+	data.append(amt)
+	data.append(click)
+	
+	Plyrm.Playroom.RPC.call("dmg_boss",var_to_str(data),Plyrm.Playroom.RPC.Mode.HOST)
+
+func remote_damage(amt : int, click : int):
+	if click == 1:
+		for p in phases:
+			p.on_heavy_received()
+	
+	monster_data.status._damage(amt)
+	print("remote dmg : ",amt)
+	check_progress()
+	#healthbar.value = monster_data.status.health
 
 func check_progress():
 	if monster_data.status.health <= 0 and !dead:
@@ -172,7 +193,7 @@ func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingTex
 	if outline:
 		new.outline_color = outline.color
 		new.outline_size = outline.size
-	add_child(new)
+	get_parent().add_child(new)
 
 func _physics_process(delta):
 	sync_state()
@@ -199,6 +220,15 @@ func sync_state():
 	if Plyrm.PLAYER: 
 		#Plyrm.Playroom.setState(str("pState_",Plyrm.PLAYERData.id),JSON.stringify(state))
 		Plyrm.Playroom.setState("bState",JSON.stringify(state))
+
+func sync_drag(state : bool, to : NodePath = "", strr : float = 0):
+	var drag_state = {
+		"is_drag":state,
+		"to":to,
+		"strr":strr
+	}
+	if Plyrm.PLAYER:
+		Plyrm.Playroom.setState("bDrag",JSON.stringify(drag_state))
 
 #func set_behaviour_time(new_dura : float):
 	#behaviour_time_elapse = 0.0

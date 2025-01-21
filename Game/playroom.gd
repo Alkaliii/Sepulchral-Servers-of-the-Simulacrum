@@ -122,9 +122,46 @@ func register_rpc():
 	Playroom.RPC.register("spawn_dmg",bridgeToJS(spawn_dmg))
 	Playroom.RPC.register("cam_target",bridgeToJS(cam_target))
 	Playroom.RPC.register("cam_trauma",bridgeToJS(cam_trauma))
-	Playroom.RPC.register()
+	Playroom.RPC.register("player_knockback",bridgeToJS(player_knockback))
+	Playroom.RPC.register("dmg_boss",bridgeToJS(dmg_boss))
 
-func player_knockback():pass
+func dmg_boss(data):
+	#data = var_to_str([amt, click])
+	
+	if typeof(data) != TYPE_ARRAY: 
+		printerr("Bad Data in dmg_boss()")
+		return
+	if !data.size() > 0:
+		printerr("No Data in dmg_boss()")
+		return
+	
+	var unpacked_data = str_to_var(data[0])
+	var mnstr = get_tree().get_first_node_in_group("monster")
+	if !mnstr: return
+	mnstr.remote_damage(unpacked_data[0],unpacked_data[1])
+
+func player_knockback(data):
+	#data = var_to_str([id,Vector2,float*])
+	
+	if typeof(data) != TYPE_ARRAY: 
+		printerr("Bad Data in player_knockback()")
+		return
+	if !data.size() > 0:
+		printerr("No Data in player_knockback()")
+		return
+	
+	var unpacked_data = str_to_var(data[0])
+	if PLAYER and PLAYER.id != unpacked_data[0]: 
+		printerr("Not for me! player_knockback call ignored")
+		return
+	
+	var plyr = get_tree().get_first_node_in_group("player")
+	if !plyr: return
+	await App.time_delay(0.063) #setting to turn this off?
+	if unpacked_data.size() > 2:
+		plyr.knockback(unpacked_data[1],unpacked_data[2])
+	else:
+		plyr.knockback(unpacked_data[1])
 
 func cam_target(data):
 	#print(get_node($Sprite.get_path()))
@@ -141,6 +178,7 @@ func cam_target(data):
 	var node = get_node(unpacked_data[0])
 	
 	var cam = get_tree().get_first_node_in_group("camera")
+	if !cam: return
 	if unpacked_data.size() > 1:
 		cam.set_target(node,unpacked_data[1])
 	else:
@@ -158,6 +196,7 @@ func cam_trauma(data):
 	
 	var unpacked_data = str_to_var(data[0])
 	var cam = get_tree().get_first_node_in_group("camera")
+	if !cam: return
 	if unpacked_data.size() > 1:
 		cam.add_trauma(unpacked_data[0],unpacked_data[1])
 	else:

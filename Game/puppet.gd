@@ -18,8 +18,16 @@ func on_quit(args):
 		queue_free()
 
 func knockback(from : Vector2, strr : float = 10):
+	#Boss on host calls knockback on puppet on host
+	#Puppet passes call to client via RPC
+	
 	print("puppet knockback")
-	pass #to client?
+	var data : Array = []
+	data.append(my_id) #This is used to determine which client actually listens?
+	data.append(from)
+	data.append(strr)
+	
+	Plyrm.Playroom.RPC.call("player_knockback",var_to_str(data),Plyrm.Playroom.RPC.Mode.OTHERS)
 
 func _process(delta):
 	if state:
