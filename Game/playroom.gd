@@ -32,6 +32,7 @@ func blog(txt : String):
 
 # Called when the host has started the game
 func onInsertCoin(args):
+	register_rpc()
 	connected = true
 	print("Coin Inserted!")
 	blog("Coin Inserted!")
@@ -66,6 +67,13 @@ func onPlayerQuit(args):
 	print("player quit: ", state.id)
 	blog(str("player quit: ", state.id))
 	PR_PLAYER_QUIT.emit(args)
+
+@onready var start_game = $PRUI/LobbyUI/StartGame
+func _on_start_game_pressed():
+	if Plyrm.Playroom.isHost():
+		start_game.release_focus()
+		start_game.hide()
+		App.start_boss.emit()
 
 @onready var room_input = $PRUI/LobbyUI/VBoxContainer/RoomInput
 @onready var join_room = $PRUI/LobbyUI/VBoxContainer/JoinRoom
@@ -109,3 +117,67 @@ func _on_join_room_pressed():
 	PLAYER = pd
 	Playroom.onDisconnect(bridgeToJS(onDisconnect))
 	blog(str(pd))
+
+func register_rpc():
+	Playroom.RPC.register("spawn_dmg",bridgeToJS(spawn_dmg))
+	Playroom.RPC.register("cam_target",bridgeToJS(cam_target))
+	Playroom.RPC.register("cam_trauma",bridgeToJS(cam_trauma))
+	Playroom.RPC.register()
+
+func player_knockback():pass
+
+func cam_target(data):
+	#print(get_node($Sprite.get_path()))
+	#data = var_to_str([$Sprite.get_path()],Vector2*)
+	
+	if typeof(data) != TYPE_ARRAY: 
+		printerr("Bad Data in cam_target()")
+		return
+	if !data.size() > 0:
+		printerr("No Data in cam_target()")
+		return
+	
+	var unpacked_data = str_to_var(data[0])
+	var node = get_node(unpacked_data[0])
+	
+	var cam = get_tree().get_first_node_in_group("camera")
+	if unpacked_data.size() > 1:
+		cam.set_target(node,unpacked_data[1])
+	else:
+		cam.set_target(node)
+
+func cam_trauma(data):
+	#data = var_to_str([float,float*])
+	
+	if typeof(data) != TYPE_ARRAY: 
+		printerr("Bad Data in cam_trauma()")
+		return
+	if !data.size() > 0:
+		printerr("No Data in cam_trauma()")
+		return
+	
+	var unpacked_data = str_to_var(data[0])
+	var cam = get_tree().get_first_node_in_group("camera")
+	if unpacked_data.size() > 1:
+		cam.add_trauma(unpacked_data[0],unpacked_data[1])
+	else:
+		cam.add_trauma(unpacked_data[0])
+
+func spawn_dmg(data):
+	#data = var_to_str([Vector2(),serialized_dictionary])
+	
+	if typeof(data) != TYPE_ARRAY: 
+		printerr("Bad Data in spawn_dmg()")
+		return
+	if !data.size() > 0:
+		printerr("No Data in spawn_dmg()")
+		return
+	
+	var unpacked_data = str_to_var(data[0])
+	var position = unpacked_data[0]
+	var settings = DamageRadiusSettings.new()
+	
+	if unpacked_data.size() > 1:
+		settings.deserialize(JSON.parse_string(unpacked_data[1]))
+	
+	App.spawn_dmg.emit(position,settings)

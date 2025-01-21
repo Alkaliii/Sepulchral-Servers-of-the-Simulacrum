@@ -26,3 +26,31 @@ class_name DamageRadiusSettings
 
 @export var prevent_attack : bool = false
 #Prevent player from attacking if they are inside it
+
+func serialize() -> Dictionary:
+	var sset : Dictionary = {}
+	
+	sset["dmg"] = dmg
+	sset["radius"] = radius
+	sset["inflict"] = inflict
+	sset["pre_warn"] = pre_warn
+	sset["warn_activation_time"] = warn_activation_time
+	sset["dmg_activation_time"] = dmg_activation_time
+	sset["hold_time"] = hold_time
+	sset["repeat"] = repeat
+	sset["slow"] = slow
+	sset["prevent_attack"] = prevent_attack
+	
+	return sset
+
+func deserialize(sset : Dictionary):
+	dmg = sset["dmg"]
+	radius = sset["radius"]
+	inflict = sset["inflict"]
+	pre_warn = sset["pre_warn"]
+	warn_activation_time = sset["warn_activation_time"]
+	dmg_activation_time = sset["dmg_activation_time"]
+	hold_time = sset["hold_time"]
+	repeat = sset["repeat"]
+	slow = sset["slow"]
+	prevent_attack = sset["prevent_attack"]

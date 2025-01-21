@@ -20,7 +20,10 @@ func move(monster : system_monster_controller):
 	
 	mTween.tween_property(monster,"global_position",npos,spd).set_ease(move_ease).set_trans(move_trans)
 	await mTween.finished
-	plyr.knockback(initpos,2222)
+	
+	if (plyr.global_position - monster.global_position).length() < 50:
+		plyr.knockback(initpos,2222)
+	else: print("Too far to knockback")
 	movement_complete.emit(self)
 
 func get_player(_m : system_monster_controller) -> Array[Vector2]:

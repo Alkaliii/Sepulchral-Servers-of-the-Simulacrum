@@ -50,9 +50,15 @@ layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
 
-[node name="LineEdit" type="LineEdit" parent="PRUI/LobbyUI"]
-layout_mode = 0
-offset_right = 67.0625
+[node name="StartGame" type="Button" parent="PRUI/LobbyUI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -67.0
 offset_bottom = 31.0
+grow_horizontal = 0
+text = "Start"
 
 [connection signal="pressed" from="PRUI/LobbyUI/VBoxContainer/JoinRoom" to="." method="_on_join_room_pressed"]
+[connection signal="pressed" from="PRUI/LobbyUI/StartGame" to="." method="_on_start_game_pressed"]

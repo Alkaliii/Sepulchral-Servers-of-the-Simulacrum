@@ -18,6 +18,7 @@ func on_quit(args):
 		queue_free()
 
 func knockback(from : Vector2, strr : float = 10):
+	print("puppet knockback")
 	pass #to client?
 
 func _process(delta):

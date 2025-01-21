@@ -24,6 +24,20 @@ func set_target(new : Node2D,ofst : Vector2 = Vector2.ZERO):
 	target = new
 	offset_target = ofst
 
+func sync_target():
+	var data : Array = []
+	data.append(target.get_path())
+	data.append(offset_target)
+	
+	Plyrm.Playroom.RPC.call("cam_target",var_to_str(data),Plyrm.Playroom.RPC.Mode.OTHERS)
+
+func sync_trauma(amt = trauma, dec := decay):
+	var data : Array = []
+	data.append(amt)
+	data.append(dec)
+	
+	Plyrm.Playroom.RPC.call("cam_trauma",var_to_str(data),Plyrm.Playroom.RPC.Mode.OTHERS)
+
 func add_trauma(amount : float, dec := decay):
 	trauma = min(trauma + amount, 1.0)
 	while trauma:

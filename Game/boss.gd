@@ -28,6 +28,12 @@ var dead := false
 # Using the phase movement, the host will move, clients will sync using state
 
 func _ready():
+	App.start_boss.connect(test_start)
+	Plyrm.PR_PLAYER_JOIN.connect(check_host)
+	Plyrm.PR_PLAYER_QUIT.connect(check_host)
+	Plyrm.PR_SESSION_END.connect(check_host)
+	Plyrm.PR_DISCONNECT.connect(check_host)
+	
 	add_to_group("monster")
 	monster_data.status.setup(monster_data.base_health)
 	healthbar.max_value = monster_data.base_health
@@ -35,9 +41,22 @@ func _ready():
 	hit_detector.DAMAGED.connect(on_damage)
 	#hit_detector.AFFLICTED.connect()
 	
+	if OS.has_feature("pc"): test_start()
+
+func test_start():
 	await get_tree().create_timer(3.0).timeout
 	await roar(str("You encounter [shake]",monster_data.name))
 	test_phase()
+
+func check_host(args = null):
+	if Plyrm.PLAYER and !Plyrm.Playroom.isHost():
+		print("kys")
+		set_physics_process(false)
+		kill_phase()
+		return
+	else:
+		set_physics_process(true)
+		#restart the game...?
 
 func test_phase():
 	if phases.is_empty(): return
@@ -136,10 +155,13 @@ func roar(msg : String = "!!!"):
 	App.can_click = false
 	var cam = get_tree().get_first_node_in_group("camera")
 	cam.set_target($Sprite,Vector2(0,-45))
+	if Plyrm.connected: cam.sync_target()
 	await get_tree().create_timer(0.5).timeout
 	cam.add_trauma(10)
+	if Plyrm.connected: cam.sync_trauma(10)
 	await get_tree().create_timer(2.5).timeout
 	cam.set_target(get_tree().get_first_node_in_group("player"))
+	if Plyrm.connected: cam.sync_target()
 	App.can_click = true
 
 func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingText.a.FLOAT, outline : Dictionary = {}):
@@ -153,33 +175,53 @@ func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingTex
 	add_child(new)
 
 func _physics_process(delta):
-	if Plyrm.PLAYER and !Plyrm.Playroom.isHost():
-		set_physics_process(false)
-		return
+	sync_state()
+	check_host()
 	#chase(delta)
 
-func set_behaviour_time(new_dura : float):
-	behaviour_time_elapse = 0.0
-	behaviour_duration = new_dura
+func _process(delta):
+	if Plyrm.PLAYER and !is_physics_processing():
+		var data
+		var boss_state = Plyrm.Playroom.getState("bState")
+		if boss_state: data = JSON.parse_string(boss_state)
+		else: return
+		
+		var pos = Vector2(data.pos_x,data.pos_y)
+		create_tween().tween_property(self,"global_position",pos,0.1).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 
-var behaviour_time_elapse : float = 0.0
-var behaviour_duration : float = 10.0
-var chase_target : Node2D
-func chase(delta):
-	#Set target
-	if !chase_target or (behaviour_time_elapse >= behaviour_duration):
-		set_behaviour_time(randf_range(10,20))
-		var possible_target : Array = get_tree().get_nodes_in_group("puppet")
-		possible_target.append(get_tree().get_first_node_in_group("player"))
-		chase_target = possible_target.pick_random()
-	
-	#run away sorta DIRECTION = (global_position - chase_target.global_position).normalized()
-	DIRECTION = (chase_target.global_position - global_position).normalized()
-	if DIRECTION:
-		velocity = lerp(velocity,DIRECTION * (SPEED * SPEED_MULTIPLIER),ACCELERATION)
-		#last_direction = DIRECTION
-	else:
-		velocity = lerp(velocity,Vector2.ZERO,FRICTION)
-	
-	behaviour_time_elapse += delta
-	move_and_slide()
+func sync_state():
+	var state = {
+		"pos_x":global_position.x,
+		"pos_y":global_position.y,
+		#"on_cooldown": !(dash_cooldown <= 0.0),
+		#"direction":var_to_str(DIRECTION)
+	}
+	if Plyrm.PLAYER: 
+		#Plyrm.Playroom.setState(str("pState_",Plyrm.PLAYERData.id),JSON.stringify(state))
+		Plyrm.Playroom.setState("bState",JSON.stringify(state))
+
+#func set_behaviour_time(new_dura : float):
+	#behaviour_time_elapse = 0.0
+	#behaviour_duration = new_dura
+#
+#var behaviour_time_elapse : float = 0.0
+#var behaviour_duration : float = 10.0
+#var chase_target : Node2D
+#func chase(delta):
+	##Set target
+	#if !chase_target or (behaviour_time_elapse >= behaviour_duration):
+		#set_behaviour_time(randf_range(10,20))
+		#var possible_target : Array = get_tree().get_nodes_in_group("puppet")
+		#possible_target.append(get_tree().get_first_node_in_group("player"))
+		#chase_target = possible_target.pick_random()
+	#
+	##run away sorta DIRECTION = (global_position - chase_target.global_position).normalized()
+	#DIRECTION = (chase_target.global_position - global_position).normalized()
+	#if DIRECTION:
+		#velocity = lerp(velocity,DIRECTION * (SPEED * SPEED_MULTIPLIER),ACCELERATION)
+		##last_direction = DIRECTION
+	#else:
+		#velocity = lerp(velocity,Vector2.ZERO,FRICTION)
+	#
+	#behaviour_time_elapse += delta
+	#move_and_slide()

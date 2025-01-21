@@ -46,6 +46,7 @@ var dash_cooldown_length := 2.0
 #var last_direction : Vector2 = Vector2.ZERO
 
 func _ready():
+	#App.knock_plyr.connect(knockback)
 	add_to_group("player")
 	tspin_vfx.play("topSPIN")
 	bspin_vfx.play("bottomSPIN")

@@ -134,8 +134,6 @@ func play_phase(retrn = null):
 		match on_end:
 			r.NONE:
 				if randf_range(0,100) < chance_to_stop:
-					pass
-				else:
 					kill_phase()
 					my_monster.change_phase()
 					return

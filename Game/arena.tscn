@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bbaje3tan2k7o"]
+[gd_scene load_steps=22 format=3 uid="uid://bbaje3tan2k7o"]
 
 [ext_resource type="PackedScene" uid="uid://dgyaxcfmcseek" path="res://Game/player.tscn" id="1_f8ne3"]
 [ext_resource type="Script" path="res://Game/arena.gd" id="1_idpkm"]
@@ -9,15 +9,11 @@
 [ext_resource type="Script" path="res://Game/game_camera.gd" id="6_cmqed"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/attackOption.gd" id="7_kgwd8"]
 [ext_resource type="Script" path="res://Game/Schema/DamageSettings.gd" id="8_wt75w"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkLine.gd" id="9_5v85i"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkFocus.gd" id="9_lxfpf"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Condition/conditionOption.gd" id="10_et5r3"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/movementOption.gd" id="11_ur4n2"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveDash.gd" id="12_p0fdj"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveTeleport.gd" id="12_pmxkx"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/specialOption.gd" id="13_7jmln"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPull.gd" id="14_jau3u"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkCircle.gd" id="15_uto1i"]
 
 [sub_resource type="Resource" id="Resource_tdh4b"]
 script = ExtResource("3_4dmae")
@@ -68,122 +64,18 @@ dash_speed = 1900.0
 move_ease = 2
 move_trans = 5
 
-[sub_resource type="Resource" id="Resource_v6ygn"]
-script = ExtResource("14_jau3u")
-length = 3.0
-
-[sub_resource type="Resource" id="Resource_ggwvf"]
-script = ExtResource("8_wt75w")
-dmg = 1
-radius = 20
-inflict = 0
-pre_warn = 0.5
-warn_activation_time = 1.0
-dmg_activation_time = 0.5
-hold_time = 0.1
-repeat = 1
-slow = false
-prevent_attack = false
-
-[sub_resource type="Resource" id="Resource_p4y6c"]
-script = ExtResource("9_lxfpf")
-attack_number = 3
-intra_spawn_delay = 0.2
-spawn_position = 1
-spawn_position_offset = Vector2(0, 0)
-damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_ggwvf")])
-multi_ds_behaviour = 0
-attack_start_delay = 1.0
-
 [sub_resource type="Resource" id="Resource_7fry3"]
 script = ExtResource("6_151od")
-schedule = Array[int]([0, 3, 2, 1, 4])
-on_heavy = 1
-on_end = 2
+schedule = Array[int]([0, 1, 4])
+on_heavy = 0
+on_end = 0
 chance_to_stop = 0.0
 ohspi = -1
-oespi = 1
+oespi = -1
 wait_range = Vector2(0.5, 2)
 MOVEMENT_OPTIONS = Array[ExtResource("11_ur4n2")]([SubResource("Resource_ylt1e")])
 ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_djtya")])
-SUB_ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_p4y6c")])
-SPECIAL_OPTIONS = Array[ExtResource("13_7jmln")]([SubResource("Resource_v6ygn")])
-CONDITION_OPTIONS = Array[ExtResource("10_et5r3")]([])
-
-[sub_resource type="Resource" id="Resource_wbl6j"]
-script = ExtResource("8_wt75w")
-dmg = 1
-radius = 60
-inflict = 0
-pre_warn = 0.5
-warn_activation_time = 1.0
-dmg_activation_time = 0.5
-hold_time = 0.1
-repeat = 1
-slow = false
-prevent_attack = false
-
-[sub_resource type="Resource" id="Resource_iqt2x"]
-script = ExtResource("15_uto1i")
-attack_points = 6
-radius = 120.0
-intra_spawn_delay = 0.125
-shuffle_spawn_order = true
-spawn_position = 1
-spawn_position_offset = Vector2(0, 0)
-damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_wbl6j")])
-multi_ds_behaviour = 0
-attack_start_delay = 1.0
-
-[sub_resource type="Resource" id="Resource_bq7lo"]
-script = ExtResource("12_pmxkx")
-teleport_to = 0
-tele_global = Vector2(0, 0)
-tele_limit = Vector2(200, 200)
-hold = 0.5
-
-[sub_resource type="Resource" id="Resource_epudq"]
-script = ExtResource("8_wt75w")
-dmg = 1
-radius = 30
-inflict = 0
-pre_warn = 0.5
-warn_activation_time = 1.0
-dmg_activation_time = 0.5
-hold_time = 0.1
-repeat = 1
-slow = false
-prevent_attack = false
-
-[sub_resource type="Resource" id="Resource_5sst8"]
-script = ExtResource("9_5v85i")
-derive_dir = 1
-to_object_position = 1
-to_position = Vector2(1, 0)
-rotational_offset = 0.0
-attack_number = 6
-grow_factor = 1.5
-bifurcate = false
-intra_spawn_delay = 0.063
-shuffle_spawn_order = false
-spawn_position = 0
-spawn_position_offset = Vector2(0, 0)
-damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_epudq")])
-multi_ds_behaviour = 0
-attack_start_delay = 1.0
-
-[sub_resource type="Resource" id="Resource_1alyq"]
-script = ExtResource("6_151od")
-schedule = Array[int]([0, 3, 2, 1, 4])
-on_heavy = 1
-on_end = 2
-chance_to_stop = 0.0
-ohspi = -1
-oespi = 0
-wait_range = Vector2(0.5, 2)
-MOVEMENT_OPTIONS = Array[ExtResource("11_ur4n2")]([SubResource("Resource_bq7lo")])
-ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_iqt2x")])
-SUB_ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_5sst8")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([])
 SPECIAL_OPTIONS = Array[ExtResource("13_7jmln")]([])
 CONDITION_OPTIONS = Array[ExtResource("10_et5r3")]([])
 
@@ -201,7 +93,7 @@ job = SubResource("Resource_tdh4b")
 weapon = SubResource("Resource_yplev")
 
 [node name="Boss" parent="." instance=ExtResource("3_ly78x")]
-phases = Array[ExtResource("6_151od")]([SubResource("Resource_7fry3"), SubResource("Resource_1alyq")])
+phases = Array[ExtResource("6_151od")]([SubResource("Resource_7fry3")])
 
 [node name="GameCamera" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
 ignore_rotation = false

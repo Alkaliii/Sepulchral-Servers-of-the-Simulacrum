@@ -46,6 +46,14 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 	#Use monster to get player positions
 	pass
 
+func sync_attack(position : Vector2, settings : DamageRadiusSettings):
+	var data : Array = []
+	var drs = JSON.stringify(settings.serialize())
+	data.append(position)
+	data.append(drs)
+	
+	Plyrm.Playroom.RPC.call("spawn_dmg",var_to_str(data),Plyrm.Playroom.RPC.Mode.OTHERS)
+
 func _check_complete():
 	while true:
 		await App.process_frame()

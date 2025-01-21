@@ -19,6 +19,7 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 		new.top_level = true
 		new.global_position = _get_spawn_position(_monster).pick_random()
 		new.warn()
+		if Plyrm.connected: sync_attack(new.global_position,new.settings)
 		
 		my_radi.append(new)
 		new.finished.connect(_on_damage_finished)

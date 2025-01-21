@@ -5,11 +5,20 @@ extends Node2D
 #eg. placing down boss, player, and puppets
 
 const PUPPET = preload("res://Game/puppet.tscn")
+const DAMAGE_RADIUS = preload("res://Game/damage_radius.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Plyrm.PR_PLAYER_JOIN.connect(on_player_join)
+	App.spawn_dmg.connect(spawn_dmg)
 
+func spawn_dmg(pos : Vector2, data : DamageRadiusSettings):
+	var new = DAMAGE_RADIUS.instantiate()
+	new.settings = data
+	add_child(new)
+	new.top_level = true
+	new.global_position = pos
+	new.warn()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

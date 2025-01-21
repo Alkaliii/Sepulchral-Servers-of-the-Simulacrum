@@ -4,6 +4,9 @@ extends Node
 var can_click : bool = true
 var can_input : bool = true
 
+signal start_boss
+signal spawn_dmg #position : vector2, dmgSettings
+
 func isometrize(v : Vector2) -> Vector2:
 	var new : Vector2 = Vector2()
 	new.x = v.x - v.y
