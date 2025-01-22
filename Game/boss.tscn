@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://jvlvkbccv6ur"]
+[gd_scene load_steps=16 format=3 uid="uid://jvlvkbccv6ur"]
 
 [ext_resource type="Script" path="res://Game/boss.gd" id="1_5lnwp"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="1_yr56s"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Game/hit_detector.gd" id="2_354gp"]
 [ext_resource type="Script" path="res://Game/Schema/Status.gd" id="3_fi5qo"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="3_xghth"]
+[ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="4_dh5bv"]
 [ext_resource type="PackedScene" uid="uid://oas5aab7on8x" path="res://Game/damage_radius.tscn" id="6_1htco"]
 
 [sub_resource type="Resource" id="Resource_83p26"]
@@ -16,9 +17,43 @@ immunity = Array[int]([])
 
 [sub_resource type="Resource" id="Resource_4md7q"]
 script = ExtResource("2_44a56")
-name = "Unit Test"
+stitle = "vanguard of observation"
+name = "System Unit Test"
 base_health = 100
 status = SubResource("Resource_83p26")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_toek4"]
+noise_type = 2
+fractal_lacunarity = 11.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ot7aj"]
+width = 8
+seamless = true
+noise = SubResource("FastNoiseLite_toek4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6mmno"]
+shader = ExtResource("4_dh5bv")
+shader_parameter/mask = false
+shader_parameter/mask_scroll = Vector2(0, 0)
+shader_parameter/wscale = 1.0
+shader_parameter/progress = 0.31
+shader_parameter/derive_progress = -1.0
+shader_parameter/ease_progress = 1.0
+shader_parameter/time_scale = 0.25
+shader_parameter/auto_fade = true
+shader_parameter/direction = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/pulse_max_scale = 0.35
+shader_parameter/pulse_offset = 0.0
+shader_parameter/outer_feather = 0.1
+shader_parameter/inner_feather = 0.1
+shader_parameter/ss_edges = Vector2(0, 0.7)
+shader_parameter/mix_strength = 0.0
+shader_parameter/col_ovr_dis_str = 0.0
+shader_parameter/polarize_opacity_noise = true
+shader_parameter/animate_opacity_noise = Vector3(3, 0, 0)
+shader_parameter/scale_opacity_noise = Vector2(1, 1)
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ot7aj")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yofi6"]
 radius = 15.0
@@ -31,6 +66,20 @@ y_sort_enabled = true
 motion_mode = 1
 script = ExtResource("1_5lnwp")
 monster_data = SubResource("Resource_4md7q")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_6mmno")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -200.0
+offset_right = 400.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="HitDetector" type="Area2D" parent="."]
 scale = Vector2(4, 4)

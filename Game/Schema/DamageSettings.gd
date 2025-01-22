@@ -27,6 +27,8 @@ class_name DamageRadiusSettings
 @export var prevent_attack : bool = false
 #Prevent player from attacking if they are inside it
 
+@export var invert_controls : bool = false
+
 func serialize() -> Dictionary:
 	var sset : Dictionary = {}
 	
@@ -40,6 +42,7 @@ func serialize() -> Dictionary:
 	sset["repeat"] = repeat
 	sset["slow"] = slow
 	sset["prevent_attack"] = prevent_attack
+	sset["invert_controls"] = invert_controls
 	
 	return sset
 
@@ -54,3 +57,4 @@ func deserialize(sset : Dictionary):
 	repeat = sset["repeat"]
 	slow = sset["slow"]
 	prevent_attack = sset["prevent_attack"]
+	invert_controls = sset["invert_controls"]

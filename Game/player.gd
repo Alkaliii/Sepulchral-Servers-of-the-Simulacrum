@@ -33,17 +33,22 @@ var BDMG : int = 2
 @onready var bspin_vfx = $bottomSpinVFX
 @onready var gesture = $Gesture
 
+@onready var health_bar = $UI/Stats/MarginContainer/stats/HealthBar
+@onready var under_bar = $UI/Stats/MarginContainer/stats/HealthBar/UnderBar
 @onready var s_cache_lbl = $UI/Stats/MarginContainer/VBoxContainer/sCache
 @onready var charge_bar = $UI/Stats/MarginContainer/VBoxContainer/Charge
-@onready var p_cache_bar = $UI/Stats/pCacheBar
+@onready var p_cache_bar = $UI/Stats/MarginContainer/stats/pCacheBar#$UI/Stats/pCacheBar
 @onready var cooldown = $UI/Stats/MarginContainer/VBoxContainer/Cooldown
-@onready var p_cooldown_bar = $UI/Stats/pCooldownBar
+@onready var p_cooldown_bar = $UI/Stats/MarginContainer/stats/pCooldownBar#$UI/Stats/pCooldownBar
 
 const FTXT = preload("res://Game/float_text.tscn")
 
 var dash_cooldown := 0.0
 var dash_cooldown_length := 2.0
 #var last_direction : Vector2 = Vector2.ZERO
+
+var canDealDamage : bool = true
+var invertControls : bool = false
 
 func _ready():
 	#App.knock_plyr.connect(knockback)
@@ -67,12 +72,24 @@ func set_job():
 		MAX_PCACHE = job.final_m_pc
 		CHARGE_AMOUNT = job.final_pc_c
 		BDMG = job.final_base_dmg
+	health_bar.max_value = status.max_health
+	under_bar.max_value = status.max_health
+	health_bar.value = status.health
+	under_bar.value = status.health
 
 func on_damage(amt : int):
 	status._damage(amt)
 	disp_ftxt(str("[color=#e34262]",amt),global_position + Vector2(0,25),FloatingText.a.POP)
-	#set health bar here
+	#health_bar.value = status.health
+	tween_health(status.health)
 	#print(status.health)
+
+var htw : Tween
+func tween_health(nv : float):
+	if htw: htw.kill()
+	htw = create_tween()
+	htw.tween_property(health_bar,"value",nv,0.125).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	htw.parallel().tween_property(under_bar,"value",nv,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE).set_delay(0.1)
 
 func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingText.a.FLOAT, outline : Dictionary = {}):
 	var new = FTXT.instantiate()
@@ -143,15 +160,19 @@ func remote_drag():
 			drag(rd_target[0].global_position,boss_drag_data["strr"])
 		else: rd_target.clear()
 
-func _process(delta):
-	if SCACHE > 0.0 and decay:
-		SCACHE -= 0.001
-		update_s_charge()
+func _process(_delta):
+	#if SCACHE > 0.0 and decay:
+		#SCACHE -= 0.001
+		#update_s_charge()
+	pass
 
 func _physics_process(delta):
 	#WACKY
+	if Input.is_action_just_pressed("recognize_gesture"): weapon.generate_random()
 	if App.can_input and !knocked:
 		DIRECTION = isometrize(Input.get_vector("MLEFT", "MRIGHT", "MUP", "MDOWN").rotated(deg_to_rad(-45))).normalized()
+		if invertControls:
+			DIRECTION = isometrize(Input.get_vector("MUP", "MDOWN", "MLEFT", "MRIGHT").rotated(deg_to_rad(-45))).normalized()
 	#DON"T ROTATE FOR NORMAL
 	
 	#if Input.is_action_just_pressed("ACTIONB"):
@@ -184,8 +205,8 @@ func _physics_process(delta):
 		else:
 			print("on cooldown ", dash_cooldown)
 	elif dash_cooldown > 0.0:
-		cooldown.value = dash_cooldown
-		p_cooldown_bar.value = dash_cooldown
+		cooldown.value = cooldown.max_value - dash_cooldown
+		p_cooldown_bar.value = p_cooldown_bar.max_value - dash_cooldown
 		dash_cooldown -= delta
 	if dash_cooldown <= 0.0 and (tspin_vfx.modulate.a == 0.0 or bspin_vfx.modulate.a == 0.0):
 		stw = create_tween()
@@ -207,9 +228,9 @@ func sync_state():
 		#Plyrm.Playroom.setState(str("pState_",Plyrm.PLAYERData.id),JSON.stringify(state))
 		Plyrm.PLAYER.state.setState("pState",JSON.stringify(state))
 
-func charge():
+func charge(ca = CHARGE_AMOUNT):
 	if CURRENT_PCACHE >= 0 and CURRENT_PCACHE < MAX_PCACHE:
-		CURRENT_PCACHE += CHARGE_AMOUNT
+		CURRENT_PCACHE += ca
 		CURRENT_PCACHE = clamp(CURRENT_PCACHE,0,MAX_PCACHE)
 		print(CURRENT_PCACHE)
 		disp_ftxt(str("+"),global_position + Vector2(0,25),FloatingText.a.POP)
@@ -220,13 +241,16 @@ func charge():
 	p_cache_bar.value = CURRENT_PCACHE
 
 func s_charge():
-	if !decay: return
-	var minc = 0.1 * pow(2.718,-0.9 * (SCACHE - 2.0))
-	var maxc = 0.45 * pow(2.718,-0.9 * (SCACHE - 2.0))
-	var val = randf_range(minc,maxc)
+	#if !decay: return
+	#var minc = 0.1 * pow(2.718,-0.9 * (SCACHE - 2.0))
+	#var maxc = 0.45 * pow(2.718,-0.9 * (SCACHE - 2.0))
+	disp_ftxt(str("[font_size=10][shake]!!!"),global_position + Vector2(0,45),FloatingText.a.POP)
+	if SCACHE >= 5.0: 
+		charge(1)
+		return
+	var val = 5.0 / 3.0#randf_range(minc,maxc)
 	SCACHE += val
 	s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
-	disp_ftxt(str("[font_size=10][shake]!!!"),global_position + Vector2(0,45),FloatingText.a.POP)
 	#print(min,"/",max,"->",val)
 
 func update_s_charge():
@@ -234,6 +258,9 @@ func update_s_charge():
 
 func s_discharge() -> float:
 	if !decay: return 0.0
+	if SCACHE == 0.0: 
+		disp_ftxt("@",global_position + Vector2(0,25),FloatingText.a.POP)
+		return 0.0
 	if !discharge(): return 0.0
 	var amt = SCACHE
 	if amt != 0.0:

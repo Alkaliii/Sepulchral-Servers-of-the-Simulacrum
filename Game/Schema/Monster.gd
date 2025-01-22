@@ -1,8 +1,8 @@
 extends Resource
 class_name system_monster
 
-
-@export var name : String = "Unit Test"
+@export var stitle : String = "vanguard of observation"
+@export var name : String = "System Unit Test"
 @export var base_health : int = 100
 @export var status : system_status
 

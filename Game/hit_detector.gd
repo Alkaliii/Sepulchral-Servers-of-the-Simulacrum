@@ -81,6 +81,7 @@ func determine_and_signal_outcome(p : system_controller, c : int) -> bool:
 			print("AID! ",delta)
 		hdf.ENEMY:
 			if p.job.need_sight and !p.can_see(sight_subject): return false
+			if !p.canDealDamage: return false
 			match c:
 				0: #light
 					if p.discharge():

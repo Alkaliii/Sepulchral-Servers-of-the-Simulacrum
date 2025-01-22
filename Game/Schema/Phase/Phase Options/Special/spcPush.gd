@@ -3,6 +3,7 @@ class_name pushSpecial
 
 #pushes player away from monster
 @export var length : float = 3.0
+@export_range(1,99) var strength : float = 1.0
 
 func perform_special(monster : system_monster_controller):
 	#host will push player and player on other instances using RPC?
@@ -10,13 +11,13 @@ func perform_special(monster : system_monster_controller):
 	cancel = false
 	
 	var dur = length
-	monster.sync_drag(true,monster.get_path(),-30)
+	monster.sync_drag(true,monster.get_path(),-30 * strength)
 	while true:
 		if dur <= 0: break
 		if cancel: 
 			monster.sync_drag(false)
 			return
-		p.drag(monster.global_position,-30)
+		p.drag(monster.global_position,-30 * strength)
 		dur -= monster.get_process_delta_time()
 		await App.process_frame()
 	

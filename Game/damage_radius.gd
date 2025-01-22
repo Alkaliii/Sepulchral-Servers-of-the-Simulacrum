@@ -146,3 +146,29 @@ func isometrize(v : Vector2) -> Vector2:
 	new.x = v.x - v.y
 	new.y = (v.x + v.y) / 2.0
 	return new
+
+
+func _on_player_detector_body_entered(body):
+	if body is system_controller:
+		if settings.prevent_attack: 
+			print("Attack Nullified")
+			body.canDealDamage = false
+		if settings.slow:
+			print("Speed Reduced")
+			body.SPEED_MULTIPLIER = 0.5
+		if settings.invert_controls:
+			print("Controls Inverted")
+			body.invertControls = true
+
+
+func _on_player_detector_body_exited(body):
+	if body is system_controller:
+		if settings.prevent_attack: 
+			print("Attack Restored")
+			body.canDealDamage = true
+		if settings.slow:
+			print("Speed Restored")
+			body.SPEED_MULTIPLIER = 1.0
+		if settings.invert_controls:
+			print("Controls Restored")
+			body.invertControls = false

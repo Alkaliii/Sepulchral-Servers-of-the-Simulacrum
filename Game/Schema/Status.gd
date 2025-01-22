@@ -8,7 +8,7 @@ enum effects {
 	FEAR, #BAD, Movement speed down
 	WEAK, #BAD, Attacks deal half damage (ceil)
 	MUTE, #BAD, Can't click self or others for aid
-	BLIND, #BAD, Screen goes black, forces monsters to roam
+	BLIND, #BAD, Screen goes black
 	SICK, #BAD, Can't receive aid (healing/armor), can be cleared still
 	SLOW, #BAD, Cooldown is slow
 	ARMOR, #GOOD, Prevents damage once

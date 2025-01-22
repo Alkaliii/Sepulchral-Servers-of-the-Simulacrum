@@ -45,7 +45,10 @@ func _ready():
 
 func test_start():
 	await get_tree().create_timer(3.0).timeout
+	await SystemUI.set_title(true,2,monster_data.name,monster_data.stitle)
 	await roar(str("You encounter [shake]",monster_data.name))
+	SystemUI.set_title(false)
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([6]),Plyrm.Playroom.RPC.Mode.OTHERS)
 	test_phase()
 
 func check_host(args = null):
@@ -101,6 +104,7 @@ var dtw : Tween
 func disappear(state : bool):
 	if dtw: dtw.kill()
 	dtw = create_tween()
+	if Plyrm.connected: sync_disappear(state)
 	match state:
 		true:
 			set_collision_layer_value(1,false)
@@ -114,6 +118,10 @@ func disappear(state : bool):
 			await dtw.finished
 			set_collision_layer_value(1,true)
 			hit_detector.disabled = false
+
+func sync_disappear(state : bool):
+	if !Plyrm.Playroom.isHost(): return #prevent spiralling disappear calls
+	Plyrm.Playroom.RPC.call("hide_boss",var_to_str(state),Plyrm.Playroom.RPC.Mode.OTHERS)
 
 @onready var sight = $Sight
 func check_position(pos : Vector2) -> Vector2:
@@ -165,6 +173,7 @@ func check_progress():
 		kill_phase()
 		dead = true
 		await roar()
+		SystemUI.set_title(true,2,fTxt.victorytitle,fTxt.victorySubtitles.pick_random(),Color("#a89f94"))
 	elif monster_data.status.health < (monster_data.status.max_health * .5) and !halfway_dead:
 		kill_phase()
 		halfway_dead = true
@@ -180,7 +189,9 @@ func roar(msg : String = "!!!"):
 	await get_tree().create_timer(0.5).timeout
 	cam.add_trauma(10)
 	if Plyrm.connected: cam.sync_trauma(10)
+	SystemUI.roar_effect(true)
 	await get_tree().create_timer(2.5).timeout
+	SystemUI.roar_effect(false)
 	cam.set_target(get_tree().get_first_node_in_group("player"))
 	if Plyrm.connected: cam.sync_target()
 	App.can_click = true
@@ -197,7 +208,7 @@ func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingTex
 
 func _physics_process(delta):
 	sync_state()
-	check_host()
+	#check_host()
 	#chase(delta)
 
 func _process(delta):

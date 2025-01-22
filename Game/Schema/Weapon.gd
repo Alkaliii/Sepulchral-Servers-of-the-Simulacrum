@@ -14,6 +14,21 @@ enum wd {
 	D20,
 }
 
+enum i {
+	DAGGER,
+	SWORD,
+	STAFF,
+	HAMMER,
+	GLASS,
+	AXE,
+	WARAXE,
+	TRIDENT,
+	BOW,
+	BLADE,
+	GAUNTLET
+}
+
+@export var icon : i = i.SWORD
 @export var primary_damage : wd = wd.D3
 @export var secondary_damage : wd = wd.D0
 @export var tertiary_damage : wd = wd.D0
@@ -64,3 +79,37 @@ func roll(weapon_damage : wd) -> int:
 		wd.D10: return randi_range(1,10)
 		wd.D20: return randi_range(1,20)
 	return 0
+
+const p_damage_weight = [0.0,2.0,1.0,1.0,0.5,0.5,0.5,0.5,0.25,0.24]
+const st_damage_weight = [1.0,1.0,1.0,1.0,0.5,0.5,0.5,0.5,0.25,0.24]
+const is_weight = [3.0,0.5,0.5]
+const icon_weights = [0.5,1.0,1.0,0.75,0.75,1.0,0.75,0.25,0.5,0.5,0.24]
+const weapon_is = [
+	system_status.effects.NONE,
+	system_status.effects.STUN,
+	system_status.effects.DOT,
+]
+func generate_random():
+	var damage_options = wd.keys()
+	var rand : RandomNumberGenerator = RandomNumberGenerator.new()
+	rand.randomize()
+	icon = i[i.keys()[rand.rand_weighted(icon_weights)]]
+	
+	primary_damage = wd[damage_options[rand.rand_weighted(p_damage_weight)]]
+	secondary_damage = wd[damage_options[rand.rand_weighted(st_damage_weight)]]
+	if secondary_damage != wd.D0:
+		tertiary_damage = wd[damage_options[rand.rand_weighted(st_damage_weight)]]
+		inflict_status = weapon_is[rand.rand_weighted(is_weight)]
+	else: 
+		tertiary_damage = wd.D0
+		inflict_status = system_status.effects.NONE
+	
+	var data = {
+		"icon": i.keys()[icon],
+		"pdmg": wd.keys()[primary_damage],
+		"sdmg": wd.keys()[secondary_damage],
+		"tdmg": wd.keys()[tertiary_damage],
+		"inflict": system_status.effects.keys()[inflict_status]
+	}
+	
+	print(data)

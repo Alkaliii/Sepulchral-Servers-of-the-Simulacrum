@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bbaje3tan2k7o"]
+[gd_scene load_steps=30 format=3 uid="uid://bbaje3tan2k7o"]
 
 [ext_resource type="PackedScene" uid="uid://dgyaxcfmcseek" path="res://Game/player.tscn" id="1_f8ne3"]
 [ext_resource type="Script" path="res://Game/arena.gd" id="1_idpkm"]
@@ -12,9 +12,11 @@
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkFocus.gd" id="9_lxfpf"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Condition/conditionOption.gd" id="10_et5r3"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/movementOption.gd" id="11_ur4n2"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveDash.gd" id="12_p0fdj"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveTeleport.gd" id="12_5yocs"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/specialOption.gd" id="13_7jmln"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPull.gd" id="14_h5kxk"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPush.gd" id="14_ywv46"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkCircle.gd" id="15_svyp1"]
 
 [sub_resource type="Resource" id="Resource_tdh4b"]
 script = ExtResource("3_4dmae")
@@ -31,6 +33,7 @@ need_sight = false
 
 [sub_resource type="Resource" id="Resource_yplev"]
 script = ExtResource("4_r7r2p")
+icon = 1
 primary_damage = 1
 secondary_damage = 0
 tertiary_damage = 0
@@ -48,6 +51,21 @@ hold_time = 0.1
 repeat = 1
 slow = false
 prevent_attack = false
+invert_controls = true
+
+[sub_resource type="Resource" id="Resource_ap81d"]
+script = ExtResource("8_wt75w")
+dmg = 1
+radius = 60
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
 
 [sub_resource type="Resource" id="Resource_djtya"]
 script = ExtResource("9_lxfpf")
@@ -55,33 +73,66 @@ attack_number = 6
 intra_spawn_delay = 1.0
 spawn_position = 1
 spawn_position_offset = Vector2(0, 0)
-damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_80r88")])
+damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_80r88"), SubResource("Resource_ap81d")])
 multi_ds_behaviour = 0
 attack_start_delay = 1.0
 
-[sub_resource type="Resource" id="Resource_ylt1e"]
-script = ExtResource("12_p0fdj")
-dash_speed = 1900.0
-move_ease = 2
-move_trans = 5
+[sub_resource type="Resource" id="Resource_2ccjo"]
+script = ExtResource("12_5yocs")
+teleport_to = 0
+tele_global = Vector2(0, 0)
+tele_limit = Vector2(200, 200)
+hold = 0.5
 
-[sub_resource type="Resource" id="Resource_1fkbx"]
+[sub_resource type="Resource" id="Resource_p15yq"]
+script = ExtResource("14_ywv46")
+length = 3.0
+strength = 1.0
+
+[sub_resource type="Resource" id="Resource_qrpbg"]
 script = ExtResource("14_h5kxk")
 length = 3.0
+strength = 2.0
+
+[sub_resource type="Resource" id="Resource_wgr23"]
+script = ExtResource("8_wt75w")
+dmg = 1
+radius = 60
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+
+[sub_resource type="Resource" id="Resource_vxl22"]
+script = ExtResource("15_svyp1")
+attack_points = 6
+radius = 120.0
+intra_spawn_delay = 0.0
+shuffle_spawn_order = true
+spawn_position = 1
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_wgr23")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
 
 [sub_resource type="Resource" id="Resource_7fry3"]
 script = ExtResource("6_151od")
-schedule = Array[int]([0, 1, 3, 4])
+schedule = Array[int]([0, 3, 2, 1, 4])
 on_heavy = 0
 on_end = 0
 chance_to_stop = 0.0
 ohspi = -1
 oespi = -1
-wait_range = Vector2(0.5, 2)
-MOVEMENT_OPTIONS = Array[ExtResource("11_ur4n2")]([SubResource("Resource_ylt1e")])
+wait_range = Vector2(1, 3)
+MOVEMENT_OPTIONS = Array[ExtResource("11_ur4n2")]([SubResource("Resource_2ccjo")])
 ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_djtya")])
-SUB_ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([])
-SPECIAL_OPTIONS = Array[ExtResource("13_7jmln")]([SubResource("Resource_1fkbx")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_vxl22")])
+SPECIAL_OPTIONS = Array[ExtResource("13_7jmln")]([SubResource("Resource_p15yq"), SubResource("Resource_qrpbg")])
 CONDITION_OPTIONS = Array[ExtResource("10_et5r3")]([])
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_f7y7t"]

@@ -119,11 +119,29 @@ func _on_join_room_pressed():
 	blog(str(pd))
 
 func register_rpc():
+	Playroom.RPC.register("game_state_update",bridgeToJS(game_state_update))
 	Playroom.RPC.register("spawn_dmg",bridgeToJS(spawn_dmg))
 	Playroom.RPC.register("cam_target",bridgeToJS(cam_target))
 	Playroom.RPC.register("cam_trauma",bridgeToJS(cam_trauma))
 	Playroom.RPC.register("player_knockback",bridgeToJS(player_knockback))
 	Playroom.RPC.register("dmg_boss",bridgeToJS(dmg_boss))
+	Playroom.RPC.register("hide_boss",bridgeToJS(hide_boss))
+
+func hide_boss(data):
+	#data = var_to_str(bool)
+	
+	if typeof(data) != TYPE_ARRAY: 
+		printerr("Bad Data in hide_boss()")
+		return
+	if !data.size() > 0:
+		printerr("No Data in hide_boss()")
+		return
+	
+	var unpacked_data = str_to_var(data[0])
+	
+	var mnstr = get_tree().get_first_node_in_group("monster")
+	if !mnstr: return
+	mnstr.disappear(unpacked_data)
 
 func dmg_boss(data):
 	#data = var_to_str([amt, click])
@@ -220,3 +238,30 @@ func spawn_dmg(data):
 		settings.deserialize(JSON.parse_string(unpacked_data[1]))
 	
 	App.spawn_dmg.emit(position,settings)
+
+func game_state_update(data):
+	#data = var_to_str([int,...])
+	
+	if typeof(data) != TYPE_ARRAY: 
+		printerr("Bad Data in game_state_update()")
+		return
+	if !data.size() > 0:
+		printerr("No Data in game_state_update()")
+		return
+	
+	var unpacked_data = str_to_var(data[0])
+	
+	match unpacked_data[0]:
+		0: pass #unreserved / test code
+		6: #kill client boss
+			var mnstr = get_tree().get_first_node_in_group("monster")
+			if !mnstr: return
+			mnstr.check_host()
+		7: #roar effect [7,bool]
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_BOOL: 
+				print_debug("Wrong Type")
+				return
+			SystemUI.roar_effect(unpacked_data[1])
