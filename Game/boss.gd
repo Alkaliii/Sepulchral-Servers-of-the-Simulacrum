@@ -29,6 +29,7 @@ var dead := false
 
 func _ready():
 	App.start_boss.connect(test_start)
+	App.reload_boss.connect(reload)
 	#Plyrm.PR_PLAYER_JOIN.connect(check_host)
 	#Plyrm.PR_PLAYER_QUIT.connect(check_host)
 	#Plyrm.PR_SESSION_END.connect(check_host)
@@ -39,13 +40,14 @@ func _ready():
 	healthbar.max_value = monster_data.base_health
 	healthbar.value = monster_data.status.health
 	hit_detector.DAMAGED.connect(on_damage)
-	#hit_detector.AFFLICTED.connect()
+	hit_detector.AFFLICTED.connect(on_afflict)
+	monster_data.status.DOT.connect(show_other_damage)
 	
 	if OS.has_feature("pc"): test_start()
 
 func test_start():
 	await get_tree().create_timer(3.0).timeout
-	await SystemUI.set_title(true,2,monster_data.name,monster_data.stitle)
+	await SystemUI.set_title(true,2,monster_data.name,monster_data.stitle,Color("#a89f94"))
 	await roar(str("You encounter [shake]",monster_data.name))
 	SystemUI.set_title(false)
 	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([6]),Plyrm.Playroom.RPC.Mode.OTHERS)
@@ -61,6 +63,13 @@ func check_host(args = null):
 		set_physics_process(true)
 		#restart the game...?
 
+func reload():
+	kill_phase()
+	dead = false
+	halfway_dead = false
+	monster_data.status.reload()
+	global_position = Vector2.ZERO
+
 func test_phase():
 	if phases.is_empty(): return
 	
@@ -69,8 +78,9 @@ func test_phase():
 	
 	await App.process_frame()
 	
-	phases[0].is_active = true
-	phases[0].play_phase()
+	#phases[0].is_active = true
+	#phases[0].play_phase()
+	change_phase(0)
 	
 	#while true:
 		#phases[0].ATTACK_OPTIONS[0].attack(self)
@@ -80,8 +90,9 @@ func test_phase():
 		#phases[0].MOVEMENT_OPTIONS[0].move(self)
 		#await phases[0].MOVEMENT_OPTIONS[0].movement_complete
 
+var active_phase : Phase
 func change_phase(new_phase : int = -1):
-	print("CHANGING PHASE!"," RANDOM" if new_phase == -1 else new_phase)
+	print("CHANGING PHASE!"," RANDOM" if new_phase == -1 else str(new_phase))
 	var phs : Phase
 	if new_phase and new_phase != -1: phs = phases[new_phase]
 	else: phs = phases.pick_random()
@@ -95,9 +106,12 @@ func start_phase(phs : Phase):
 	phs.last_phase_action = false
 	phs.phase_idx = 0
 	phs.play_phase()
+	active_phase = phs #sync active phase?
 
 func kill_phase():
-	for phs in phases: phs.kill_phase()
+	print("kill")
+	for phs in phases: 
+		phs.kill_phase()
 
 #@onready var boss_sprite = $Sprite
 var dtw : Tween
@@ -131,8 +145,25 @@ func check_position(pos : Vector2) -> Vector2:
 	else:
 		return pos
 
+func on_afflict(c : Array):
+	if c[0] != system_status.effects.NONE:
+		print("Afflict ",system_status.effects.keys()[c[0]]," ",c[1])
+	if c[0] == system_status.effects.STUN and !monster_data.status.current_effects.has(system_status.effects.STUN):
+		kill_phase()
+		await App.process_frame()
+		active_phase.clean_actions()
+		active_phase.is_active = true
+		active_phase.cancel = false
+		active_phase.last_phase_action = false
+		active_phase.phase_idx = 0
+		active_phase.pWAIT(c[1])
+	monster_data.status.add_effect(c[0],c[1])
+
 func on_damage(amt : int, click : int): #send player data in
 	#check condition before validating
+	if active_phase and !active_phase.validate_damage(click): 
+		return
+	
 	disp_ftxt(str(amt,"!" if click == 1 else ""),global_position - Vector2(0,45),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
 	var cam = get_tree().get_first_node_in_group("camera")
 	match click:
@@ -145,10 +176,10 @@ func on_damage(amt : int, click : int): #send player data in
 		sync_damage(amt,click)
 		return
 	
+	App.dmg_dealt += amt
 	monster_data.status._damage(amt)
 	healthbar.value = monster_data.status.health
-	
-	
+		
 	check_progress()
 
 func sync_damage(amt : int, click : int):
@@ -159,6 +190,9 @@ func sync_damage(amt : int, click : int):
 	Plyrm.Playroom.RPC.call("dmg_boss",var_to_str(data),Plyrm.Playroom.RPC.Mode.HOST)
 
 func remote_damage(amt : int, click : int):
+	if active_phase and !active_phase.validate_damage(click): 
+		return
+	
 	if click == 1:
 		for p in phases:
 			p.on_heavy_received()
@@ -168,12 +202,17 @@ func remote_damage(amt : int, click : int):
 	check_progress()
 	#healthbar.value = monster_data.status.health
 
+func show_other_damage(od : int = 1):
+	disp_ftxt(str(od),global_position - Vector2(0,45),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
+
 func check_progress():
 	if monster_data.status.health <= 0 and !dead:
 		kill_phase()
 		dead = true
-		await roar()
+		await roar(str(monster_data.name," has been defeated."))
 		SystemUI.set_title(true,2,fTxt.victorytitle,fTxt.victorySubtitles.pick_random(),Color("#a89f94"))
+		SystemUI.set_background(true,Color.BLACK)
+		SystemUI.push_title(Vector2(0,-80))
 	elif monster_data.status.health < (monster_data.status.max_health * .5) and !halfway_dead:
 		kill_phase()
 		halfway_dead = true
@@ -181,7 +220,6 @@ func check_progress():
 		start_phase(phases.pick_random())
 
 func roar(msg : String = "!!!"):
-	SystemUI.play_message(msg,6)
 	App.can_click = false
 	var cam = get_tree().get_first_node_in_group("camera")
 	cam.set_target($Sprite,Vector2(0,-45))
@@ -195,6 +233,23 @@ func roar(msg : String = "!!!"):
 	cam.set_target(get_tree().get_first_node_in_group("player"))
 	if Plyrm.connected: cam.sync_target()
 	App.can_click = true
+	await App.time_delay(0.5)
+	SystemUI.push_lateral({
+	"speaker":"nme",
+	"message":msg,
+	"type":LateralNotification.nt.SYSTEM,
+	"duration":6.0
+	})
+
+@onready var pull_vfx = $PullVFX
+func pull(state:bool,sscl:float = 1.0):
+	if state: pull_vfx.speed_scale = sscl
+	pull_vfx.emitting = state
+
+@onready var push_vfx = $PushVFX
+func push(state:bool,sscl:float = 1.0):
+	if state: push_vfx.speed_scale = sscl
+	push_vfx.emitting = state
 
 func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingText.a.FLOAT, outline : Dictionary = {}):
 	var new = FTXT.instantiate()
@@ -218,8 +273,33 @@ func _process(delta):
 		if boss_state: data = JSON.parse_string(boss_state)
 		else: return
 		
+		remote_drag()
 		var pos = Vector2(data.pos_x,data.pos_y)
 		create_tween().tween_property(self,"global_position",pos,0.1).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+	else:
+		if !monster_data.status.current_effects.is_empty():
+			monster_data.status.process_current(delta)
+
+var rd_target : Array
+func remote_drag():
+	var boss_drag_data
+	var boss_drag_state = Plyrm.Playroom.getState("bDrag")
+	if boss_drag_state: 
+		boss_drag_data = JSON.parse_string(boss_drag_state)
+		if boss_drag_data["is_drag"]:
+			if !rd_target or rd_target[1] != boss_drag_data["to"]:
+				rd_target = []
+				rd_target.append(get_node_or_null(boss_drag_data["to"]))
+				rd_target.append(boss_drag_data["to"])
+			#drag(rd_target[0].global_position,boss_drag_data["strr"])
+			if boss_drag_data["strr"] > 0: #pull
+				pull(true,1.0 + abs(boss_drag_data["strr"] / 30.0))
+			elif boss_drag_data["strr"] < 0: #push
+				push(true,1.0 + abs(boss_drag_data["strr"] / 30.0))
+		else: 
+			rd_target.clear()
+			pull(false)
+			push(false)
 
 func sync_state():
 	var state = {

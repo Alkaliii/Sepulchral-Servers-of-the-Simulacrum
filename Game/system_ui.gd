@@ -5,6 +5,8 @@ var system_messages : Array = []
 #[Message,Duration]
 #Negative means it's duration will elapse when sharing screen time
 @onready var system_msg = $cl/Top/Panel/HBoxContainer/system_msg
+@onready var console = $cl/Top/consolecont/console
+@onready var weapon_inventory = $cl/InGameMenu/MarginContainer/WeaponInventory
 
 func _ready():
 	set_title(false)
@@ -21,9 +23,42 @@ func _process(delta):
 		system_messages.pop_front()
 		if system_messages.is_empty(): system_msg.text = ""
 		else: system_msg.text = system_messages[0][0]
+	
+	if Input.is_action_just_pressed("open_console") and !console.visible:
+		open_console()
+	
+	if Input.is_action_just_pressed("open_weapon_inventory"):
+		open_w_inv()
+	
+	if check_move() and weapon_inventory.visible: open_w_inv()
+
+func check_move() -> bool:
+	if Input.is_action_just_pressed("MDOWN"): return true
+	if Input.is_action_just_pressed("MLEFT"): return true
+	if Input.is_action_just_pressed("MRIGHT"): return true
+	if Input.is_action_just_pressed("MUP"): return true
+	return false
+
+@onready var background = $cl/Back/Background
+var btw : Tween #background tween
+func set_background(state : bool, colr : Color = Color.BLACK):
+	if btw: btw.kill()
+	btw = create_tween()
+	
+	background.color = colr
+	match state:
+		true: #open
+			background.show()
+			btw.tween_property(background,"scale:y",1.0,0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+			await btw.finished
+		false: #close
+			btw.tween_property(background,"scale:y",-1.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
+			await btw.finished
+			background.hide()
 
 @onready var titlecont = $cl/Top/TITLECONT
 @onready var titletext = $cl/Top/TITLECONT/TITLE/pc/TITLETEXT
+@onready var title_background = $cl/Top/TITLECONT/TITLE/background
 var ttw : Tween #title tween
 func set_title(state : bool = true, shake : int = 2, title : String = "", subtitle : String = "", s_colr : Color = Color("#e34262")):
 	if ttw: ttw.kill()
@@ -34,9 +69,13 @@ func set_title(state : bool = true, shake : int = 2, title : String = "", subtit
 			ttw.tween_property(titlecont,"modulate:a",0,0.25).set_ease(Tween.EASE_IN_OUT)
 			await ttw.finished
 			titlecont.hide()
+			push_title(Vector2.ZERO)
 		true:
 			titlecont.show()
 			titletext.clear()
+			if s_colr == Color.BLACK:
+				title_background.hide()
+			else: title_background.show()
 			if subtitle != "":
 				titletext.append_text(str("[center][code][color=",s_colr.to_html(),"]",subtitle,"[/color][/code]"))
 				titletext.newline()
@@ -53,6 +92,12 @@ func set_title(state : bool = true, shake : int = 2, title : String = "", subtit
 			ttw = create_tween()
 			ttw.tween_property(titletext,"visible_ratio",1.0,0.125).set_ease(Tween.EASE_IN_OUT)
 			await ttw.finished
+
+var pttw : Tween #push title tween
+func push_title(offset : Vector2):
+	if pttw: pttw.kill()
+	pttw = create_tween()
+	pttw.tween_property(titlecont,"position",Vector2.ZERO + offset,0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 
 @onready var roar_sl = $effects/RoarSL
 var rtw : Tween #roar tween
@@ -71,3 +116,62 @@ func roar_effect(state : bool):
 
 func srslmev(nv : float): #set roar speed lines mask edge value
 	roar_sl.material.set_shader_parameter("mask_edge",nv)
+
+
+func open_console():
+	if weapon_inventory.visible: return
+	console.visible = !console.visible 
+	match console.visible:
+		true:
+			console.clear()
+			console.grab_focus()
+			App.can_input = false
+		false:
+			console.release_focus()
+			App.can_input = true
+
+func open_w_inv():
+	if console.visible: return
+	weapon_inventory.visible = !weapon_inventory.visible
+	match weapon_inventory.visible:
+		true:
+			App.can_input = false
+		false:
+			App.can_input = true
+
+func _on_console_text_submitted(new_text):
+	open_console()
+	if new_text:
+		push_lateral({
+			"speaker":"nme",
+			"message":new_text,
+			"type":LateralNotification.nt.SELF
+		})
+
+func clean_lateral():
+	#destory first child?
+	var noti = lat_notifications.get_children()
+	if noti.size() == 8:
+		var min_dur : LateralNotification = noti[0]
+		for i : LateralNotification in noti:
+			if i.liftime < min_dur.liftime:
+				min_dur = i
+		#lat_notifications.get_child(0).remove()
+		min_dur.remove()
+
+const NOTIPANEL = preload("res://Game/UI/notipanel.tscn")
+@onready var notipos = $cl/Top/NotificationCenter/Notification/notipos
+@onready var lat_notifications = $cl/Top/NotificationCenter/latNotifications
+
+#display shows a max of 8 msgs at a time, messages persist for 4 seconds by default?
+func push_lateral(data : Dictionary = {}):
+	clean_lateral()
+	var np : Control = Control.new()
+	np.custom_minimum_size = Vector2(150,15)
+	notipos.add_child(np)
+	await get_tree().process_frame
+	var ln : LateralNotification = NOTIPANEL.instantiate()
+	ln.assign = np
+	lat_notifications.add_child(ln)
+	ln.global_position = np.global_position + Vector2(-200,0)
+	ln.set_noti(data)

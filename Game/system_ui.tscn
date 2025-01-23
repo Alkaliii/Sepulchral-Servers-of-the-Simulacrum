@@ -1,13 +1,31 @@
-[gd_scene load_steps=22 format=3 uid="uid://t6xwa6fxikjk"]
+[gd_scene load_steps=25 format=3 uid="uid://t6xwa6fxikjk"]
 
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_d5ssp"]
 [ext_resource type="Script" path="res://Game/system_ui.gd" id="1_lreom"]
+[ext_resource type="PackedScene" uid="uid://djuca74bxbm2g" path="res://Game/UI/weapon_inventory.tscn" id="2_byca4"]
 [ext_resource type="Script" path="res://Game/mouse_follow.gd" id="2_puh6d"]
 [ext_resource type="Shader" path="res://Assets/Shaders/soko.gdshader" id="3_bnsld"]
 [ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="3_dhot8"]
 [ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="3_es8be"]
 [ext_resource type="Shader" path="res://Assets/Shaders/speedlines.gdshader" id="3_lnnwt"]
 [ext_resource type="Shader" path="res://Assets/Shaders/crt.gdshader" id="3_vrl4t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vijd3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fpsoy"]
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.168627, 0.168627, 0.14902, 1)
+border_blend = true
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+expand_margin_left = 15.0
+expand_margin_right = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rwfdx"]
 content_margin_left = 10.0
@@ -111,6 +129,54 @@ shader_parameter/opacity_noise = SubResource("NoiseTexture2D_q1l5l")
 script = ExtResource("1_lreom")
 
 [node name="cl" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="InGameMenu" type="Control" parent="cl"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="cl/InGameMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 60
+
+[node name="WeaponInventory" parent="cl/InGameMenu/MarginContainer" instance=ExtResource("2_byca4")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Back" type="Control" parent="cl"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="cl/Back"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, -1)
+pivot_offset = Vector2(0, 360)
+color = Color(0, 0, 0, 1)
 
 [node name="Top" type="Control" parent="cl"]
 layout_mode = 3
@@ -120,6 +186,33 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="consolecont" type="MarginContainer" parent="cl/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 80
+
+[node name="console" type="LineEdit" parent="cl/Top/consolecont"]
+visible = false
+z_index = 9
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("1_d5ssp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vijd3")
+theme_override_styles/normal = SubResource("StyleBoxFlat_fpsoy")
+placeholder_text = "(msg)"
+max_length = 30
+caret_blink = true
 
 [node name="Panel" type="PanelContainer" parent="cl/Top"]
 visible = false
@@ -166,6 +259,7 @@ scroll_active = false
 autowrap_mode = 0
 
 [node name="TITLECONT" type="MarginContainer" parent="cl/Top"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -173,6 +267,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(320, 180)
+mouse_filter = 2
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
@@ -211,6 +306,41 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 visible_characters_behavior = 1
+
+[node name="NotificationCenter" type="Control" parent="cl/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Notification" type="MarginContainer" parent="cl/Top/NotificationCenter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 80
+
+[node name="notipos" type="VBoxContainer" parent="cl/Top/NotificationCenter/Notification"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+mouse_filter = 2
+alignment = 2
+
+[node name="latNotifications" type="Control" parent="cl/Top/NotificationCenter"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
 
 [node name="effects" type="CanvasLayer" parent="."]
 layer = 9
@@ -254,3 +384,5 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[connection signal="text_submitted" from="cl/Top/consolecont/console" to="." method="_on_console_text_submitted"]

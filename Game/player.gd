@@ -58,12 +58,9 @@ func _ready():
 	gesture.circle_drawn.connect(s_charge)
 	
 	set_job()
-	charge_bar.max_value = MAX_PCACHE
-	p_cache_bar.max_value = MAX_PCACHE
-	charge_bar.value = CURRENT_PCACHE
-	p_cache_bar.value = CURRENT_PCACHE
 
 func set_job():
+	dead = false
 	if job:
 		job.setup()
 		#HEALTH = job.final_health
@@ -76,13 +73,59 @@ func set_job():
 	under_bar.max_value = status.max_health
 	health_bar.value = status.health
 	under_bar.value = status.health
+	
+	charge_bar.max_value = MAX_PCACHE
+	p_cache_bar.max_value = MAX_PCACHE
+	charge_bar.value = CURRENT_PCACHE
+	p_cache_bar.value = CURRENT_PCACHE
 
+func on_afflict(c : Array):
+	#TODO
+	pass
+
+var dead : bool = false
 func on_damage(amt : int):
+	if dead: return
 	status._damage(amt)
 	disp_ftxt(str("[color=#e34262]",amt),global_position + Vector2(0,25),FloatingText.a.POP)
 	#health_bar.value = status.health
 	tween_health(status.health)
 	#print(status.health)
+	if status.health == 1:
+		SystemUI.push_lateral({
+		"speaker":"nme",
+		"message":"Low Health!",
+		"type":LateralNotification.nt.DANGER,
+		"duration":8.0
+		})
+	
+	if status.health == 0:
+		dead = true
+		#remove puppets from other machines
+		#check if there are 0 puppets on host
+		#If so reload boss
+		await SystemUI.set_title(true,2,str("[color=red]",fTxt.defeattitle),fTxt.defeatSubtitles.pick_random(),Color("#a89f94"))
+		SystemUI.set_background(true,Color.BLACK)
+		SystemUI.push_title(Vector2(0,-80))
+		await App.time_delay(2.0)
+		
+		var game_state
+		if Plyrm.connected:
+			if !Plyrm.Playroom.isHost():
+				#get host to validate, stay dead until reload or victory
+				return
+			else:
+				game_state = App.validate_alive(false)
+		else:
+			game_state = App.validate_alive(false)
+		
+		if game_state == 0:
+			#Game over
+			App.reload_game()
+			await App.time_delay(2.0)
+			SystemUI.set_title(false)
+			await SystemUI.set_background(false)
+			App.start_boss.emit()
 
 var htw : Tween
 func tween_health(nv : float):
@@ -168,8 +211,11 @@ func _process(_delta):
 
 func _physics_process(delta):
 	#WACKY
-	if Input.is_action_just_pressed("recognize_gesture"): weapon.generate_random()
-	if App.can_input and !knocked:
+	if Input.is_action_just_pressed("recognize_gesture"):
+		var nw = system_weapon.new()
+		nw.generate_random()
+		App.weapon_inventory.append(nw)
+	if App.can_input and !knocked and !dead:
 		DIRECTION = isometrize(Input.get_vector("MLEFT", "MRIGHT", "MUP", "MDOWN").rotated(deg_to_rad(-45))).normalized()
 		if invertControls:
 			DIRECTION = isometrize(Input.get_vector("MUP", "MDOWN", "MLEFT", "MRIGHT").rotated(deg_to_rad(-45))).normalized()
@@ -250,11 +296,14 @@ func s_charge():
 		return
 	var val = 5.0 / 3.0#randf_range(minc,maxc)
 	SCACHE += val
-	s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
+	#s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
+	var wve = "[wave]" if SCACHE >= 5.0 else ""
+	s_cache_lbl.text = str(wve,"%.2f" % SCACHE,"[b]ghz")
 	#print(min,"/",max,"->",val)
 
 func update_s_charge():
-	s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
+	#s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
+	s_cache_lbl.text = str("%.2f" % SCACHE,"[b]ghz")
 
 func s_discharge() -> float:
 	if !decay: return 0.0

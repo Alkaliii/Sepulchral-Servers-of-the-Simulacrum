@@ -1,0 +1,171 @@
+[gd_scene load_steps=9 format=3 uid="uid://djuca74bxbm2g"]
+
+[ext_resource type="Script" path="res://Game/UI/weapon_inventory.gd" id="1_aqyos"]
+[ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="3_fl44h"]
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="4_dar0v"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_bvk63"]
+color = Color(0.745098, 0.745098, 0.745098, 1)
+thickness = 2
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_x41p2"]
+color = Color(0.168627, 0.168627, 0.14902, 0.498039)
+thickness = 2
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_0b6l7"]
+color = Color(0.745098, 0.745098, 0.745098, 1)
+vertical = true
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_djc0j"]
+color = Color(0.168627, 0.168627, 0.14902, 0.498039)
+vertical = true
+
+[sub_resource type="Theme" id="Theme_ft2mn"]
+HScrollBar/styles/grabber = SubResource("StyleBoxLine_bvk63")
+HScrollBar/styles/scroll = SubResource("StyleBoxLine_x41p2")
+VScrollBar/styles/grabber = SubResource("StyleBoxLine_0b6l7")
+VScrollBar/styles/scroll = SubResource("StyleBoxLine_djc0j")
+
+[node name="WeaponInventory" type="VBoxContainer"]
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_constants/separation = 0
+script = ExtResource("1_aqyos")
+
+[node name="Stats" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="weaponType" type="RichTextLabel" parent="Stats"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("3_fl44h")
+theme_override_fonts/mono_font = ExtResource("4_dar0v")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[code]SWORD[/code]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="damagelbl" type="RichTextLabel" parent="Stats"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("3_fl44h")
+theme_override_fonts/mono_font = ExtResource("4_dar0v")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[color=a89f94][code]DMG[/code]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="dmg" type="HBoxContainer" parent="Stats"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 0
+
+[node name="pDmg" type="RichTextLabel" parent="Stats/dmg"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("3_fl44h")
+theme_override_fonts/mono_font = ExtResource("4_dar0v")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "20"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="slash" type="RichTextLabel" parent="Stats/dmg"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("3_fl44h")
+theme_override_fonts/mono_font = ExtResource("4_dar0v")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[code]/[/code]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="sDmg" type="RichTextLabel" parent="Stats/dmg"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("3_fl44h")
+theme_override_fonts/mono_font = ExtResource("4_dar0v")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "20"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="slash2" type="RichTextLabel" parent="Stats/dmg"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("3_fl44h")
+theme_override_fonts/mono_font = ExtResource("4_dar0v")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[code]/[/code]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="tDmg" type="RichTextLabel" parent="Stats/dmg"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("3_fl44h")
+theme_override_fonts/mono_font = ExtResource("4_dar0v")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "20"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="invsc" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(200, 32)
+layout_mode = 2
+theme = SubResource("Theme_ft2mn")
+
+[node name="vbx" type="VBoxContainer" parent="invsc"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Spacer" type="Control" parent="invsc/vbx"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="List" type="HBoxContainer" parent="invsc/vbx"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4

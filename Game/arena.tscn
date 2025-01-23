@@ -1,12 +1,13 @@
-[gd_scene load_steps=30 format=3 uid="uid://bbaje3tan2k7o"]
+[gd_scene load_steps=32 format=3 uid="uid://bbaje3tan2k7o"]
 
 [ext_resource type="PackedScene" uid="uid://dgyaxcfmcseek" path="res://Game/player.tscn" id="1_f8ne3"]
 [ext_resource type="Script" path="res://Game/arena.gd" id="1_idpkm"]
 [ext_resource type="Script" path="res://Game/Schema/Job.gd" id="3_4dmae"]
 [ext_resource type="PackedScene" uid="uid://jvlvkbccv6ur" path="res://Game/boss.tscn" id="3_ly78x"]
-[ext_resource type="Script" path="res://Game/Schema/Weapon.gd" id="4_r7r2p"]
+[ext_resource type="Script" path="res://Game/Schema/Monster.gd" id="5_dev3y"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase.gd" id="6_151od"]
 [ext_resource type="Script" path="res://Game/game_camera.gd" id="6_cmqed"]
+[ext_resource type="Script" path="res://Game/Schema/Status.gd" id="6_id5ga"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/attackOption.gd" id="7_kgwd8"]
 [ext_resource type="Script" path="res://Game/Schema/DamageSettings.gd" id="8_wt75w"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkFocus.gd" id="9_lxfpf"]
@@ -31,13 +32,18 @@ can_heal = false
 can_parry = false
 need_sight = false
 
-[sub_resource type="Resource" id="Resource_yplev"]
-script = ExtResource("4_r7r2p")
-icon = 1
-primary_damage = 1
-secondary_damage = 0
-tertiary_damage = 0
-inflict_status = 0
+[sub_resource type="Resource" id="Resource_l3l4r"]
+script = ExtResource("6_id5ga")
+health = 5
+current_effects = {}
+immunity = Array[int]([])
+
+[sub_resource type="Resource" id="Resource_epvqo"]
+script = ExtResource("5_dev3y")
+stitle = "vanguard of observation"
+name = "System Unit Test"
+base_health = 900
+status = SubResource("Resource_l3l4r")
 
 [sub_resource type="Resource" id="Resource_80r88"]
 script = ExtResource("8_wt75w")
@@ -122,7 +128,7 @@ attack_start_delay = 1.0
 
 [sub_resource type="Resource" id="Resource_7fry3"]
 script = ExtResource("6_151od")
-schedule = Array[int]([0, 3, 2, 1, 4])
+schedule = Array[int]([0, 2, 3, 1, 4])
 on_heavy = 0
 on_end = 0
 chance_to_stop = 0.0
@@ -146,9 +152,9 @@ script = ExtResource("1_idpkm")
 y_sort_enabled = true
 position = Vector2(200, 200)
 job = SubResource("Resource_tdh4b")
-weapon = SubResource("Resource_yplev")
 
 [node name="Boss" parent="." instance=ExtResource("3_ly78x")]
+monster_data = SubResource("Resource_epvqo")
 phases = Array[ExtResource("6_151od")]([SubResource("Resource_7fry3")])
 
 [node name="GameCamera" type="Camera2D" parent="." node_paths=PackedStringArray("target")]

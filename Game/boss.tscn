@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://jvlvkbccv6ur"]
+[gd_scene load_steps=21 format=3 uid="uid://jvlvkbccv6ur"]
 
 [ext_resource type="Script" path="res://Game/boss.gd" id="1_5lnwp"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="1_yr56s"]
@@ -24,10 +24,14 @@ status = SubResource("Resource_83p26")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_toek4"]
 noise_type = 2
-fractal_lacunarity = 11.0
+fractal_type = 3
+fractal_octaves = 4
+fractal_gain = 2.0
+cellular_distance_function = 1
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ot7aj"]
-width = 8
+width = 256
+invert = true
 seamless = true
 noise = SubResource("FastNoiseLite_toek4")
 
@@ -36,24 +40,64 @@ shader = ExtResource("4_dh5bv")
 shader_parameter/mask = false
 shader_parameter/mask_scroll = Vector2(0, 0)
 shader_parameter/wscale = 1.0
-shader_parameter/progress = 0.31
-shader_parameter/derive_progress = -1.0
-shader_parameter/ease_progress = 1.0
-shader_parameter/time_scale = 0.25
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 1.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
 shader_parameter/auto_fade = true
-shader_parameter/direction = 0.0
-shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/direction = 1.0
+shader_parameter/modulate = Color(0.745098, 0.745098, 0.745098, 1)
 shader_parameter/pulse_max_scale = 0.35
 shader_parameter/pulse_offset = 0.0
 shader_parameter/outer_feather = 0.1
-shader_parameter/inner_feather = 0.1
-shader_parameter/ss_edges = Vector2(0, 0.7)
+shader_parameter/inner_feather = 0.05
+shader_parameter/ss_edges = Vector2(0, 0.4)
 shader_parameter/mix_strength = 0.0
 shader_parameter/col_ovr_dis_str = 0.0
 shader_parameter/polarize_opacity_noise = true
-shader_parameter/animate_opacity_noise = Vector3(3, 0, 0)
-shader_parameter/scale_opacity_noise = Vector2(1, 1)
+shader_parameter/animate_opacity_noise = Vector3(0, 0, -1)
+shader_parameter/scale_opacity_noise = Vector2(1, 0.2)
 shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ot7aj")
+
+[sub_resource type="Gradient" id="Gradient_3t6bd"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_op2kc"]
+gradient = SubResource("Gradient_3t6bd")
+width = 800
+height = 400
+
+[sub_resource type="Curve" id="Curve_21qdy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t0pa2"]
+shader = ExtResource("4_dh5bv")
+shader_parameter/mask = false
+shader_parameter/mask_scroll = Vector2(0, 0)
+shader_parameter/wscale = 1.0
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 1.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/auto_fade = true
+shader_parameter/direction = 0.0
+shader_parameter/modulate = Color(0.745098, 0.745098, 0.745098, 1)
+shader_parameter/pulse_max_scale = 0.35
+shader_parameter/pulse_offset = 0.0
+shader_parameter/outer_feather = 0.1
+shader_parameter/inner_feather = 0.05
+shader_parameter/ss_edges = Vector2(0, 0.4)
+shader_parameter/mix_strength = 0.0
+shader_parameter/col_ovr_dis_str = 0.0
+shader_parameter/polarize_opacity_noise = true
+shader_parameter/animate_opacity_noise = Vector3(0, 0, -1)
+shader_parameter/scale_opacity_noise = Vector2(1, 0.2)
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ot7aj")
+
+[sub_resource type="Curve" id="Curve_pb35b"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yofi6"]
 radius = 15.0
@@ -67,19 +111,27 @@ motion_mode = 1
 script = ExtResource("1_5lnwp")
 monster_data = SubResource("Resource_4md7q")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="PullVFX" type="CPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+show_behind_parent = true
 material = SubResource("ShaderMaterial_6mmno")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -200.0
-offset_right = 400.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
+emitting = false
+amount = 4
+speed_scale = 0.5
+texture = SubResource("GradientTexture2D_op2kc")
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_21qdy")
+
+[node name="PushVFX" type="CPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+show_behind_parent = true
+material = SubResource("ShaderMaterial_t0pa2")
+emitting = false
+amount = 4
+speed_scale = 0.5
+texture = SubResource("GradientTexture2D_op2kc")
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_pb35b")
 
 [node name="HitDetector" type="Area2D" parent="."]
 scale = Vector2(4, 4)

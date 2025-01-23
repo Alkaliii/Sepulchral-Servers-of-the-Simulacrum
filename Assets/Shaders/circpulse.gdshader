@@ -38,6 +38,7 @@ uniform bool polarize_opacity_noise = false;
 uniform vec3 animate_opacity_noise = vec3(0.0);
 uniform vec2 scale_opacity_noise = vec2(1.0);
 uniform sampler2D opacity_noise : hint_default_black;
+uniform sampler2D opacity_noise_b : hint_default_white;
 group_uniforms;
 
 varying float LIFETIME;
@@ -110,7 +111,7 @@ float get_opacity_noise(vec2 uv, float pgrs) {
 	if (polarize_opacity_noise == true) {
 		tUV = polar_coordinates(uv,vec2(0.5), (0.3 * offset.z) + scale_opacity_noise.y, 1.0);
 	}
-	return texture(opacity_noise,(tUV + offset.xy)).r;
+	return texture(opacity_noise,(tUV + offset.xy)).r * texture(opacity_noise_b,(tUV + offset.xy)).r;
 }
 
 void vertex() {

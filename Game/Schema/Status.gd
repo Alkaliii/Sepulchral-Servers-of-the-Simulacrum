@@ -33,6 +33,10 @@ func setup(maxh : int):
 	max_health = maxh
 	health = maxh
 
+func reload():
+	health = max_health
+	current_effects.clear()
+
 func _damage(amt : int):
 	if amt < 0: 
 		_heal(amt)
@@ -69,22 +73,28 @@ func process_effect(e : effects):
 		effects.DOT: _DOT()
 		effects.HEALTHY: _HEALTHY()
 
+signal DOT
+signal HLTY
+var drun := false
 func _DOT():
+	if drun: return
+	drun = true
 	if current_effects[effects.DOT] >= 1.0:
-		var t : Timer = Timer.new()
-		t.start(1.0)
-		await t.timeout
-		t.queue_free()
+		await App.time_delay(1)
 		
 		if health > 0:
 			health -= 1
+		DOT.emit()
+	drun = false
 
+var hrun := false
 func _HEALTHY():
+	if hrun: return
+	hrun = true
 	if current_effects[effects.HEALTHY] >= 1.0:
-		var t : Timer = Timer.new()
-		t.start(1.0)
-		await t.timeout
-		t.queue_free()
+		await App.time_delay(1)
 		
 		if health < max_health:
 			health += 1
+		HLTY.emit()
+	hrun = false

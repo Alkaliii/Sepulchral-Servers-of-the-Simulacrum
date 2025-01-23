@@ -176,14 +176,15 @@ func dconr(retrn = null):
 	if retrn is phaseSpecialOption:
 		retrn.special_complete.disconnect(play_phase)
 
-func pWAIT():
+func pWAIT(cwt : float = 0.0):
 	cur_option = null
 	var wait_time = randf_range(wait_range.x,wait_range.y)
+	if cwt != 0.0: wait_time = clamp(cwt,0.0,3.0)
+	print("I'M WAITIN! ", wait_time)
 	while true:
 		if wait_time <= 0: break
 		if cancel: return
 		wait_time -= my_monster.get_process_delta_time()
-		print("I'M WAITIN! ", wait_time)
 		await App.process_frame()
 	
 	play_phase()
@@ -256,3 +257,9 @@ func cancel_movement(caller = null):
 	for mve in MOVEMENT_OPTIONS:
 		if mve == caller: continue
 		mve.cancel_movement()
+
+func validate_damage(click : int) -> bool:
+	for c in CONDITION_OPTIONS:
+		if !c.validate_on_condition(click):
+			return false
+	return true

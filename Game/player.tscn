@@ -535,13 +535,14 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 
 [node name="sCache" type="RichTextLabel" parent="UI/Stats/MarginContainer/VBoxContainer"]
+clip_contents = false
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("5_pn2lt")
 theme_override_fonts/bold_font = ExtResource("5_pn2lt")
 theme_override_font_sizes/normal_font_size = 15
 theme_override_font_sizes/bold_font_size = 10
 bbcode_enabled = true
-text = "2.35[b]ghz"
+text = "0.00[b]ghz"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0

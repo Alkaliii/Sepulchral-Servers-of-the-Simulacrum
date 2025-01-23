@@ -12,14 +12,17 @@ func perform_special(monster : system_monster_controller):
 	
 	var dur = length
 	monster.sync_drag(true,monster.get_path(),-30 * strength)
+	monster.push(true, 1.0 + (strength / 10.0))
 	while true:
 		if dur <= 0: break
-		if cancel: 
+		if cancel:
+			monster.push(false)
 			monster.sync_drag(false)
 			return
 		p.drag(monster.global_position,-30 * strength)
 		dur -= monster.get_process_delta_time()
 		await App.process_frame()
 	
+	monster.push(false)
 	monster.sync_drag(false)
 	special_complete.emit(self)

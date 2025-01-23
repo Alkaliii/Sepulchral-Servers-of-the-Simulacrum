@@ -59,7 +59,7 @@ func calc_inflict(base : int,c : int) -> Array:
 		0: #light
 			if randf_range(0,100) < 15:
 				final[0] = inflict_status
-				final[1] = calc_heal(base)
+				final[1] = calc_heal(base) #lazy time calc
 		1: #heavy
 			if randf_range(0,100) < 50:
 				final[0] = inflict_status

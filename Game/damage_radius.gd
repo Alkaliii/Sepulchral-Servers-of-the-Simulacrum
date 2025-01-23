@@ -153,12 +153,30 @@ func _on_player_detector_body_entered(body):
 		if settings.prevent_attack: 
 			print("Attack Nullified")
 			body.canDealDamage = false
+			SystemUI.push_lateral({
+			"speaker":"nme",
+			"message":"Attack Nullified",
+			"type":LateralNotification.nt.WARN,
+			"duration":2.0
+			})
 		if settings.slow:
 			print("Speed Reduced")
 			body.SPEED_MULTIPLIER = 0.5
+			SystemUI.push_lateral({
+			"speaker":"nme",
+			"message":"Speed Reduced",
+			"type":LateralNotification.nt.WARN,
+			"duration":2.0
+			})
 		if settings.invert_controls:
 			print("Controls Inverted")
 			body.invertControls = true
+			SystemUI.push_lateral({
+			"speaker":"nme",
+			"message":"Controls Inverted",
+			"type":LateralNotification.nt.WARN,
+			"duration":2.0
+			})
 
 
 func _on_player_detector_body_exited(body):

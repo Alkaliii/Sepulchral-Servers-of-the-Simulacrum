@@ -41,6 +41,7 @@ func _input_event(viewport, event, shape_idx):
 			if player_callback(1): 
 				print("ACTION C Intercepted.")
 				pseudo_control.accept_event()
+				App.clicks_made += 1
 
 func repeat():
 	var increment := 0.5
@@ -52,6 +53,7 @@ func repeat():
 			if player_callback(0): 
 				print("ACTION B Intercepted.")
 				pseudo_control.accept_event()
+				App.clicks_made += 1
 		if !Input.is_action_pressed("ACTIONB"): break
 		if exit: break
 
