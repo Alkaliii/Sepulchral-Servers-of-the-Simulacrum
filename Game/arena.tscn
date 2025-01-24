@@ -42,7 +42,7 @@ immunity = Array[int]([])
 script = ExtResource("5_dev3y")
 stitle = "vanguard of observation"
 name = "System Unit Test"
-base_health = 900
+base_health = 100
 status = SubResource("Resource_l3l4r")
 
 [sub_resource type="Resource" id="Resource_80r88"]

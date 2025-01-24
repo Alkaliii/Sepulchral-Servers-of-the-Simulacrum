@@ -10,12 +10,22 @@ signal reload_boss
 
 #var saved_job : system_job
 #var saved_weapon : system_weapon
+var player_name : String
 var job_inventory : Array[system_job] = []
 var weapon_inventory : Array[system_weapon] = []
 
 var dmg_dealt : int = 0 #click damage
 var healing_performed : int = 0 #click healing
 var clicks_made : int = 0 #how many times you clicked
+var revolutions_made : int = 0 #how many times you spun your cursor
+
+var performance_screen_details : Dictionary = {
+	"bhp":1000,
+	"time":300
+}
+
+func _ready():
+	player_name = fTxt.playerNames.pick_random()
 
 func isometrize(v : Vector2) -> Vector2:
 	var new : Vector2 = Vector2()
@@ -38,13 +48,20 @@ func validate_alive(count_host : bool = true) -> int:
 	in_game += get_tree().get_nodes_in_group("puppet").size()
 	return in_game
 
+func validate_players() -> int:
+	if !Plyrm.connected: return 1
+	else:
+		return Plyrm.connected_players.size()
+
 func reload_game():
 	reload_boss.emit()
 	#reload player states also
 	var plyr = get_tree().get_first_node_in_group("player")
 	plyr.set_job()
+	reset_performace_metrics()
 
 func reset_performace_metrics():
 	dmg_dealt = 0
 	healing_performed = 0
 	clicks_made = 0
+	revolutions_made = 0

@@ -79,12 +79,12 @@ static var playerNames = [
 	"cho",
 	"zoe",
 	"nme",
- "wes",
- "why",
- "wax",
- "frt",
- "brj",
- "rsh",
- "dyn",
- "lax"
+	"wes",
+	"why",
+	"wax",
+	"frt",
+	"brj",
+	"rsh",
+	"dyn",
+	"lax"
 ]

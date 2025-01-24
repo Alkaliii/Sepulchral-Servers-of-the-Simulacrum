@@ -40,21 +40,28 @@ func check_move() -> bool:
 	return false
 
 @onready var background = $cl/Back/Background
+@onready var background_texture = $cl/Back/Background/BackTexture
 var btw : Tween #background tween
 func set_background(state : bool, colr : Color = Color.BLACK):
 	if btw: btw.kill()
 	btw = create_tween()
 	
-	background.color = colr
+	btw.tween_property(background,"color",colr,0.25).set_ease(Tween.EASE_IN_OUT)
+	#background.color = colr
 	match state:
 		true: #open
+			background_texture.modulate.a = 25.0/255.0
 			background.show()
-			btw.tween_property(background,"scale:y",1.0,0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+			btw.parallel().tween_property(background,"scale:y",1.0,0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+			#btw.parallel().tween_property(background_texture,"modulate:a",25.0/255.0,0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 			await btw.finished
 		false: #close
-			btw.tween_property(background,"scale:y",-1.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
+			btw.parallel().tween_property(background_texture,"modulate:a",0.0,0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+			btw.parallel().tween_property(background,"scale:y",-1.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
 			await btw.finished
 			background.hide()
+			#background_texture.material.set_shader_parameter("polar_coordinates",[true,false].pick_random())
+			#background_texture.material.set_shader_parameter("spin_rotation",randf_range(5,-5))
 
 @onready var titlecont = $cl/Top/TITLECONT
 @onready var titletext = $cl/Top/TITLECONT/TITLE/pc/TITLETEXT
@@ -175,3 +182,11 @@ func push_lateral(data : Dictionary = {}):
 	lat_notifications.add_child(ln)
 	ln.global_position = np.global_position + Vector2(-200,0)
 	ln.set_noti(data)
+
+@onready var performance_screen = $cl/Top/PerformanceScreen
+func prepare_stats():
+	#get all players to stash stats if multiplayer
+	await App.time_delay(4.0)
+	
+	#get all players to show stat screen (then they have to progress through menus on their own)
+	performance_screen.setlist()

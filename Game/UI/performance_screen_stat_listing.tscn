@@ -1,0 +1,83 @@
+[gd_scene load_steps=3 format=3 uid="uid://tu7hiqllegoa"]
+
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_4c08m"]
+[ext_resource type="Script" path="res://Game/UI/performance_screen_stat_listing.gd" id="1_388gi"]
+
+[node name="StatListing" type="HBoxContainer"]
+custom_minimum_size = Vector2(350, 0)
+script = ExtResource("1_388gi")
+
+[node name="name" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_4c08m")
+theme_override_fonts/bold_font = ExtResource("1_4c08m")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[wave]NME"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="dmg" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_4c08m")
+theme_override_fonts/bold_font = ExtResource("1_4c08m")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[shake]300!"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="healing" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_4c08m")
+theme_override_fonts/bold_font = ExtResource("1_4c08m")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "300"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="spins" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_4c08m")
+theme_override_fonts/bold_font = ExtResource("1_4c08m")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "3"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="clicks" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_4c08m")
+theme_override_fonts/bold_font = ExtResource("1_4c08m")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "300"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

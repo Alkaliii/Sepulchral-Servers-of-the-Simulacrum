@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://t6xwa6fxikjk"]
+[gd_scene load_steps=32 format=3 uid="uid://t6xwa6fxikjk"]
 
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_d5ssp"]
 [ext_resource type="Script" path="res://Game/system_ui.gd" id="1_lreom"]
@@ -7,8 +7,53 @@
 [ext_resource type="Shader" path="res://Assets/Shaders/soko.gdshader" id="3_bnsld"]
 [ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="3_dhot8"]
 [ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="3_es8be"]
+[ext_resource type="Shader" path="res://Assets/Shaders/balatroPaintMix.gdshader" id="3_i3u1e"]
 [ext_resource type="Shader" path="res://Assets/Shaders/speedlines.gdshader" id="3_lnnwt"]
 [ext_resource type="Shader" path="res://Assets/Shaders/crt.gdshader" id="3_vrl4t"]
+[ext_resource type="Shader" path="res://Assets/Shaders/slipgate.gdshader" id="4_3d3qu"]
+[ext_resource type="PackedScene" uid="uid://brxo7jbspxwqt" path="res://Game/UI/performance_screen.tscn" id="8_uiocd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qiyfm"]
+shader = ExtResource("3_i3u1e")
+shader_parameter/polar_coordinates = false
+shader_parameter/polar_center = Vector2(0.5, 0.5)
+shader_parameter/polar_zoom = 1.0
+shader_parameter/polar_repeat = 1.0
+shader_parameter/spin_rotation = 2.0
+shader_parameter/spin_speed = 5.0
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/colour_1 = Color(0, 0, 0, 1)
+shader_parameter/colour_2 = Color(0.745098, 0.745098, 0.745098, 1)
+shader_parameter/colour_3 = Color(0.201527, 0.201527, 0.201527, 1)
+shader_parameter/contrast = 2.0
+shader_parameter/spin_amount = 0.36
+shader_parameter/pixel_filter = 1080.0
+
+[sub_resource type="Gradient" id="Gradient_q0prr"]
+offsets = PackedFloat32Array(0, 0.6, 0.8, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.745098, 0.745098, 0.745098, 1, 0.2, 0.2, 0.2, 1, 0.745098, 0.745098, 0.745098, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_aeq4l"]
+gradient = SubResource("Gradient_q0prr")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hx6f5"]
+shader = ExtResource("4_3d3qu")
+shader_parameter/polar_coordinates = true
+shader_parameter/polar_center = Vector2(0.5, 0.5)
+shader_parameter/fisheye_amt = 1.0
+shader_parameter/fbm_octaves = 4
+shader_parameter/center_bias = 1.0
+shader_parameter/swirl_str = 0.02
+shader_parameter/swirl_arms = -3
+shader_parameter/swirl_size = 5.0
+shader_parameter/marble_multipliers = Vector2(5, 3.5)
+shader_parameter/rotation_speed = -0.01
+shader_parameter/rotation_speed_b = -0.1
+shader_parameter/time_scale = Vector2(0.05, 0.1)
+shader_parameter/time_scale_b = Vector2(0.02, 0.05)
+shader_parameter/edges = Vector2(1, 0)
+shader_parameter/use_color_lookup = true
+shader_parameter/color_lookup = SubResource("GradientTexture1D_aeq4l")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vijd3"]
 
@@ -147,6 +192,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 60
 theme_override_constants/margin_right = 30
@@ -177,6 +223,28 @@ grow_vertical = 2
 scale = Vector2(1, -1)
 pivot_offset = Vector2(0, 360)
 color = Color(0, 0, 0, 1)
+
+[node name="BackgroundTexture" type="ColorRect" parent="cl/Back/Background"]
+visible = false
+modulate = Color(1, 1, 1, 0.137255)
+material = SubResource("ShaderMaterial_qiyfm")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BackTexture" type="ColorRect" parent="cl/Back/Background"]
+modulate = Color(1, 1, 1, 0.0980392)
+material = SubResource("ShaderMaterial_hx6f5")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Top" type="Control" parent="cl"]
 layout_mode = 3
@@ -341,6 +409,9 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
+
+[node name="PerformanceScreen" parent="cl/Top" instance=ExtResource("8_uiocd")]
+layout_mode = 1
 
 [node name="effects" type="CanvasLayer" parent="."]
 layer = 9

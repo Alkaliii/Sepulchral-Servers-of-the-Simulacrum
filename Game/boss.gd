@@ -21,6 +21,8 @@ const FTXT = preload("res://Game/float_text.tscn")
 
 var halfway_dead := false
 var dead := false
+var tiktok := false
+var time_elapsed := 0.0
 
 # On host, phase is selected, this is propagated via RPC to client bosses
 # During phase an attack is called, this is also propagated via RPC to client bosses
@@ -49,6 +51,8 @@ func test_start():
 	await get_tree().create_timer(3.0).timeout
 	await SystemUI.set_title(true,2,monster_data.name,monster_data.stitle,Color("#a89f94"))
 	await roar(str("You encounter [shake]",monster_data.name))
+	time_elapsed = 0.0
+	tiktok = true
 	SystemUI.set_title(false)
 	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([6]),Plyrm.Playroom.RPC.Mode.OTHERS)
 	test_phase()
@@ -208,11 +212,15 @@ func show_other_damage(od : int = 1):
 func check_progress():
 	if monster_data.status.health <= 0 and !dead:
 		kill_phase()
+		tiktok = false
 		dead = true
+		App.performance_screen_details["time"] = time_elapsed
+		App.performance_screen_details["bhp"] = monster_data.status.max_health
 		await roar(str(monster_data.name," has been defeated."))
 		SystemUI.set_title(true,2,fTxt.victorytitle,fTxt.victorySubtitles.pick_random(),Color("#a89f94"))
 		SystemUI.set_background(true,Color.BLACK)
 		SystemUI.push_title(Vector2(0,-80))
+		SystemUI.prepare_stats()
 	elif monster_data.status.health < (monster_data.status.max_health * .5) and !halfway_dead:
 		kill_phase()
 		halfway_dead = true
@@ -267,6 +275,7 @@ func _physics_process(delta):
 	#chase(delta)
 
 func _process(delta):
+	if tiktok: time_elapsed += delta
 	if Plyrm.PLAYER and !is_physics_processing():
 		var data
 		var boss_state = Plyrm.Playroom.getState("bState")

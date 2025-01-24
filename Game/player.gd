@@ -74,10 +74,24 @@ func set_job():
 	health_bar.value = status.health
 	under_bar.value = status.health
 	
+	CURRENT_PCACHE = 0
+	SCACHE = 0
+	dash_cooldown = 0.0
 	charge_bar.max_value = MAX_PCACHE
 	p_cache_bar.max_value = MAX_PCACHE
 	charge_bar.value = CURRENT_PCACHE
 	p_cache_bar.value = CURRENT_PCACHE
+	update_s_charge()
+
+func random_start_position():
+	var rand = randf_range(0,2*PI)
+	var pos : Vector2 = Vector2(
+		sin(rand),
+		cos(rand)
+	)
+	pos.y *= 0.5
+	pos *= 200
+	global_position = pos
 
 func on_afflict(c : Array):
 	#TODO
@@ -122,6 +136,7 @@ func on_damage(amt : int):
 		if game_state == 0:
 			#Game over
 			App.reload_game()
+			random_start_position()
 			await App.time_delay(2.0)
 			SystemUI.set_title(false)
 			await SystemUI.set_background(false)
@@ -219,6 +234,7 @@ func _physics_process(delta):
 		DIRECTION = isometrize(Input.get_vector("MLEFT", "MRIGHT", "MUP", "MDOWN").rotated(deg_to_rad(-45))).normalized()
 		if invertControls:
 			DIRECTION = isometrize(Input.get_vector("MUP", "MDOWN", "MLEFT", "MRIGHT").rotated(deg_to_rad(-45))).normalized()
+	else: DIRECTION = Vector2.ZERO
 	#DON"T ROTATE FOR NORMAL
 	
 	#if Input.is_action_just_pressed("ACTIONB"):
@@ -238,7 +254,7 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("ACTIONA") and DIRECTION:
 		if dash_cooldown <= 0.0 or CURRENT_PCACHE != 0:
-			velocity *= DASH_STRENGTH
+			velocity += (DIRECTION * abs(velocity)) * DASH_STRENGTH
 			var new_cooldown = dash_cooldown_length
 			if dash_cooldown <= dash_cooldown_length * 0.2: charge()
 			else:
@@ -291,6 +307,7 @@ func s_charge():
 	#var minc = 0.1 * pow(2.718,-0.9 * (SCACHE - 2.0))
 	#var maxc = 0.45 * pow(2.718,-0.9 * (SCACHE - 2.0))
 	disp_ftxt(str("[font_size=10][shake]!!!"),global_position + Vector2(0,45),FloatingText.a.POP)
+	App.revolutions_made += 1
 	if SCACHE >= 5.0: 
 		charge(1)
 		return

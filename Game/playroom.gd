@@ -27,8 +27,12 @@ func _ready():
 	if OS.has_feature("pc"): $PRUI.hide()
 
 func blog(txt : String):
-	debug.text += "\n"
-	debug.text += txt
+	SystemUI.push_lateral({
+	"speaker":"nme",
+	"message":txt,
+	"type":LateralNotification.nt.SYSTEM,
+	"duration":80
+	})
 
 # Called when the host has started the game
 func onInsertCoin(args):
@@ -77,7 +81,6 @@ func _on_start_game_pressed():
 
 @onready var room_input = $PRUI/LobbyUI/VBoxContainer/RoomInput
 @onready var join_room = $PRUI/LobbyUI/VBoxContainer/JoinRoom
-@onready var debug = $PRUI/LobbyUI/debug
 func _on_join_room_pressed():
 	join_room.release_focus()
 	join_room.disabled = true

@@ -44,12 +44,6 @@ visible = false
 layout_mode = 2
 text = "Queue"
 
-[node name="debug" type="TextEdit" parent="PRUI/LobbyUI"]
-custom_minimum_size = Vector2(200, 200)
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-
 [node name="StartGame" type="Button" parent="PRUI/LobbyUI"]
 layout_mode = 1
 anchors_preset = 1

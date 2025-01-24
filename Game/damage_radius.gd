@@ -173,7 +173,7 @@ func _on_player_detector_body_entered(body):
 			body.invertControls = true
 			SystemUI.push_lateral({
 			"speaker":"nme",
-			"message":"Controls Inverted",
+			"message":"Controls Twisted",
 			"type":LateralNotification.nt.WARN,
 			"duration":2.0
 			})

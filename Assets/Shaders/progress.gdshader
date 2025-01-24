@@ -1,3 +1,4 @@
+// https://godotshaders.com/shader/sprite-progress-bar/
 // UPDATED VERSION FOR GODOT 4
 
 shader_type canvas_item;

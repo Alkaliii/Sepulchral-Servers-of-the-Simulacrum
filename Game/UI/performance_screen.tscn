@@ -1,0 +1,270 @@
+[gd_scene load_steps=5 format=3 uid="uid://brxo7jbspxwqt"]
+
+[ext_resource type="Script" path="res://Game/UI/performance_screen.gd" id="1_fkyv5"]
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_wknbi"]
+[ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="2_bb82i"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_l7p7c"]
+color = Color(0.333333, 0.333333, 0.333333, 1)
+
+[node name="PerformanceScreen" type="MarginContainer"]
+custom_minimum_size = Vector2(640, 360)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 640.0
+offset_right = 640.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+script = ExtResource("1_fkyv5")
+
+[node name="HeaderVbc" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = -5
+
+[node name="Subtitle" type="RichTextLabel" parent="HeaderVbc"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[wave]DUNGEON CLEARED!"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Header" type="RichTextLabel" parent="HeaderVbc"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("2_bb82i")
+theme_override_fonts/mono_font = ExtResource("1_wknbi")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "Results"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="StatList" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="bHealth" type="RichTextLabel" parent="StatList"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "1000 hp"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Time" type="RichTextLabel" parent="StatList"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "time/ 00:00:00"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="spacer" type="Control" parent="StatList"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="statHeaders" type="HBoxContainer" parent="StatList"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="name" type="RichTextLabel" parent="StatList/statHeaders"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "name"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="dmg" type="RichTextLabel" parent="StatList/statHeaders"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "damage"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="healing" type="RichTextLabel" parent="StatList/statHeaders"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "healing"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="spins" type="RichTextLabel" parent="StatList/statHeaders"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "rev"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="clicks" type="RichTextLabel" parent="StatList/statHeaders"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "clicks"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="topsep" type="HSeparator" parent="StatList"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_l7p7c")
+
+[node name="list" type="VBoxContainer" parent="StatList"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="botsep" type="HSeparator" parent="StatList"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_l7p7c")
+
+[node name="statTotals" type="HBoxContainer" parent="StatList"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="total" type="RichTextLabel" parent="StatList/statTotals"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "total"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="dmg" type="RichTextLabel" parent="StatList/statTotals"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "3000000"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="healing" type="RichTextLabel" parent="StatList/statTotals"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "3000000"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="rev" type="RichTextLabel" parent="StatList/statTotals"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "3"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="clicks" type="RichTextLabel" parent="StatList/statTotals"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "3000000"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
