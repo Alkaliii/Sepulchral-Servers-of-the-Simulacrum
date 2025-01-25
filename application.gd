@@ -24,8 +24,23 @@ var performance_screen_details : Dictionary = {
 	"time":300
 }
 
+enum gsu {
+	ASSERT_STATE,
+	RELOAD_STATE,
+	REMOTE_MUSIC,
+	REMOTE_STOP_MUSIC,
+	REMOTE_SFX,
+	REMOTE_LATERAL, #send messages
+	REMOTE_TITLE,
+	DISABLE_CLIENT_BOSS,
+	ROAR_FX,
+	STASH_METRICS,
+	SHOW_PERFORMANCE,
+}
+
 func _ready():
 	player_name = fTxt.playerNames.pick_random()
+	print(player_name)
 
 func isometrize(v : Vector2) -> Vector2:
 	var new : Vector2 = Vector2()
@@ -44,7 +59,7 @@ func time_delay(time_sec : float = 1.0, process_always : bool = true,process_in_
 func validate_alive(count_host : bool = true) -> int:
 	#check for players and puppets and return the number
 	var in_game : int = 0
-	if count_host: in_game += get_tree().get_nodes_in_group("player").size()
+	in_game += get_tree().get_nodes_in_group("player").size()
 	in_game += get_tree().get_nodes_in_group("puppet").size()
 	return in_game
 
@@ -53,12 +68,37 @@ func validate_players() -> int:
 	else:
 		return Plyrm.connected_players.size()
 
+func assert_game_state():
+	var game_state
+	if Plyrm.connected:
+		if !Plyrm.Playroom.isHost():
+			#get host to validate, stay dead until reload or victory
+			Plyrm.Playroom.RPC.call("game_state_update",var_to_str([gsu.ASSERT_STATE]),Plyrm.Playroom.RPC.Mode.OTHERS)
+			return
+		else:
+			game_state = App.validate_alive()
+	else:
+		game_state = App.validate_alive()
+	
+	if game_state == 0:
+		#Game over
+		if Plyrm.connected: 
+			Plyrm.Playroom.RPC.call("game_state_update",var_to_str([gsu.RELOAD_STATE]),Plyrm.Playroom.RPC.Mode.OTHERS)
+		await App.reload_game()
+	
+		if !Plyrm.connected or Plyrm.Playroom.isHost():
+			App.start_boss.emit()
+
 func reload_game():
 	reload_boss.emit()
 	#reload player states also
-	var plyr = get_tree().get_first_node_in_group("player")
-	plyr.set_job()
 	reset_performace_metrics()
+	var plyr = get_tree().get_first_node_in_group("player_persistant")
+	plyr.set_job()
+	plyr.random_start_position()
+	await App.time_delay(2.0)
+	SystemUI.set_title(false)
+	await SystemUI.set_background(false)
 
 func reset_performace_metrics():
 	dmg_dealt = 0

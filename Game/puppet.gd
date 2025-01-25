@@ -17,6 +17,19 @@ func on_quit(args):
 		get_parent().remove_child(self)
 		queue_free()
 
+var dead : bool = false
+func sync_dead(state:bool):
+	dead = state
+	match state:
+		true:
+			#turn on off hit detection here (for aid)
+			#make request to check game state (auto)
+			remove_from_group("puppet")
+			await create_tween().tween_property(self,"scale",Vector2.ZERO,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
+		false:
+			add_to_group("puppet")
+			await create_tween().tween_property(self,"scale",Vector2.ONE,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
+
 func knockback(from : Vector2, strr : float = 10):
 	#Boss on host calls knockback on puppet on host
 	#Puppet passes call to client via RPC
@@ -39,6 +52,7 @@ func _process(delta):
 		var pos = Vector2(data.pos_x,data.pos_y)
 		manage_animation(str_to_var(data.direction))
 		manage_spin(data.on_cooldown)
+		if data.dead != dead: sync_dead(data.dead)
 		create_tween().tween_property(self,"global_position",pos,0.1).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 
 var stw : Tween

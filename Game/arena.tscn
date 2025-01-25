@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bbaje3tan2k7o"]
+[gd_scene load_steps=34 format=3 uid="uid://bbaje3tan2k7o"]
 
 [ext_resource type="PackedScene" uid="uid://dgyaxcfmcseek" path="res://Game/player.tscn" id="1_f8ne3"]
 [ext_resource type="Script" path="res://Game/arena.gd" id="1_idpkm"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPull.gd" id="14_h5kxk"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPush.gd" id="14_ywv46"]
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkCircle.gd" id="15_svyp1"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkLine.gd" id="18_up7ol"]
 
 [sub_resource type="Resource" id="Resource_tdh4b"]
 script = ExtResource("3_4dmae")
@@ -44,6 +45,9 @@ stitle = "vanguard of observation"
 name = "System Unit Test"
 base_health = 100
 status = SubResource("Resource_l3l4r")
+normal_music = 0
+halfway_music = 1
+roar = 0
 
 [sub_resource type="Resource" id="Resource_80r88"]
 script = ExtResource("8_wt75w")
@@ -58,6 +62,9 @@ repeat = 1
 slow = false
 prevent_attack = false
 invert_controls = true
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 1
 
 [sub_resource type="Resource" id="Resource_ap81d"]
 script = ExtResource("8_wt75w")
@@ -72,6 +79,9 @@ repeat = 1
 slow = false
 prevent_attack = false
 invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 1
 
 [sub_resource type="Resource" id="Resource_djtya"]
 script = ExtResource("9_lxfpf")
@@ -100,7 +110,7 @@ script = ExtResource("14_h5kxk")
 length = 3.0
 strength = 2.0
 
-[sub_resource type="Resource" id="Resource_wgr23"]
+[sub_resource type="Resource" id="Resource_lxviw"]
 script = ExtResource("8_wt75w")
 dmg = 1
 radius = 60
@@ -108,21 +118,41 @@ inflict = 0
 pre_warn = 0.5
 warn_activation_time = 1.0
 dmg_activation_time = 0.5
-hold_time = 0.1
+hold_time = 3.0
 repeat = 1
 slow = false
 prevent_attack = false
 invert_controls = false
+movement_type = 3
+movement_speed = 100.0
+spawn_sound = 1
 
 [sub_resource type="Resource" id="Resource_vxl22"]
 script = ExtResource("15_svyp1")
 attack_points = 6
 radius = 120.0
-intra_spawn_delay = 0.0
+intra_spawn_delay = -1.0
 shuffle_spawn_order = true
-spawn_position = 1
+spawn_position = 0
 spawn_position_offset = Vector2(0, 0)
-damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_wgr23")])
+damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_lxviw")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_0mj3e"]
+script = ExtResource("18_up7ol")
+derive_dir = 1
+to_object_position = 1
+to_position = Vector2(1, 0)
+rotational_offset = 0.0
+attack_number = 6
+grow_factor = 1.0
+bifurcate = false
+intra_spawn_delay = 0.0
+shuffle_spawn_order = false
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_lxviw")])
 multi_ds_behaviour = 0
 attack_start_delay = 1.0
 
@@ -137,7 +167,7 @@ oespi = -1
 wait_range = Vector2(1, 3)
 MOVEMENT_OPTIONS = Array[ExtResource("11_ur4n2")]([SubResource("Resource_2ccjo")])
 ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_djtya")])
-SUB_ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_vxl22")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_vxl22"), SubResource("Resource_0mj3e")])
 SPECIAL_OPTIONS = Array[ExtResource("13_7jmln")]([SubResource("Resource_p15yq"), SubResource("Resource_qrpbg")])
 CONDITION_OPTIONS = Array[ExtResource("10_et5r3")]([])
 

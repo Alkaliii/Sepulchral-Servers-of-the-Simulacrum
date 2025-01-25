@@ -63,6 +63,19 @@ func set_background(state : bool, colr : Color = Color.BLACK):
 			#background_texture.material.set_shader_parameter("polar_coordinates",[true,false].pick_random())
 			#background_texture.material.set_shader_parameter("spin_rotation",randf_range(5,-5))
 
+func sync_and_set_title(state : bool = true, shake : int = 2, title : String = "", subtitle : String = "", s_colr : Color = Color("#e34262")):
+	var data = {
+		"state":state,
+		"shake":shake,
+		"title":title,
+		"subtitle":subtitle,
+		"s_colr":s_colr.to_html()
+	}
+	var pack = JSON.stringify(data)
+	
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.REMOTE_TITLE,pack]),Plyrm.Playroom.RPC.Mode.OTHERS)
+	set_title(state,shake,title,subtitle,s_colr)
+
 @onready var titlecont = $cl/Top/TITLECONT
 @onready var titletext = $cl/Top/TITLECONT/TITLE/pc/TITLETEXT
 @onready var title_background = $cl/Top/TITLECONT/TITLE/background
@@ -112,7 +125,7 @@ func roar_effect(state : bool):
 	if rtw: rtw.kill()
 	rtw = create_tween()
 	if Plyrm.connected and Plyrm.Playroom.isHost(): 
-		Plyrm.Playroom.RPC.call("game_state_update",var_to_str([7,state]),Plyrm.Playroom.RPC.Mode.OTHERS)
+		Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.ROAR_FX,state]),Plyrm.Playroom.RPC.Mode.OTHERS)
 	match state:
 		true: #Show roar
 			rtw.tween_property(roar_sl,"modulate:a",1.0,0.125).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
@@ -148,9 +161,9 @@ func open_w_inv():
 
 func _on_console_text_submitted(new_text):
 	open_console()
-	if new_text:
-		push_lateral({
-			"speaker":"nme",
+	if new_text and new_text[0] != "/":
+		sync_and_push_lateral({
+			"speaker":str(App.player_name),
 			"message":new_text,
 			"type":LateralNotification.nt.SELF
 		})
@@ -183,10 +196,39 @@ func push_lateral(data : Dictionary = {}):
 	ln.global_position = np.global_position + Vector2(-200,0)
 	ln.set_noti(data)
 
+func sync_and_push_lateral(data : Dictionary = {}):
+	var chat_data = data.duplicate()
+	if chat_data["type"] == LateralNotification.nt.SELF:
+		chat_data["type"] = LateralNotification.nt.CHAT
+	var pack = JSON.stringify(chat_data)
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.REMOTE_LATERAL,pack]),Plyrm.Playroom.RPC.Mode.OTHERS)
+	push_lateral(data)
+
+func sync_lateral(data : Dictionary = {}):
+	var pack = JSON.stringify(data)
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.REMOTE_LATERAL,pack]),Plyrm.Playroom.RPC.Mode.OTHERS)
+
 @onready var performance_screen = $cl/Top/PerformanceScreen
 func prepare_stats():
+	if Plyrm.connected: 
+		Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.STASH_METRICS]),Plyrm.Playroom.RPC.Mode.OTHERS)
+		var metrics = {
+			"name":App.player_name,
+			"dmg":App.dmg_dealt,
+			"heal":App.healing_performed,
+			"rev":App.revolutions_made,
+			"click":App.clicks_made
+		}
+		Plyrm.PLAYER.state.setState("pMetrics",JSON.stringify(metrics))
+		
+		var boss_metrics = App.performance_screen_details
+		Plyrm.Playroom.setState("bMetrics",JSON.stringify(boss_metrics))
 	#get all players to stash stats if multiplayer
 	await App.time_delay(4.0)
 	
 	#get all players to show stat screen (then they have to progress through menus on their own)
+	performance_screen.setlist()
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.SHOW_PERFORMANCE]),Plyrm.Playroom.RPC.Mode.OTHERS)
+
+func remote_perf():
 	performance_screen.setlist()

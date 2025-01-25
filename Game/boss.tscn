@@ -21,6 +21,9 @@ stitle = "vanguard of observation"
 name = "System Unit Test"
 base_health = 100
 status = SubResource("Resource_83p26")
+normal_music = 0
+halfway_music = 1
+roar = 0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_toek4"]
 noise_type = 2

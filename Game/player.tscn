@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://dgyaxcfmcseek"]
+[gd_scene load_steps=67 format=3 uid="uid://dgyaxcfmcseek"]
 
 [ext_resource type="Script" path="res://Game/player.gd" id="1_75war"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="2_7yrue"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bqx5trm0iullw" path="res://Assets/Temp/cooldown_fill.png" id="11_kb5rs"]
 [ext_resource type="Texture2D" uid="uid://ci1wy6dekujgw" path="res://Assets/Temp/circle_guide.png" id="12_bum1a"]
 [ext_resource type="Script" path="res://Game/tracker.gd" id="13_cb3h4"]
+[ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="15_wudql"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pxs6c"]
 atlas = ExtResource("2_nc3th")
@@ -299,6 +300,68 @@ corner_radius_top_right = 1024
 corner_radius_bottom_right = 1024
 corner_radius_bottom_left = 1024
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fdjte"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ojb7q"]
+height = 64
+seamless = true
+noise = SubResource("FastNoiseLite_fdjte")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3bq7h"]
+shader = ExtResource("15_wudql")
+shader_parameter/mask = false
+shader_parameter/mask_scroll = Vector2(0, 0)
+shader_parameter/wscale = 1.0
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = -1.0
+shader_parameter/ease_progress = 1.0
+shader_parameter/time_scale = 1.0
+shader_parameter/auto_fade = true
+shader_parameter/direction = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/pulse_max_scale = 0.4
+shader_parameter/pulse_offset = 0.0
+shader_parameter/outer_feather = 0.1
+shader_parameter/inner_feather = 0.1
+shader_parameter/ss_edges = Vector2(0, 0)
+shader_parameter/mix_strength = 0.0
+shader_parameter/col_ovr_dis_str = 0.0
+shader_parameter/polarize_opacity_noise = true
+shader_parameter/animate_opacity_noise = Vector3(0, 0, 0)
+shader_parameter/scale_opacity_noise = Vector2(1, 1)
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ojb7q")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_uekt3"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1mk0m"]
+height = 64
+seamless = true
+noise = SubResource("FastNoiseLite_uekt3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5cdnd"]
+shader = ExtResource("15_wudql")
+shader_parameter/mask = false
+shader_parameter/mask_scroll = Vector2(0, 0)
+shader_parameter/wscale = 1.0
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 1.0
+shader_parameter/time_scale = 1.0
+shader_parameter/auto_fade = true
+shader_parameter/direction = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/pulse_max_scale = 0.4
+shader_parameter/pulse_offset = 0.0
+shader_parameter/outer_feather = 0.1
+shader_parameter/inner_feather = 0.1
+shader_parameter/ss_edges = Vector2(0, 0)
+shader_parameter/mix_strength = 0.0
+shader_parameter/col_ovr_dis_str = 0.0
+shader_parameter/polarize_opacity_noise = true
+shader_parameter/animate_opacity_noise = Vector3(0, 0, 0)
+shader_parameter/scale_opacity_noise = Vector2(1, 1)
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_1mk0m")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n0u8s"]
 bg_color = Color(0.168627, 0.168627, 0.14902, 1)
 corner_radius_top_left = 1024
@@ -546,6 +609,39 @@ text = "0.00[b]ghz"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[node name="emphasis" type="ColorRect" parent="UI/Stats/MarginContainer/VBoxContainer/sCache"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_3bq7h")
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="charge_fx" type="ColorRect" parent="UI/Stats/MarginContainer/VBoxContainer/sCache"]
+material = SubResource("ShaderMaterial_5cdnd")
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Charge" type="ProgressBar" parent="UI/Stats/MarginContainer/VBoxContainer"]
 visible = false

@@ -16,6 +16,8 @@ var sync_objs : Array = []
 var connected_players : Array = []
 var connected : bool = false
 
+var debug_blog := true
+
 # Keep a reference to the callback so it doesn't get garbage collected
 var jsBridgeReferences = []
 func bridgeToJS(cb):
@@ -27,6 +29,7 @@ func _ready():
 	if OS.has_feature("pc"): $PRUI.hide()
 
 func blog(txt : String):
+	if !debug_blog: return
 	SystemUI.push_lateral({
 	"speaker":"nme",
 	"message":txt,
@@ -38,10 +41,19 @@ func blog(txt : String):
 func onInsertCoin(args):
 	register_rpc()
 	connected = true
-	print("Coin Inserted!")
-	blog("Coin Inserted!")
+	print("Coin Inserted! ",Playroom.getRoomCode())
+	blog(str("Coin Inserted! ",Playroom.getRoomCode()))
 	Playroom.onPlayerJoin(bridgeToJS(onPlayerJoin))
 	PR_INSERT_COIN.emit()
+	
+	#set name
+	Plyrm.PLAYER.state.setState("name",App.player_name)
+	SystemUI.sync_lateral({
+	"speaker":"nme",
+	"message":str("[color=b4ba46]",App.player_name,"[/color] has joined the server"),
+	"type":LateralNotification.nt.SYSTEM,
+	"duration":4.0
+	})
 
 func onSessionEnd(args):
 	connected = false
@@ -59,8 +71,8 @@ func onDisconnect(args):
 func onPlayerJoin(args):
 	var state = args[0]
 	connected_players.append(state)
-	print("new player joined: ", state.id)
-	blog(str("new player joined: ", state.id))
+	print("new npc joined: ", state.id)
+	blog(str("new npc joined: ", state.id))
 	PR_PLAYER_JOIN.emit(args)
 	# Listen to onQuit event
 	state.onQuit(bridgeToJS(onPlayerQuit))
@@ -68,8 +80,8 @@ func onPlayerJoin(args):
 func onPlayerQuit(args):
 	var state = args[0];
 	connected_players.erase(state)
-	print("player quit: ", state.id)
-	blog(str("player quit: ", state.id))
+	print("npc quit: ", state.id)
+	blog(str("npc quit: ", state.id))
 	PR_PLAYER_QUIT.emit(args)
 
 @onready var start_game = $PRUI/LobbyUI/StartGame
@@ -100,7 +112,7 @@ func _on_join_room_pressed():
 		initOptions.roomCode = room_input.text
 	initOptions.gameId = config.get_value("playroom/enviroment_variables","gameId")
 	initOptions.skipLobby = true
-	initOptions.maxPlayersPerRoom = 2
+	initOptions.maxPlayersPerRoom = 4
 
 	#Insert Coin
 	Playroom.insertCoin(initOptions, bridgeToJS(onInsertCoin), bridgeToJS(onSessionEnd))
@@ -255,12 +267,60 @@ func game_state_update(data):
 	var unpacked_data = str_to_var(data[0])
 	
 	match unpacked_data[0]:
-		0: pass #unreserved / test code
-		6: #kill client boss
+		#0: pass #unreserved / test code
+		App.gsu.ASSERT_STATE:
+			App.assert_game_state()
+		App.gsu.RELOAD_STATE:
+			App.reload_game()
+		App.gsu.REMOTE_MUSIC:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_STRING: 
+				print_debug("Wrong Type")
+				return
+			var play_music_data = JSON.parse_string(unpacked_data[1])
+			SystemAudio.play_music(play_music_data["sound_path"],str_to_var(play_music_data["fade"]))
+		App.gsu.REMOTE_STOP_MUSIC:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_FLOAT: 
+				print_debug("Wrong Type")
+				return
+			SystemAudio.stop_music(unpacked_data[1])
+		App.gsu.REMOTE_SFX:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_STRING: 
+				print_debug("Wrong Type")
+				return
+			var play_data = JSON.parse_string(unpacked_data[1])
+			SystemAudio.play(play_data["sound_path"],play_data["volume"],play_data["bus"])
+		App.gsu.REMOTE_LATERAL:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_STRING: 
+				print_debug("Wrong Type")
+				return
+			var push_lateral_data = JSON.parse_string(unpacked_data[1])
+			SystemUI.push_lateral(push_lateral_data)
+		App.gsu.REMOTE_TITLE:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_STRING: 
+				print_debug("Wrong Type")
+				return
+			var set_title_data = JSON.parse_string(unpacked_data[1])
+			SystemUI.set_title(set_title_data["state"],set_title_data["shake"],set_title_data["title"],set_title_data["subtitle"],Color(set_title_data["s_colr"]))
+		App.gsu.DISABLE_CLIENT_BOSS: #kill client boss
 			var mnstr = get_tree().get_first_node_in_group("monster")
 			if !mnstr: return
 			mnstr.check_host()
-		7: #roar effect [7,bool]
+		App.gsu.ROAR_FX: #roar effect [7,bool]
 			if unpacked_data.size() < 2: 
 				print_debug("Not enough data")
 				return
@@ -268,3 +328,14 @@ func game_state_update(data):
 				print_debug("Wrong Type")
 				return
 			SystemUI.roar_effect(unpacked_data[1])
+		App.gsu.STASH_METRICS:
+			var metrics = {
+				"name":App.player_name,
+				"dmg":App.dmg_dealt,
+				"heal":App.healing_performed,
+				"rev":App.revolutions_made,
+				"click":App.clicks_made
+			}
+			Plyrm.PLAYER.state.setState("pMetrics",JSON.stringify(metrics))
+		App.gsu.SHOW_PERFORMANCE:
+			SystemUI.remote_perf()

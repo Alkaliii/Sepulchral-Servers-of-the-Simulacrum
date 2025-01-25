@@ -20,14 +20,19 @@ config/icon="res://KnightCursor@2x.png"
 App="*res://application.gd"
 Plyrm="*res://Game/playroom.tscn"
 SystemUI="*res://Game/system_ui.tscn"
+SystemAudio="*res://Service/AudioManager.gd"
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=360
-window/size/resizable=false
 window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_height"
 mouse_cursor/custom_image="res://KnightCursor@2x.png"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/majordomo/plugin.cfg")
 
 [input]
 

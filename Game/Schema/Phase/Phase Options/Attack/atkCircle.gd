@@ -20,7 +20,10 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 		if shuffle_spawn_order: c.shuffle()
 		for i in c:
 			var new = DAMAGE_RADIUS.instantiate()
-			new.settings = _get_settings(c.find(i))
+			new.settings = _get_settings(c.find(i)).duplicate()
+			new.settings.movement_origin = p
+			new.settings.movement_radius = radius
+			new.settings.movement_offset = ((c.find(i) + 1) / float(attack_points)) * (2.0*PI)
 			_monster.get_parent().add_child(new)
 			new.top_level = true
 			new.global_position = i + p

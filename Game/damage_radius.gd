@@ -40,8 +40,38 @@ func damage_body(body : Node2D):
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+var move = false
 func _process(delta):
-	pass
+	if move: process_dr_movement(delta)
+
+var orb_rad
+var orb_accum
+var pp_dir
+func process_dr_movement(delta):
+	if !settings: return
+	match settings.movement_type:
+		DamageRadiusSettings.mt.ORBIT:
+			if !orb_rad: orb_rad = settings.movement_radius#(settings.movement_origin - global_position).length()
+			if !orb_accum: 
+				var ip = (global_position - settings.movement_origin)
+				ip.y *= 2.0
+				orb_accum = ip.normalized().angle() - ((1.0/6.0) * 2.0*PI)
+				#orb_accum = settings.movement_offset
+			global_position = lerp(global_position,settings.movement_origin + Vector2(
+				cos(orb_accum),
+				sin(orb_accum) / 2.0
+			) * orb_rad,1.0)
+			#global_position = settings.movement_origin + Vector2(
+				#cos(orb_accum),
+				#sin(orb_accum) / 2.0
+			#) * orb_rad
+			orb_accum += delta * settings.movement_speed
+		DamageRadiusSettings.mt.PUSH:
+			if !pp_dir: pp_dir = (global_position - settings.movement_origin).normalized()
+			global_position = lerp(global_position,global_position + (pp_dir * (settings.movement_speed * delta)),0.5)
+		DamageRadiusSettings.mt.PULL:
+			if !pp_dir: pp_dir = (global_position - settings.movement_origin).normalized()
+			global_position = lerp(global_position,global_position - (pp_dir * (settings.movement_speed * delta)),0.5)
 
 func reset_dr():
 	sosv(0.0)
@@ -53,14 +83,35 @@ func warn():
 	var wtw : Tween = create_tween()
 	var activation_time = 1.0
 	if settings: activation_time = settings.warn_activation_time
+	sfx(randf_range(0.2,0.5))
 	wtw.tween_method(sosv,0.0,1.0,activation_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	wtw.parallel().tween_method(swsp,0.0,1.0,activation_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	await wtw.finished
+	move = true
 	
 	var pre_warn_time = 0.5
 	if settings: pre_warn_time = settings.pre_warn
 	await get_tree().create_timer(pre_warn_time).timeout
 	await damage()
+
+func sfx(vol = 1.0):
+	var sp = DamageRadiusSettings.sfx.ACID
+	if settings: sp = settings.spawn_sound
+	
+	if sp == DamageRadiusSettings.sfx.NONE or [true,false].pick_random(): return
+	
+	var sfx : Array = []
+	match sp:
+		DamageRadiusSettings.sfx.ACID:
+			sfx.append(SoundLib.sound_files.ATTACK_ACID_A)
+			sfx.append(SoundLib.sound_files.ATTACK_ACID_B)
+		DamageRadiusSettings.sfx.ICE:
+			sfx.append(SoundLib.sound_files.ATTACK_ICE_A)
+			sfx.append(SoundLib.sound_files.ATTACK_ICE_B)
+		DamageRadiusSettings.sfx.LIGHTNING:
+			sfx.append(SoundLib.sound_files.ATTACK_LIGHTNING_A)
+			sfx.append(SoundLib.sound_files.ATTACK_LIGHTNING_B)
+	SystemAudio.play(SoundLib.get_file_sfx(sfx.pick_random()),vol)
 
 func damage():
 	var dtw : Tween = create_tween()
@@ -71,6 +122,7 @@ func damage():
 	dtwb.tween_property(outline_poly,"scale",Vector2(1.05,1.05),0.125).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO).set_delay(activation_time * 0.3)
 	dtwb.tween_property(outline_poly,"scale",Vector2.ONE,0.125).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
 	await dtwb.finished
+	#sfx()
 	dmg_shape.call_deferred("set_disabled",false)
 	await dtw.finished
 	

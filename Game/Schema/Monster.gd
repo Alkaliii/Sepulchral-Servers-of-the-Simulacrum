@@ -5,6 +5,9 @@ class_name system_monster
 @export var name : String = "System Unit Test"
 @export var base_health : int = 100
 @export var status : system_status
+@export var normal_music : SoundLib.music_files = SoundLib.music_files.BATTLE_DAWN
+@export var halfway_music : SoundLib.music_files = SoundLib.music_files.BATTLE_KANNAGI
+@export var roar : SoundLib.sound_files = SoundLib.sound_files.MONSTER_GROWL_A
 
 #Behaviours
 enum b {

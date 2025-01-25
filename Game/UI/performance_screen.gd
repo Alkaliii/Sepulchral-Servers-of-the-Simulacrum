@@ -53,7 +53,7 @@ func appear(state:bool):
 			await atw.finished
 		false:
 			atw = create_tween()
-			atw.tween_property(self,"position:x",-640.0,0.5).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
+			atw.tween_property(self,"position:x",-get_viewport().size.x,0.5).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
 			await atw.finished
 			position.x = 640
 			hide()
@@ -72,7 +72,39 @@ func setlist():
 	
 	if Plyrm.connected:
 		#get everyones data, also compare it, also total it?
-		pass
+		var all_dmg : Array = []
+		var all_heal : Array = []
+		var all_rev : Array = []
+		var all_click : Array = []
+		for i in Plyrm.connected_players:
+			var metric = i.getState("pMetrics")
+			var data
+			if metric:
+				data = JSON.parse_string(metric)
+			else: continue
+			perfdata.append(data)
+			all_dmg.append(data.dmg)
+			all_heal.append(data.heal)
+			all_rev.append(data.rev)
+			all_click.append(data.click)
+		
+		for i in perfdata:
+			if i.name == App.player_name: i.name = "YOU"
+			total_dmg += i.dmg
+			if i.dmg == all_dmg.max(): i.dmg = str("[shake]",i.dmg,"!")
+			total_heal += i.heal
+			if i.heal == all_heal.max(): i.heal = str("[shake]",i.heal,"!")
+			total_rev += i.rev
+			if i.rev == all_rev.max(): i.rev = str("[shake]",i.rev,"!")
+			total_click += i.click
+			if i.click == all_click.max(): i.click = str("[shake]",i.click,"!")
+		
+		var boss_metric = Plyrm.Playroom.getState("bMetrics")
+		var bm_data 
+		if boss_metric: bm_data = JSON.parse_string(boss_metric)
+		if bm_data:
+			ttl_time_taken = bm_data.time
+			ttl_boss_health = bm_data.bhp
 	else:
 		perfdata.append({
 			"name":App.player_name,

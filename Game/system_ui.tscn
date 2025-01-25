@@ -141,7 +141,7 @@ shader_parameter/pixel_strength = -2.0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_4s2lq"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_q1l5l"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xs6ni"]
 height = 64
 seamless = true
 noise = SubResource("FastNoiseLite_4s2lq")
@@ -168,7 +168,7 @@ shader_parameter/col_ovr_dis_str = 0.0
 shader_parameter/polarize_opacity_noise = true
 shader_parameter/animate_opacity_noise = Vector3(0, 0, 0)
 shader_parameter/scale_opacity_noise = Vector2(1, 1)
-shader_parameter/opacity_noise = SubResource("NoiseTexture2D_q1l5l")
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_xs6ni")
 
 [node name="systemUI" type="Node"]
 script = ExtResource("1_lreom")
@@ -411,6 +411,7 @@ offset_bottom = 40.0
 mouse_filter = 2
 
 [node name="PerformanceScreen" parent="cl/Top" instance=ExtResource("8_uiocd")]
+visible = false
 layout_mode = 1
 
 [node name="effects" type="CanvasLayer" parent="."]

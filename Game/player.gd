@@ -52,7 +52,9 @@ var invertControls : bool = false
 
 func _ready():
 	#App.knock_plyr.connect(knockback)
+	random_start_position()
 	add_to_group("player")
+	add_to_group("player_persistant")
 	tspin_vfx.play("topSPIN")
 	bspin_vfx.play("bottomSPIN")
 	gesture.circle_drawn.connect(s_charge)
@@ -61,6 +63,8 @@ func _ready():
 
 func set_job():
 	dead = false
+	add_to_group("player")
+	await create_tween().tween_property(self,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
 	if job:
 		job.setup()
 		#HEALTH = job.final_health
@@ -86,8 +90,8 @@ func set_job():
 func random_start_position():
 	var rand = randf_range(0,2*PI)
 	var pos : Vector2 = Vector2(
-		sin(rand),
-		cos(rand)
+		cos(rand),
+		sin(rand)
 	)
 	pos.y *= 0.5
 	pos *= 200
@@ -115,32 +119,27 @@ func on_damage(amt : int):
 	
 	if status.health == 0:
 		dead = true
-		#remove puppets from other machines
+		SystemUI.sync_lateral({
+		"speaker":"nme",
+		"message":str("[color=e34262]",App.player_name,"[/color] has fallen!"),
+		"type":LateralNotification.nt.DANGER,
+		"duration":4.0
+		})
+		await create_tween().tween_property(self,"modulate:a",0.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
+		SystemAudio.stop_music(1.0)
+		remove_from_group("player")
+		#remove puppets from other machines (auto)
 		#check if there are 0 puppets on host
 		#If so reload boss
+		var death_back_col = Color.BLACK
+		if Plyrm.connected: death_back_col.a = 0.5
+		SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_B))
 		await SystemUI.set_title(true,2,str("[color=red]",fTxt.defeattitle),fTxt.defeatSubtitles.pick_random(),Color("#a89f94"))
-		SystemUI.set_background(true,Color.BLACK)
 		SystemUI.push_title(Vector2(0,-80))
-		await App.time_delay(2.0)
+		await SystemUI.set_background(true,death_back_col)
+		#await App.time_delay(2.0)
 		
-		var game_state
-		if Plyrm.connected:
-			if !Plyrm.Playroom.isHost():
-				#get host to validate, stay dead until reload or victory
-				return
-			else:
-				game_state = App.validate_alive(false)
-		else:
-			game_state = App.validate_alive(false)
-		
-		if game_state == 0:
-			#Game over
-			App.reload_game()
-			random_start_position()
-			await App.time_delay(2.0)
-			SystemUI.set_title(false)
-			await SystemUI.set_background(false)
-			App.start_boss.emit()
+		App.assert_game_state()
 
 var htw : Tween
 func tween_health(nv : float):
@@ -284,8 +283,11 @@ func sync_state():
 		"pos_x":global_position.x,
 		"pos_y":global_position.y,
 		"on_cooldown": !(dash_cooldown <= 0.0),
-		"direction":var_to_str(DIRECTION)
+		"direction":var_to_str(DIRECTION),
+		"health":var_to_str(Vector2(status.health,status.max_health)) if status else var_to_str(Vector2.ZERO),
+		"dead":dead
 	}
+	
 	if Plyrm.PLAYER: 
 		#Plyrm.Playroom.setState(str("pState_",Plyrm.PLAYERData.id),JSON.stringify(state))
 		Plyrm.PLAYER.state.setState("pState",JSON.stringify(state))
@@ -302,13 +304,19 @@ func charge(ca = CHARGE_AMOUNT):
 	charge_bar.value = CURRENT_PCACHE
 	p_cache_bar.value = CURRENT_PCACHE
 
+var scfxtw : Tween
 func s_charge():
-	#if !decay: return
+	if !decay: return
 	#var minc = 0.1 * pow(2.718,-0.9 * (SCACHE - 2.0))
 	#var maxc = 0.45 * pow(2.718,-0.9 * (SCACHE - 2.0))
 	disp_ftxt(str("[font_size=10][shake]!!!"),global_position + Vector2(0,45),FloatingText.a.POP)
+	#if s_charge_fx.material.get_shader_parameter("progress") in [1.0,0.0]:
+		#scfxtw.tween_method(scfxpv,0.0,1.0,0.5).set_ease(Tween.EASE_IN_OUT)
 	App.revolutions_made += 1
-	if SCACHE >= 5.0: 
+	if SCACHE >= 5.0:
+		if scfxtw: scfxtw.kill()
+		scfxtw = create_tween()
+		scfxtw.tween_property(s_chrg_emphasis,"modulate:a",1.0,0.125).set_ease(Tween.EASE_IN_OUT)
 		charge(1)
 		return
 	var val = 5.0 / 3.0#randf_range(minc,maxc)
@@ -317,6 +325,11 @@ func s_charge():
 	var wve = "[wave]" if SCACHE >= 5.0 else ""
 	s_cache_lbl.text = str(wve,"%.2f" % SCACHE,"[b]ghz")
 	#print(min,"/",max,"->",val)
+
+@onready var s_chrg_emphasis = $UI/Stats/MarginContainer/VBoxContainer/sCache/emphasis
+@onready var s_charge_fx = $UI/Stats/MarginContainer/VBoxContainer/sCache/charge_fx
+func scfxpv(nv : float): #set charge fx progress value
+	s_charge_fx.material.set_shader_parameter("progress",nv)
 
 func update_s_charge():
 	#s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
@@ -328,6 +341,8 @@ func s_discharge() -> float:
 		disp_ftxt("@",global_position + Vector2(0,25),FloatingText.a.POP)
 		return 0.0
 	if !discharge(): return 0.0
+	create_tween().tween_property(s_chrg_emphasis,"modulate:a",0.0,0.125).set_ease(Tween.EASE_IN_OUT)
+	
 	var amt = SCACHE
 	if amt != 0.0:
 		decrease_s_cache()

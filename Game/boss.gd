@@ -49,12 +49,13 @@ func _ready():
 
 func test_start():
 	await get_tree().create_timer(3.0).timeout
-	await SystemUI.set_title(true,2,monster_data.name,monster_data.stitle,Color("#a89f94"))
+	await SystemUI.sync_and_set_title(true,2,monster_data.name,monster_data.stitle,Color("#a89f94"))
 	await roar(str("You encounter [shake]",monster_data.name))
+	SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.normal_music))
 	time_elapsed = 0.0
 	tiktok = true
-	SystemUI.set_title(false)
-	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([6]),Plyrm.Playroom.RPC.Mode.OTHERS)
+	SystemUI.sync_and_set_title(false)
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.DISABLE_CLIENT_BOSS]),Plyrm.Playroom.RPC.Mode.OTHERS)
 	test_phase()
 
 func check_host(args = null):
@@ -73,6 +74,7 @@ func reload():
 	halfway_dead = false
 	monster_data.status.reload()
 	global_position = Vector2.ZERO
+	if is_physics_processing(): SystemAudio.sync_and_stop_music()
 
 func test_phase():
 	if phases.is_empty(): return
@@ -176,11 +178,12 @@ func on_damage(amt : int, click : int): #send player data in
 			cam.add_trauma(1,0.8)
 			for p in phases:
 				p.on_heavy_received()
+	
+	App.dmg_dealt += amt
 	if Plyrm.PLAYER and !Plyrm.PLAYER.host: 
 		sync_damage(amt,click)
 		return
 	
-	App.dmg_dealt += amt
 	monster_data.status._damage(amt)
 	healthbar.value = monster_data.status.health
 		
@@ -224,6 +227,7 @@ func check_progress():
 	elif monster_data.status.health < (monster_data.status.max_health * .5) and !halfway_dead:
 		kill_phase()
 		halfway_dead = true
+		SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.halfway_music))
 		await roar(str(monster_data.name," is weak!"))
 		start_phase(phases.pick_random())
 
@@ -234,6 +238,7 @@ func roar(msg : String = "!!!"):
 	if Plyrm.connected: cam.sync_target()
 	await get_tree().create_timer(0.5).timeout
 	cam.add_trauma(10)
+	SystemAudio.sync_and_play(SoundLib.get_file_sfx(monster_data.roar))
 	if Plyrm.connected: cam.sync_trauma(10)
 	SystemUI.roar_effect(true)
 	await get_tree().create_timer(2.5).timeout
@@ -302,9 +307,9 @@ func remote_drag():
 				rd_target.append(boss_drag_data["to"])
 			#drag(rd_target[0].global_position,boss_drag_data["strr"])
 			if boss_drag_data["strr"] > 0: #pull
-				pull(true,1.0 + abs(boss_drag_data["strr"] / 30.0))
+				pull(true,1.0 + (abs(boss_drag_data["strr"] / 30.0) / 10.0))
 			elif boss_drag_data["strr"] < 0: #push
-				push(true,1.0 + abs(boss_drag_data["strr"] / 30.0))
+				push(true,1.0 + (abs(boss_drag_data["strr"] / 30.0) / 10.0))
 		else: 
 			rd_target.clear()
 			pull(false)

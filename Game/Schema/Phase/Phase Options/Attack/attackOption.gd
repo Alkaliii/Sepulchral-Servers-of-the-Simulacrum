@@ -98,20 +98,23 @@ func _get_spawn_position(_m : Node2D) -> Array[Vector2]:
 			var p : Array = _m.get_tree().get_nodes_in_group("player")
 			p.append_array(_m.get_tree().get_nodes_in_group("puppet"))
 			
-			pos.append(p.pick_random().global_position)
+			if !p.is_empty():
+				pos.append(p.pick_random().global_position)
 		s.ALL_PLAYER:
 			var p : Array = _m.get_tree().get_nodes_in_group("player")
 			p.append_array(_m.get_tree().get_nodes_in_group("puppet"))
 			
-			for plyr in p:
-				pos.append(plyr.global_position)
+			if !p.is_empty():
+				for plyr in p:
+					pos.append(plyr.global_position)
 		s.POSITION_BETWEEN_BOSS_AND_PLAYER:
 			var p : Array = _m.get_tree().get_nodes_in_group("player")
 			p.append_array(_m.get_tree().get_nodes_in_group("puppet"))
 			
-			var plyr = p.pick_random()
-			var position = (_m.global_position + plyr.global_position) / 2.0
-			pos.append(position)
+			if !p.is_empty():
+				var plyr = p.pick_random()
+				var position = (_m.global_position + plyr.global_position) / 2.0
+				pos.append(position)
 		s.GROUP_OBJECT:
 			var g = _m.get_tree().get_nodes_in_group("spawn")
 			if g.is_empty():
@@ -125,6 +128,10 @@ func _get_spawn_position(_m : Node2D) -> Array[Vector2]:
 			else:
 				for o in g:
 					pos.append(o.global_position)
+	
+	if pos.is_empty():
+		printerr("no position in attack data!?")
+		pos.append(Vector2.ZERO)
 	
 	for p in pos:
 		p += spawn_position_offset

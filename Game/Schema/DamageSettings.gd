@@ -17,7 +17,7 @@ class_name DamageRadiusSettings
 @export var hold_time : float = 0.1
 #how long the attack remains, walking into it during this time will hurt you
 
-@export var repeat : int = 1.0
+@export var repeat : int = 1
 #instead of removing, it will shrink and then it will activate again for n amount of times
 
 @export_group("Field Properties")
@@ -28,6 +28,28 @@ class_name DamageRadiusSettings
 #Prevent player from attacking if they are inside it
 
 @export var invert_controls : bool = false
+
+@export_group("Movement") #TODO write implementation in tscn
+enum mt {
+	NONE, #won't move
+	ORBIT, #will orbit defined position
+	PUSH, #will move away from defined position in the direction found by the difference between it and the position
+	PULL, #will move away from defined position in the direction found by the difference between it and the position
+}
+@export var movement_type : mt = mt.NONE
+var movement_origin : Vector2 = Vector2.ZERO #position in global space to calculate movement with
+@export var movement_speed : float = 5.0 #how fast the dr moves
+var movement_offset : float = 0.0
+var movement_radius : float = 0.0
+
+@export_group("Sound")
+enum sfx {
+	NONE,
+	ACID,
+	ICE,
+	LIGHTNING
+}
+@export var spawn_sound : sfx = sfx.ACID
 
 func serialize() -> Dictionary:
 	var sset : Dictionary = {}
@@ -43,6 +65,12 @@ func serialize() -> Dictionary:
 	sset["slow"] = slow
 	sset["prevent_attack"] = prevent_attack
 	sset["invert_controls"] = invert_controls
+	sset["movement_type"] = movement_type
+	sset["movement_origin"] = var_to_str(movement_origin)
+	sset["movement_speed"] = movement_speed
+	sset["movement_offset"] = movement_offset
+	sset["movement_radius"] = movement_radius
+	sset["spawn_sound"] = spawn_sound
 	
 	return sset
 
@@ -58,3 +86,9 @@ func deserialize(sset : Dictionary):
 	slow = sset["slow"]
 	prevent_attack = sset["prevent_attack"]
 	invert_controls = sset["invert_controls"]
+	movement_type = sset["movement_type"]
+	movement_origin = str_to_var(sset["movement_origin"])
+	movement_speed = sset["movement_speed"]
+	movement_offset = sset["movement_offset"]
+	movement_radius = sset["movement_radius"]
+	spawn_sound = sset["spawn_sound"]

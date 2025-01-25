@@ -19,7 +19,7 @@ func perform_special(monster : system_monster_controller):
 			monster.push(false)
 			monster.sync_drag(false)
 			return
-		p.drag(monster.global_position,-30 * strength)
+		if p: p.drag(monster.global_position,-30 * strength)
 		dur -= monster.get_process_delta_time()
 		await App.process_frame()
 	
