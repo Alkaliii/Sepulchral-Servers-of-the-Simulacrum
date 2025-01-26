@@ -7,6 +7,8 @@ var can_input : bool = true
 signal start_boss
 signal spawn_dmg #position : vector2, dmgSettings
 signal reload_boss
+signal purge_attacks #remove attacks
+signal tutorial_click
 
 #var saved_job : system_job
 #var saved_weapon : system_weapon
@@ -34,6 +36,7 @@ enum gsu {
 	REMOTE_TITLE,
 	DISABLE_CLIENT_BOSS,
 	ROAR_FX,
+	PURGE_ATTACKS,
 	STASH_METRICS,
 	SHOW_PERFORMANCE,
 }
@@ -89,7 +92,10 @@ func assert_game_state():
 		if !Plyrm.connected or Plyrm.Playroom.isHost():
 			App.start_boss.emit()
 
+var reloading := false
 func reload_game():
+	if reloading: return
+	reloading = true
 	reload_boss.emit()
 	#reload player states also
 	reset_performace_metrics()
@@ -99,6 +105,7 @@ func reload_game():
 	await App.time_delay(2.0)
 	SystemUI.set_title(false)
 	await SystemUI.set_background(false)
+	reloading = false
 
 func reset_performace_metrics():
 	dmg_dealt = 0

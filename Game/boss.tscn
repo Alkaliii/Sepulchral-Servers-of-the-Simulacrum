@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://jvlvkbccv6ur"]
+[gd_scene load_steps=37 format=3 uid="uid://jvlvkbccv6ur"]
 
 [ext_resource type="Script" path="res://Game/boss.gd" id="1_5lnwp"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="1_yr56s"]
@@ -8,6 +8,9 @@
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="3_xghth"]
 [ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="4_dh5bv"]
 [ext_resource type="PackedScene" uid="uid://oas5aab7on8x" path="res://Game/damage_radius.tscn" id="6_1htco"]
+[ext_resource type="Shader" path="res://Assets/Shaders/ProceduralGleam.gdshader" id="7_c5t82"]
+[ext_resource type="Shader" path="res://Assets/Shaders/flash.gdshader" id="7_fq6pi"]
+[ext_resource type="Shader" path="res://Assets/Shaders/ProceduralSpark.gdshader" id="7_u3e0q"]
 
 [sub_resource type="Resource" id="Resource_83p26"]
 script = ExtResource("3_fi5qo")
@@ -105,6 +108,144 @@ point_count = 2
 [sub_resource type="CircleShape2D" id="CircleShape2D_yofi6"]
 radius = 15.0
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_11fkc"]
+noise_type = 2
+frequency = 0.05
+fractal_weighted_strength = 1.0
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_br3dr"]
+seamless = true
+noise = SubResource("FastNoiseLite_11fkc")
+
+[sub_resource type="Gradient" id="Gradient_lmfs7"]
+offsets = PackedFloat32Array(0.2, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qckk8"]
+gradient = SubResource("Gradient_lmfs7")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wq0bb"]
+shader = ExtResource("7_u3e0q")
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 1.0
+shader_parameter/time_scale = 1.0
+shader_parameter/spark_origin = Vector2(0.5, 0.5)
+shader_parameter/spark_zoom = 0.1
+shader_parameter/spark_rotate = 90.0
+shader_parameter/spark_color = Color(1, 1, 1, 1)
+shader_parameter/mix_strength = null
+shader_parameter/emission_strength = null
+shader_parameter/base_noise = SubResource("NoiseTexture2D_br3dr")
+shader_parameter/radial_mask = SubResource("GradientTexture2D_qckk8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c5mmf"]
+shader = ExtResource("7_u3e0q")
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 1.0
+shader_parameter/time_scale = 1.0
+shader_parameter/spark_origin = Vector2(0.5, 0.5)
+shader_parameter/spark_zoom = 0.1
+shader_parameter/spark_rotate = 90.0
+shader_parameter/spark_color = Color(1, 1, 1, 1)
+shader_parameter/mix_strength = null
+shader_parameter/emission_strength = null
+shader_parameter/base_noise = SubResource("NoiseTexture2D_br3dr")
+shader_parameter/radial_mask = SubResource("GradientTexture2D_qckk8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_03wo7"]
+shader = ExtResource("7_c5t82")
+shader_parameter/billboard = false
+shader_parameter/progress = 0.5
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/index_rot = 0.0
+shader_parameter/shimer_speed = 8.0
+shader_parameter/shimer_amt = 0.2
+shader_parameter/points = 8.0
+shader_parameter/arc = 0.1
+shader_parameter/feather = 0.0
+shader_parameter/radi = Vector2(1.5, 0.1)
+shader_parameter/gleam_position = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation = 0.062
+shader_parameter/edge = Vector2(0, 1)
+shader_parameter/ptedt = Vector2(1, 1)
+shader_parameter/ptedtofst = 0.0
+shader_parameter/uvn_str = 0.0
+shader_parameter/enabled_b = 0.0
+shader_parameter/points_b = 3.0
+shader_parameter/arc_b = 0.1
+shader_parameter/radi_b = Vector2(2, 0.25)
+shader_parameter/gleam_position_b = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation_b = null
+shader_parameter/edge_b = Vector2(0, 1)
+shader_parameter/ptedt_b = Vector2(1, 1)
+shader_parameter/ptedtofst_b = 0.0
+shader_parameter/mix_str = 1.0
+shader_parameter/rotate_lookup = 0.0
+shader_parameter/chromatic_offset = Projection(1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_1x3lv"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pbrue"]
+gradient = SubResource("Gradient_1x3lv")
+width = 16
+height = 16
+
+[sub_resource type="Curve" id="Curve_1rtex"]
+max_value = 3.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.254005, 3), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mprdl"]
+shader = ExtResource("7_c5t82")
+shader_parameter/billboard = false
+shader_parameter/progress = 0.5
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/index_rot = 0.0
+shader_parameter/shimer_speed = 8.0
+shader_parameter/shimer_amt = 0.2
+shader_parameter/points = 8.0
+shader_parameter/arc = 0.1
+shader_parameter/feather = 0.1
+shader_parameter/radi = Vector2(2, 0.1)
+shader_parameter/gleam_position = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation = 0.062
+shader_parameter/edge = Vector2(0, 1)
+shader_parameter/ptedt = Vector2(1, 1)
+shader_parameter/ptedtofst = 0.0
+shader_parameter/uvn_str = 0.0
+shader_parameter/enabled_b = 0.0
+shader_parameter/points_b = 3.0
+shader_parameter/arc_b = 0.1
+shader_parameter/radi_b = Vector2(2, 0.25)
+shader_parameter/gleam_position_b = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation_b = null
+shader_parameter/edge_b = Vector2(0, 1)
+shader_parameter/ptedt_b = Vector2(1, 1)
+shader_parameter/ptedtofst_b = 0.0
+shader_parameter/mix_str = 1.0
+shader_parameter/rotate_lookup = 0.0
+shader_parameter/chromatic_offset = Projection(1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_i0nhs"]
+gradient = SubResource("Gradient_1x3lv")
+width = 8
+height = 8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w14ld"]
+shader = ExtResource("7_fq6pi")
+shader_parameter/active = false
+shader_parameter/tint = Color(1, 1, 1, 1)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_k8ypm"]
 radius = 25.0
 
@@ -145,8 +286,91 @@ hd_for = 2
 position = Vector2(0, -13)
 shape = SubResource("CircleShape2D_yofi6")
 
+[node name="HitImpactVFX" type="ColorRect" parent="."]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_wq0bb")
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -175.0
+offset_right = 125.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 125)
+mouse_filter = 2
+
+[node name="HitImpactVFXB" type="ColorRect" parent="."]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_c5mmf")
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -175.0
+offset_right = 125.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 125)
+mouse_filter = 2
+
+[node name="Starburst" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_03wo7")
+position = Vector2(0, -50)
+scale = Vector2(4, 4)
+emitting = false
+one_shot = true
+speed_scale = 6.0
+explosiveness = 0.5
+fixed_fps = 60
+texture = SubResource("GradientTexture2D_pbrue")
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 25.0
+scale_amount_curve = SubResource("Curve_1rtex")
+
+[node name="ColorRect" type="ColorRect" parent="Starburst"]
+visible = false
+material = SubResource("ShaderMaterial_mprdl")
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Starburst2" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_03wo7")
+position = Vector2(0, -50)
+scale = Vector2(4, 4)
+emitting = false
+one_shot = true
+speed_scale = 6.0
+explosiveness = 0.5
+fixed_fps = 60
+texture = SubResource("GradientTexture2D_i0nhs")
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+scale_amount_curve = SubResource("Curve_1rtex")
+
+[node name="ColorRect" type="ColorRect" parent="Starburst2"]
+visible = false
+material = SubResource("ShaderMaterial_mprdl")
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="Sprite" type="Sprite2D" parent="."]
 y_sort_enabled = true
+material = SubResource("ShaderMaterial_w14ld")
 scale = Vector2(4, 4)
 texture = ExtResource("1_yr56s")
 offset = Vector2(0, -14)

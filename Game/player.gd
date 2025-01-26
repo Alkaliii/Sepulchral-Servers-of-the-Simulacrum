@@ -63,6 +63,7 @@ func _ready():
 
 func set_job():
 	dead = false
+	App.can_click = true
 	add_to_group("player")
 	await create_tween().tween_property(self,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
 	if job:
@@ -81,6 +82,7 @@ func set_job():
 	CURRENT_PCACHE = 0
 	SCACHE = 0
 	dash_cooldown = 0.0
+	p_cooldown_bar.value = p_cooldown_bar.max_value
 	charge_bar.max_value = MAX_PCACHE
 	p_cache_bar.max_value = MAX_PCACHE
 	charge_bar.value = CURRENT_PCACHE
@@ -125,7 +127,9 @@ func on_damage(amt : int):
 		"type":LateralNotification.nt.DANGER,
 		"duration":4.0
 		})
+		App.can_click = false
 		await create_tween().tween_property(self,"modulate:a",0.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
+		App.purge_attacks.emit()
 		SystemAudio.stop_music(1.0)
 		remove_from_group("player")
 		#remove puppets from other machines (auto)

@@ -1,0 +1,129 @@
+[gd_scene load_steps=11 format=3 uid="uid://ya8kaicfslaw"]
+
+[ext_resource type="Script" path="res://Game/UI/objectivepanel.gd" id="1_4pjse"]
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="2_0r5cx"]
+[ext_resource type="Script" path="res://Game/Other/tutorial_handler.gd" id="3_g17ks"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2sdaq"]
+content_margin_left = 14.0
+content_margin_top = 5.0
+content_margin_right = 14.0
+content_margin_bottom = 5.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c2rwa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1iq6v"]
+bg_color = Color(0.94902, 0.713726, 0.239216, 0.498039)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ubir2"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pvux3"]
+content_margin_left = 15.0
+content_margin_top = 0.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l7krc"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hpsei"]
+content_margin_left = 30.0
+content_margin_top = 2.0
+content_margin_right = 30.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[node name="objectivepanel" type="PanelContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(20, 15)
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_2sdaq")
+script = ExtResource("1_4pjse")
+
+[node name="objectiveText" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("2_0r5cx")
+theme_override_fonts/bold_font = ExtResource("2_0r5cx")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[color=f2b63d][b]OBJ:[/b][/color] [wave]Find the scarecrow"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="progress" type="ProgressBar" parent="objectiveText"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxEmpty_c2rwa")
+theme_override_styles/fill = SubResource("StyleBoxFlat_1iq6v")
+value = 50.0
+show_percentage = false
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="help" type="Button" parent="Control"]
+custom_minimum_size = Vector2(0, 30)
+theme_override_fonts/font = ExtResource("2_0r5cx")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ubir2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pvux3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_l7krc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_hpsei")
+text = "?"
+
+[node name="TutorialHandler" type="Node" parent="." node_paths=PackedStringArray("objective_ui")]
+script = ExtResource("3_g17ks")
+objective_ui = NodePath("..")
+
+[connection signal="pressed" from="Control/help" to="." method="_on_help_pressed"]

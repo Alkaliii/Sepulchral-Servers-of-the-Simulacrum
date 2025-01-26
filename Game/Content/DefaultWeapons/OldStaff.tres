@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="system_weapon" load_steps=2 format=3 uid="uid://bog0ltqdr4jh6"]
+
+[ext_resource type="Script" path="res://Game/Schema/Weapon.gd" id="1_36oi4"]
+
+[resource]
+script = ExtResource("1_36oi4")
+icon = 2
+primary_damage = 1
+secondary_damage = 0
+tertiary_damage = 0
+inflict_status = 0

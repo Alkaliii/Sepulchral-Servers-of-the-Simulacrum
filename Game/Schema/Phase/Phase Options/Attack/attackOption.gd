@@ -59,8 +59,11 @@ func _check_complete():
 		await App.process_frame()
 		if my_radi.is_empty():
 			break
+		if !my_radi[0]: 
+			my_radi.clear()
+			break
 		
-		if !my_phase.is_active: pass #return here
+		if !my_phase.is_active: return #return here
 		await App.process_frame()
 	
 	attack_complete.emit(self)

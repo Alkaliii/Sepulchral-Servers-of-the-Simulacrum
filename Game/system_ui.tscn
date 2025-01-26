@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://t6xwa6fxikjk"]
+[gd_scene load_steps=46 format=3 uid="uid://t6xwa6fxikjk"]
 
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_d5ssp"]
 [ext_resource type="Script" path="res://Game/system_ui.gd" id="1_lreom"]
@@ -9,6 +9,7 @@
 [ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="3_es8be"]
 [ext_resource type="Shader" path="res://Assets/Shaders/balatroPaintMix.gdshader" id="3_i3u1e"]
 [ext_resource type="Shader" path="res://Assets/Shaders/speedlines.gdshader" id="3_lnnwt"]
+[ext_resource type="PackedScene" uid="uid://ya8kaicfslaw" path="res://Game/UI/objectivepanel.tscn" id="3_nx2cb"]
 [ext_resource type="Shader" path="res://Assets/Shaders/crt.gdshader" id="3_vrl4t"]
 [ext_resource type="Shader" path="res://Assets/Shaders/slipgate.gdshader" id="4_3d3qu"]
 [ext_resource type="PackedScene" uid="uid://brxo7jbspxwqt" path="res://Game/UI/performance_screen.tscn" id="8_uiocd"]
@@ -101,6 +102,111 @@ shader = ExtResource("3_bnsld")
 shader_parameter/normal_offset = 1.5
 shader_parameter/time_influence = 3.0
 shader_parameter/y_div = 2.87
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nm5o1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l1tct"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qhhfx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cxcjw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e3206"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w7rbk"]
+content_margin_left = 15.0
+content_margin_top = 0.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_amps5"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a24hi"]
+content_margin_left = 30.0
+content_margin_top = 2.0
+content_margin_right = 30.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hjrjy"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w40xd"]
+content_margin_left = 15.0
+content_margin_top = 0.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_top_left = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oaa2o"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8k78r"]
+content_margin_left = 30.0
+content_margin_top = 2.0
+content_margin_right = 30.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_top_left = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r1lww"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.8)
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_4ice8"]
 noise_type = 2
@@ -201,7 +307,11 @@ theme_override_constants/margin_bottom = 60
 [node name="WeaponInventory" parent="cl/InGameMenu/MarginContainer" instance=ExtResource("2_byca4")]
 visible = false
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
+
+[node name="objectivepanel" parent="cl/InGameMenu/MarginContainer" instance=ExtResource("3_nx2cb")]
+layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 0
 
 [node name="Back" type="Control" parent="cl"]
@@ -413,6 +523,159 @@ mouse_filter = 2
 [node name="PerformanceScreen" parent="cl/Top" instance=ExtResource("8_uiocd")]
 visible = false
 layout_mode = 1
+
+[node name="ConfigScreen" type="MarginContainer" parent="cl/Top"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="PanelContainer" type="PanelContainer" parent="cl/Top/ConfigScreen"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxEmpty_nm5o1")
+
+[node name="HeaderVbc" type="VBoxContainer" parent="cl/Top/ConfigScreen/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = -5
+
+[node name="nameSubtitle" type="RichTextLabel" parent="cl/Top/ConfigScreen/PanelContainer/HeaderVbc"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_fonts/normal_font = ExtResource("1_d5ssp")
+theme_override_fonts/bold_font = ExtResource("1_d5ssp")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "NAME:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="LineEdit" type="LineEdit" parent="cl/Top/ConfigScreen/PanelContainer/HeaderVbc"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/caret_color = Color(0.168627, 0.168627, 0.14902, 1)
+theme_override_colors/font_placeholder_color = Color(0.168627, 0.168627, 0.14902, 1)
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_fonts/font = ExtResource("3_es8be")
+theme_override_font_sizes/font_size = 100
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l1tct")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_qhhfx")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_cxcjw")
+placeholder_text = "ARC"
+max_length = 3
+flat = true
+select_all_on_focus = true
+caret_blink = true
+
+[node name="Header" type="RichTextLabel" parent="cl/Top/ConfigScreen/PanelContainer/HeaderVbc"]
+visible = false
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("3_es8be")
+theme_override_fonts/mono_font = ExtResource("1_d5ssp")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "SYSTEM"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="cl/Top/ConfigScreen"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="cl/Top/ConfigScreen/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="cl/Top/ConfigScreen/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_d5ssp")
+theme_override_styles/focus = SubResource("StyleBoxFlat_e3206")
+theme_override_styles/hover = SubResource("StyleBoxFlat_w7rbk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_amps5")
+theme_override_styles/normal = SubResource("StyleBoxFlat_a24hi")
+text = "PLAY"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="cl/Top/ConfigScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Button2" type="Button" parent="cl/Top/ConfigScreen/VBoxContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_d5ssp")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hjrjy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_w40xd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oaa2o")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8k78r")
+text = "MULTIPLAYER"
+
+[node name="LineEdit" type="LineEdit" parent="cl/Top/ConfigScreen/VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_d5ssp")
+theme_override_styles/focus = SubResource("StyleBoxFlat_r1lww")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_r1lww")
+theme_override_styles/normal = SubResource("StyleBoxFlat_r1lww")
+placeholder_text = "ROOM"
+alignment = 1
+max_length = 24
+expand_to_text_length = true
+caret_blink = true
+
+[node name="Subtitle" type="RichTextLabel" parent="cl/Top/ConfigScreen/VBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/default_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_fonts/normal_font = ExtResource("1_d5ssp")
+theme_override_fonts/bold_font = ExtResource("1_d5ssp")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "SYSTEM CONFIGURATION"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="ggoSubtitle" type="RichTextLabel" parent="cl/Top/ConfigScreen"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_colors/default_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_fonts/normal_font = ExtResource("1_d5ssp")
+theme_override_fonts/bold_font = ExtResource("1_d5ssp")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "GAUSSGRANDINE SANDBOX"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 
 [node name="effects" type="CanvasLayer" parent="."]
 layer = 9

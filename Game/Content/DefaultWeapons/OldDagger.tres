@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="system_weapon" load_steps=2 format=3 uid="uid://djy4qv4upq48o"]
+
+[ext_resource type="Script" path="res://Game/Schema/Weapon.gd" id="1_vpcxp"]
+
+[resource]
+script = ExtResource("1_vpcxp")
+icon = 0
+primary_damage = 1
+secondary_damage = 0
+tertiary_damage = 0
+inflict_status = 0

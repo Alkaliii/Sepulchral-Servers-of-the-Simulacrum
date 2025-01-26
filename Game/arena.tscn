@@ -1,24 +1,10 @@
-[gd_scene load_steps=34 format=3 uid="uid://bbaje3tan2k7o"]
+[gd_scene load_steps=8 format=3 uid="uid://bbaje3tan2k7o"]
 
 [ext_resource type="PackedScene" uid="uid://dgyaxcfmcseek" path="res://Game/player.tscn" id="1_f8ne3"]
 [ext_resource type="Script" path="res://Game/arena.gd" id="1_idpkm"]
 [ext_resource type="Script" path="res://Game/Schema/Job.gd" id="3_4dmae"]
-[ext_resource type="PackedScene" uid="uid://jvlvkbccv6ur" path="res://Game/boss.tscn" id="3_ly78x"]
-[ext_resource type="Script" path="res://Game/Schema/Monster.gd" id="5_dev3y"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase.gd" id="6_151od"]
+[ext_resource type="PackedScene" uid="uid://cllt8ogsda34d" path="res://Game/scarecrow.tscn" id="5_fd6p6"]
 [ext_resource type="Script" path="res://Game/game_camera.gd" id="6_cmqed"]
-[ext_resource type="Script" path="res://Game/Schema/Status.gd" id="6_id5ga"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/attackOption.gd" id="7_kgwd8"]
-[ext_resource type="Script" path="res://Game/Schema/DamageSettings.gd" id="8_wt75w"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkFocus.gd" id="9_lxfpf"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Condition/conditionOption.gd" id="10_et5r3"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/movementOption.gd" id="11_ur4n2"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveTeleport.gd" id="12_5yocs"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/specialOption.gd" id="13_7jmln"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPull.gd" id="14_h5kxk"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPush.gd" id="14_ywv46"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkCircle.gd" id="15_svyp1"]
-[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkLine.gd" id="18_up7ol"]
 
 [sub_resource type="Resource" id="Resource_tdh4b"]
 script = ExtResource("3_4dmae")
@@ -33,144 +19,6 @@ can_heal = false
 can_parry = false
 need_sight = false
 
-[sub_resource type="Resource" id="Resource_l3l4r"]
-script = ExtResource("6_id5ga")
-health = 5
-current_effects = {}
-immunity = Array[int]([])
-
-[sub_resource type="Resource" id="Resource_epvqo"]
-script = ExtResource("5_dev3y")
-stitle = "vanguard of observation"
-name = "System Unit Test"
-base_health = 100
-status = SubResource("Resource_l3l4r")
-normal_music = 0
-halfway_music = 1
-roar = 0
-
-[sub_resource type="Resource" id="Resource_80r88"]
-script = ExtResource("8_wt75w")
-dmg = 1
-radius = 60
-inflict = 0
-pre_warn = 0.5
-warn_activation_time = 1.0
-dmg_activation_time = 0.5
-hold_time = 0.1
-repeat = 1
-slow = false
-prevent_attack = false
-invert_controls = true
-movement_type = 0
-movement_speed = 5.0
-spawn_sound = 1
-
-[sub_resource type="Resource" id="Resource_ap81d"]
-script = ExtResource("8_wt75w")
-dmg = 1
-radius = 60
-inflict = 0
-pre_warn = 0.5
-warn_activation_time = 1.0
-dmg_activation_time = 0.5
-hold_time = 0.1
-repeat = 1
-slow = false
-prevent_attack = false
-invert_controls = false
-movement_type = 0
-movement_speed = 5.0
-spawn_sound = 1
-
-[sub_resource type="Resource" id="Resource_djtya"]
-script = ExtResource("9_lxfpf")
-attack_number = 6
-intra_spawn_delay = 1.0
-spawn_position = 1
-spawn_position_offset = Vector2(0, 0)
-damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_80r88"), SubResource("Resource_ap81d")])
-multi_ds_behaviour = 0
-attack_start_delay = 1.0
-
-[sub_resource type="Resource" id="Resource_2ccjo"]
-script = ExtResource("12_5yocs")
-teleport_to = 0
-tele_global = Vector2(0, 0)
-tele_limit = Vector2(200, 200)
-hold = 0.5
-
-[sub_resource type="Resource" id="Resource_p15yq"]
-script = ExtResource("14_ywv46")
-length = 3.0
-strength = 1.0
-
-[sub_resource type="Resource" id="Resource_qrpbg"]
-script = ExtResource("14_h5kxk")
-length = 3.0
-strength = 2.0
-
-[sub_resource type="Resource" id="Resource_lxviw"]
-script = ExtResource("8_wt75w")
-dmg = 1
-radius = 60
-inflict = 0
-pre_warn = 0.5
-warn_activation_time = 1.0
-dmg_activation_time = 0.5
-hold_time = 3.0
-repeat = 1
-slow = false
-prevent_attack = false
-invert_controls = false
-movement_type = 3
-movement_speed = 100.0
-spawn_sound = 1
-
-[sub_resource type="Resource" id="Resource_vxl22"]
-script = ExtResource("15_svyp1")
-attack_points = 6
-radius = 120.0
-intra_spawn_delay = -1.0
-shuffle_spawn_order = true
-spawn_position = 0
-spawn_position_offset = Vector2(0, 0)
-damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_lxviw")])
-multi_ds_behaviour = 0
-attack_start_delay = 1.0
-
-[sub_resource type="Resource" id="Resource_0mj3e"]
-script = ExtResource("18_up7ol")
-derive_dir = 1
-to_object_position = 1
-to_position = Vector2(1, 0)
-rotational_offset = 0.0
-attack_number = 6
-grow_factor = 1.0
-bifurcate = false
-intra_spawn_delay = 0.0
-shuffle_spawn_order = false
-spawn_position = 0
-spawn_position_offset = Vector2(0, 0)
-damage_settings = Array[ExtResource("8_wt75w")]([SubResource("Resource_lxviw")])
-multi_ds_behaviour = 0
-attack_start_delay = 1.0
-
-[sub_resource type="Resource" id="Resource_7fry3"]
-script = ExtResource("6_151od")
-schedule = Array[int]([0, 2, 3, 1, 4])
-on_heavy = 0
-on_end = 0
-chance_to_stop = 0.0
-ohspi = -1
-oespi = -1
-wait_range = Vector2(1, 3)
-MOVEMENT_OPTIONS = Array[ExtResource("11_ur4n2")]([SubResource("Resource_2ccjo")])
-ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_djtya")])
-SUB_ATTACK_OPTIONS = Array[ExtResource("7_kgwd8")]([SubResource("Resource_vxl22"), SubResource("Resource_0mj3e")])
-SPECIAL_OPTIONS = Array[ExtResource("13_7jmln")]([SubResource("Resource_p15yq"), SubResource("Resource_qrpbg")])
-CONDITION_OPTIONS = Array[ExtResource("10_et5r3")]([])
-
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_f7y7t"]
 noise_type = 3
 
@@ -182,10 +30,6 @@ script = ExtResource("1_idpkm")
 y_sort_enabled = true
 position = Vector2(200, 200)
 job = SubResource("Resource_tdh4b")
-
-[node name="Boss" parent="." instance=ExtResource("3_ly78x")]
-monster_data = SubResource("Resource_epvqo")
-phases = Array[ExtResource("6_151od")]([SubResource("Resource_7fry3")])
 
 [node name="GameCamera" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
 ignore_rotation = false
@@ -200,3 +44,5 @@ target = NodePath("../Player")
 decay = 0.2
 max_offset = Vector2(200, 150)
 noise = SubResource("FastNoiseLite_f7y7t")
+
+[node name="Scarecrow" parent="." instance=ExtResource("5_fd6p6")]

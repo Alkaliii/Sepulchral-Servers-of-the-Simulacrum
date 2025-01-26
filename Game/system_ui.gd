@@ -91,6 +91,7 @@ func set_title(state : bool = true, shake : int = 2, title : String = "", subtit
 			titlecont.hide()
 			push_title(Vector2.ZERO)
 		true:
+			if weapon_inventory.visible: open_w_inv()
 			titlecont.show()
 			titletext.clear()
 			if s_colr == Color.BLACK:
@@ -139,7 +140,7 @@ func srslmev(nv : float): #set roar speed lines mask edge value
 
 
 func open_console():
-	if weapon_inventory.visible: return
+	if weapon_inventory.visible: open_w_inv()
 	console.visible = !console.visible 
 	match console.visible:
 		true:
@@ -151,7 +152,7 @@ func open_console():
 			App.can_input = true
 
 func open_w_inv():
-	if console.visible: return
+	if console.visible: open_console()
 	weapon_inventory.visible = !weapon_inventory.visible
 	match weapon_inventory.visible:
 		true:

@@ -47,6 +47,7 @@ func appear(state:bool):
 		true: #show
 			await SystemUI.set_title(false)
 			await SystemUI.set_background(true,Color("#b4b4b6"))
+			position.x = get_viewport().size.x
 			show()
 			atw = create_tween()
 			atw.tween_property(self,"position:x",0.0,0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
@@ -55,7 +56,7 @@ func appear(state:bool):
 			atw = create_tween()
 			atw.tween_property(self,"position:x",-get_viewport().size.x,0.5).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
 			await atw.finished
-			position.x = 640
+			position.x = get_viewport().size.x
 			hide()
 			
 

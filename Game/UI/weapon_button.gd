@@ -39,7 +39,7 @@ func delete_weapon():
 		delete.material.set_shader_parameter("progress", nv)
 	
 	tw.tween_method(dmspv,1.0,0.0,0.125).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	tw.tween_property(self,"modulate:a",0.0,0.125).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC).finished
+	tw.tween_property(self,"modulate:a",0.0,0.125).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	await tw.finished
 	get_parent().remove_child(self)
 	queue_free()

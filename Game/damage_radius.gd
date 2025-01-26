@@ -26,6 +26,7 @@ func _ready():
 	set_radius()
 	if Engine.is_editor_hint(): return
 	body_entered.connect(damage_body)
+	App.purge_attacks.connect(fast_destroy)
 	#while true:
 		#reset_dr()
 		#await warn()
@@ -47,6 +48,8 @@ func _process(delta):
 var orb_rad
 var orb_accum
 var pp_dir
+var wiggle_dir
+var wiggle_accum := 0.0
 func process_dr_movement(delta):
 	if !settings: return
 	match settings.movement_type:
@@ -72,6 +75,22 @@ func process_dr_movement(delta):
 		DamageRadiusSettings.mt.PULL:
 			if !pp_dir: pp_dir = (global_position - settings.movement_origin).normalized()
 			global_position = lerp(global_position,global_position - (pp_dir * (settings.movement_speed * delta)),0.5)
+		DamageRadiusSettings.mt.ORTHO_WIGGLE:
+			if wiggle_dir == null: 
+				wiggle_dir = (global_position - settings.movement_origin).rotated(deg_to_rad(90)).normalized()
+				wiggle_dir.y /= 2.0
+				wiggle_dir *= (settings.radius/5.0)
+				print(wiggle_dir)
+			global_position = lerp(global_position,global_position + (wiggle_dir * cos(wiggle_accum)),0.5)
+			wiggle_accum += delta * settings.movement_speed
+		DamageRadiusSettings.mt.LATERAL_WIGGLE:
+			if wiggle_dir == null: 
+				wiggle_dir = (global_position - settings.movement_origin).normalized()
+				wiggle_dir.y /= 2.0
+				wiggle_dir *= (settings.radius/5.0)
+				print(wiggle_dir)
+			global_position = lerp(global_position,global_position + (wiggle_dir * cos(wiggle_accum)),0.5)
+			wiggle_accum += delta * settings.movement_speed
 
 func reset_dr():
 	sosv(0.0)
@@ -152,6 +171,12 @@ func on_fin():
 func destroy():
 	if Engine.is_editor_hint(): return
 	finished.emit(self)
+	get_parent().remove_child(self)
+	queue_free()
+
+func fast_destroy():
+	if Engine.is_editor_hint(): return
+	print("fast destory")
 	get_parent().remove_child(self)
 	queue_free()
 

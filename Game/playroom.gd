@@ -328,6 +328,8 @@ func game_state_update(data):
 				print_debug("Wrong Type")
 				return
 			SystemUI.roar_effect(unpacked_data[1])
+		App.gsu.PURGE_ATTACKS:
+			App.purge_attacks.emit()
 		App.gsu.STASH_METRICS:
 			var metrics = {
 				"name":App.player_name,

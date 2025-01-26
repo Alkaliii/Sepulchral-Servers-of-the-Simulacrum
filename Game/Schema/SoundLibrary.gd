@@ -4,6 +4,10 @@ class_name SoundLib
 enum music_files {
 	BATTLE_DAWN, #https://youfulca.com/en/2022/08/14/boss_queen-of-the-white-dawn/
 	BATTLE_KANNAGI, #https://youfulca.com/en/2022/08/14/boss_kannagi/ #victory theme practically
+	MYTHICAL_TOWN,
+	TOWER_OF_THE_ARCHMAGE,
+	NIGHTTIME, #tutorial
+	NIGHTTIMENOPERC, #title screen and ambient
 }
 
 #https://ateliermagicae.itch.io/monster-sound-effects-vol1
@@ -26,6 +30,11 @@ enum sound_files {
 	ATTACK_ICE_B,
 	ATTACK_LIGHTNING_A,
 	ATTACK_LIGHTNING_B,
+	NOTIFICATION_C, #neutral
+	NOTIFICATION_D, #complete/good job
+	NOTIFICATION_E, #mystical
+	NOTIFICATION_F, #mystical 2
+	NOTIFICATION_G, #hummmm
 }
 
 static func get_file(key) -> String:
@@ -33,6 +42,10 @@ static func get_file(key) -> String:
 		#Music
 		music_files.BATTLE_DAWN: return "res://Assets/Music/Battle-Dawn_loop.ogg"
 		music_files.BATTLE_KANNAGI: return "res://Assets/Music/Battle-kannagi_loop.ogg"
+		music_files.MYTHICAL_TOWN: return "res://Assets/Music/Mystical Town (Loop).wav"
+		music_files.TOWER_OF_THE_ARCHMAGE: return "res://Assets/Music/Tower of the Archmage.wav"
+		music_files.NIGHTTIME: return "res://Assets/Music/NightTime_Short(loop)(78).wav"
+		music_files.NIGHTTIMENOPERC: return "res://Assets/Music/NightTime_ShortNoPerc(loop)(78).wav"
 	
 	printerr(key, "NOT FOUND in sound lib")
 	return ""
@@ -50,6 +63,11 @@ static func get_file_sfx(key) -> String:
 		sound_files.LEVEL_THIS_WAY: return "res://Assets/SFX/This Way.wav"
 		sound_files.NOTIFICATION_A: return "res://Assets/SFX/MMO_Game_Magic_Designed_Holy_Cast_06.wav"
 		sound_files.NOTIFICATION_B: return "res://Assets/SFX/MMO_Game_Magic_Designed_Holy_Cast_10.wav"
+		sound_files.NOTIFICATION_C: return "res://Assets/SFX/Fantasy_UI (15).wav"
+		sound_files.NOTIFICATION_D: return "res://Assets/SFX/Fantasy_UI (21).wav"
+		sound_files.NOTIFICATION_E: return "res://Assets/SFX/Fantasy_UI (40).wav"
+		sound_files.NOTIFICATION_F: return "res://Assets/SFX/Fantasy_UI (41).wav"
+		sound_files.NOTIFICATION_G: return "res://Assets/SFX/Fantasy_UI (42).wav"
 		sound_files.ATTACK_ACID_A: return "res://Assets/SFX/MMO_Game_Magic_Designed_Acid_Impact_01.wav"
 		sound_files.ATTACK_ACID_B: return "res://Assets/SFX/MMO_Game_Magic_Designed_Acid_Impact_02.wav"
 		sound_files.ATTACK_ICE_A: return "res://Assets/SFX/MMO_Game_Magic_Designed_Ice_Impact_01.wav"

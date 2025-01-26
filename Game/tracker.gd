@@ -12,6 +12,6 @@ func _ready():
 func _process(delta):
 	if !target: target = get_tree().get_first_node_in_group("monster")
 	
-	var dir : Vector2 = (player.global_position - target.global_position).rotated(deg_to_rad(-90))
-	
-	rotation = dir.angle()
+	if target:
+		var dir : Vector2 = (player.global_position - target.global_position).rotated(deg_to_rad(-90))
+		rotation = dir.angle()

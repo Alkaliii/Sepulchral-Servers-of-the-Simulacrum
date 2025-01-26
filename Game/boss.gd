@@ -119,7 +119,7 @@ func kill_phase():
 	for phs in phases: 
 		phs.kill_phase()
 
-#@onready var boss_sprite = $Sprite
+@onready var boss_sprite = $Sprite
 var dtw : Tween
 func disappear(state : bool):
 	if dtw: dtw.kill()
@@ -173,8 +173,11 @@ func on_damage(amt : int, click : int): #send player data in
 	disp_ftxt(str(amt,"!" if click == 1 else ""),global_position - Vector2(0,45),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
 	var cam = get_tree().get_first_node_in_group("camera")
 	match click:
-		0: cam.add_trauma(0.4,0.9)
+		0: 
+			flash_vfx()
+			cam.add_trauma(0.4,0.9)
 		1: 
+			hit_vfx()
 			cam.add_trauma(1,0.8)
 			for p in phases:
 				p.on_heavy_received()
@@ -186,7 +189,7 @@ func on_damage(amt : int, click : int): #send player data in
 	
 	monster_data.status._damage(amt)
 	healthbar.value = monster_data.status.health
-		
+	
 	check_progress()
 
 func sync_damage(amt : int, click : int):
@@ -217,6 +220,8 @@ func check_progress():
 		kill_phase()
 		tiktok = false
 		dead = true
+		App.purge_attacks.emit()
+		if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.PURGE_ATTACKS]),Plyrm.Playroom.RPC.Mode.OTHERS)
 		App.performance_screen_details["time"] = time_elapsed
 		App.performance_screen_details["bhp"] = monster_data.status.max_health
 		await roar(str(monster_data.name," has been defeated."))
@@ -234,7 +239,7 @@ func check_progress():
 func roar(msg : String = "!!!"):
 	App.can_click = false
 	var cam = get_tree().get_first_node_in_group("camera")
-	cam.set_target($Sprite,Vector2(0,-45))
+	cam.set_target(boss_sprite,Vector2(0,-45))
 	if Plyrm.connected: cam.sync_target()
 	await get_tree().create_timer(0.5).timeout
 	cam.add_trauma(10)
@@ -334,6 +339,49 @@ func sync_drag(state : bool, to : NodePath = "", strr : float = 0):
 	}
 	if Plyrm.PLAYER:
 		Plyrm.Playroom.setState("bDrag",JSON.stringify(drag_state))
+
+var htwA : Tween
+var htwB : Tween
+@onready var hit_impact_vfx = $HitImpactVFX
+@onready var hit_impact_vfxb = $HitImpactVFXB
+func hit_vfx():
+	#print("hi",hit_impact_vfxb.material.get_shader_parameter("progress"),hit_impact_vfx.material.get_shader_parameter("progress"))
+	flash_vfx()
+	if float(!hit_impact_vfxb.material.get_shader_parameter("progress")) in [1.0,0.0]:
+		#use A
+		hit_impact_vfx.pivot_offset = hit_impact_vfx.size / 2.0
+		hit_impact_vfx.rotation = randf_range(0,TAU)
+		var spv = func(nv):
+			hit_impact_vfx.material.set_shader_parameter("progress",nv)
+		if htwA: htwA.kill()
+		htwA = create_tween()
+		htwA.tween_method(spv,0.0,1.0,0.75).set_ease(Tween.EASE_IN_OUT)
+	elif float(!hit_impact_vfx.material.get_shader_parameter("progress")) in [1.0,0.0]:
+		#use B
+		hit_impact_vfxb.pivot_offset = hit_impact_vfx.size / 2.0
+		hit_impact_vfxb.rotation = randf_range(0,TAU)
+		var spv = func(nv):
+			hit_impact_vfxb.material.set_shader_parameter("progress",nv)
+		if htwB: htwB.kill()
+		htwB = create_tween()
+		htwB.tween_method(spv,0.0,1.0,0.75).set_ease(Tween.EASE_IN_OUT)
+	else:
+		#use A regardless
+		hit_impact_vfx.pivot_offset = hit_impact_vfx.size / 2.0
+		hit_impact_vfx.rotation = randf_range(0,TAU)
+		var spv = func(nv):
+			hit_impact_vfx.material.set_shader_parameter("progress",nv)
+		if htwA: htwA.kill()
+		htwA = create_tween()
+		htwA.tween_method(spv,0.0,1.0,0.75).set_ease(Tween.EASE_IN_OUT)
+
+func flash_vfx(hold_frames : int = 10):
+	$Starburst.emitting = true
+	$Starburst2.emitting = true
+	boss_sprite.material.set_shader_parameter("active",true)
+	for i in hold_frames:
+		await App.process_frame()
+	boss_sprite.material.set_shader_parameter("active",false)
 
 #func set_behaviour_time(new_dura : float):
 	#behaviour_time_elapse = 0.0
