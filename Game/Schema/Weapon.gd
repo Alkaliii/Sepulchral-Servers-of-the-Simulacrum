@@ -15,17 +15,17 @@ enum wd {
 }
 
 enum i {
-	DAGGER,
-	SWORD,
-	STAFF,
-	HAMMER,
-	GLASS,
-	AXE,
-	WARAXE,
-	TRIDENT,
-	BOW,
-	BLADE,
-	GAUNTLET
+	DAGGER, #0% chance to block, 30% to recharge
+	SWORD, #10% chance to parry (damage boss instead), 20 to recharge
+	STAFF, #0% chance to block, 30% to self heal
+	HAMMER, #20% chance to block, 20% to parry
+	GLASS, #40% chance to self heal
+	AXE, #40% chance to parry
+	WARAXE, #20% chance to block, 20% chance to recharge 
+	TRIDENT, #50% chance to parry
+	BOW, #50% chance to recharge
+	BLADE, #50% chance to block 
+	GAUNTLET #50% to block,self heal, and recharge
 }
 
 @export var icon : i = i.SWORD
