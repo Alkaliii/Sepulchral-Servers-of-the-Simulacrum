@@ -37,6 +37,7 @@ func _ready():
 	#Plyrm.PR_SESSION_END.connect(check_host)
 	#Plyrm.PR_DISCONNECT.connect(check_host)
 	
+	hit_detector.disabled = true
 	add_to_group("monster")
 	monster_data.status.setup(monster_data.base_health)
 	healthbar.max_value = monster_data.base_health
@@ -44,12 +45,12 @@ func _ready():
 	hit_detector.DAMAGED.connect(on_damage)
 	hit_detector.AFFLICTED.connect(on_afflict)
 	monster_data.status.DOT.connect(show_other_damage)
-	
 	if OS.has_feature("pc"): test_start()
 
 func test_start():
 	await get_tree().create_timer(3.0).timeout
 	await SystemUI.sync_and_set_title(true,2,monster_data.name,monster_data.stitle,Color("#a89f94"))
+	hit_detector.disabled = false
 	await roar(str("You encounter [shake]",monster_data.name))
 	SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.normal_music))
 	time_elapsed = 0.0
@@ -61,6 +62,7 @@ func test_start():
 func check_host(args = null):
 	if Plyrm.PLAYER and !Plyrm.Playroom.isHost():
 		print("kys")
+		hit_detector.disabled = false
 		set_physics_process(false)
 		kill_phase()
 		return
@@ -70,11 +72,14 @@ func check_host(args = null):
 
 func reload():
 	kill_phase()
+	hit_detector.disabled = true
 	dead = false
 	halfway_dead = false
 	monster_data.status.reload()
 	global_position = Vector2.ZERO
 	if is_physics_processing(): SystemAudio.sync_and_stop_music()
+	App.purge_attacks.emit()
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.PURGE_ATTACKS]),Plyrm.Playroom.RPC.Mode.OTHERS)
 
 func test_phase():
 	if phases.is_empty(): return
@@ -98,6 +103,7 @@ func test_phase():
 
 var active_phase : Phase
 func change_phase(new_phase : int = -1):
+	if phases.is_empty(): return
 	print("CHANGING PHASE!"," RANDOM" if new_phase == -1 else str(new_phase))
 	var phs : Phase
 	if new_phase and new_phase != -1: phs = phases[new_phase]
@@ -106,6 +112,7 @@ func change_phase(new_phase : int = -1):
 	start_phase(phs)
 
 func start_phase(phs : Phase):
+	if phases.is_empty(): return
 	phs.clean_actions()
 	phs.is_active = true
 	phs.cancel = false
@@ -174,7 +181,7 @@ func on_damage(amt : int, click : int): #send player data in
 	var cam = get_tree().get_first_node_in_group("camera")
 	match click:
 		0: 
-			flash_vfx()
+			hit_vfx(true)
 			cam.add_trauma(0.4,0.9)
 		1: 
 			hit_vfx()
@@ -225,16 +232,19 @@ func check_progress():
 		App.performance_screen_details["time"] = time_elapsed
 		App.performance_screen_details["bhp"] = monster_data.status.max_health
 		await roar(str(monster_data.name," has been defeated."))
-		SystemUI.set_title(true,2,fTxt.victorytitle,fTxt.victorySubtitles.pick_random(),Color("#a89f94"))
-		SystemUI.set_background(true,Color.BLACK)
-		SystemUI.push_title(Vector2(0,-80))
+		
+		#Things like this should be one gsu call... It doesn't change so you can just tell the client to do it on their side
+		#please keep in mind for future
+		SystemUI.sync_and_set_title(true,2,fTxt.victorytitle,fTxt.victorySubtitles.pick_random(),Color("#a89f94"))
+		SystemUI.sync_and_set_background(true,Color.BLACK)
+		SystemUI.sync_and_push_title(Vector2(0,-80))
 		SystemUI.prepare_stats()
 	elif monster_data.status.health < (monster_data.status.max_health * .5) and !halfway_dead:
 		kill_phase()
 		halfway_dead = true
 		SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.halfway_music))
 		await roar(str(monster_data.name," is weak!"))
-		start_phase(phases.pick_random())
+		if !phases.is_empty(): start_phase(phases.pick_random())
 
 func roar(msg : String = "!!!"):
 	App.can_click = false
@@ -248,11 +258,11 @@ func roar(msg : String = "!!!"):
 	SystemUI.roar_effect(true)
 	await get_tree().create_timer(2.5).timeout
 	SystemUI.roar_effect(false)
-	cam.set_target(get_tree().get_first_node_in_group("player"))
+	cam.set_target(get_tree().get_first_node_in_group("player_persistant"))
 	if Plyrm.connected: cam.sync_target()
 	App.can_click = true
 	await App.time_delay(0.5)
-	SystemUI.push_lateral({
+	SystemUI.sync_and_push_lateral({
 	"speaker":"nme",
 	"message":msg,
 	"type":LateralNotification.nt.SYSTEM,
@@ -344,12 +354,14 @@ var htwA : Tween
 var htwB : Tween
 @onready var hit_impact_vfx = $HitImpactVFX
 @onready var hit_impact_vfxb = $HitImpactVFXB
-func hit_vfx():
+func hit_vfx(small:=false):
 	#print("hi",hit_impact_vfxb.material.get_shader_parameter("progress"),hit_impact_vfx.material.get_shader_parameter("progress"))
 	flash_vfx()
 	if float(!hit_impact_vfxb.material.get_shader_parameter("progress")) in [1.0,0.0]:
 		#use A
 		hit_impact_vfx.pivot_offset = hit_impact_vfx.size / 2.0
+		if small: hit_impact_vfx.scale = Vector2(0.8,0.8)
+		else: hit_impact_vfx.scale = Vector2.ONE
 		hit_impact_vfx.rotation = randf_range(0,TAU)
 		var spv = func(nv):
 			hit_impact_vfx.material.set_shader_parameter("progress",nv)
@@ -358,7 +370,9 @@ func hit_vfx():
 		htwA.tween_method(spv,0.0,1.0,0.75).set_ease(Tween.EASE_IN_OUT)
 	elif float(!hit_impact_vfx.material.get_shader_parameter("progress")) in [1.0,0.0]:
 		#use B
-		hit_impact_vfxb.pivot_offset = hit_impact_vfx.size / 2.0
+		hit_impact_vfxb.pivot_offset = hit_impact_vfxb.size / 2.0
+		if small: hit_impact_vfxb.scale = Vector2(0.8,0.8)
+		else: hit_impact_vfxb.scale = Vector2.ONE
 		hit_impact_vfxb.rotation = randf_range(0,TAU)
 		var spv = func(nv):
 			hit_impact_vfxb.material.set_shader_parameter("progress",nv)
@@ -368,6 +382,8 @@ func hit_vfx():
 	else:
 		#use A regardless
 		hit_impact_vfx.pivot_offset = hit_impact_vfx.size / 2.0
+		if small: hit_impact_vfx.scale = Vector2(0.8,0.8)
+		else: hit_impact_vfx.scale = Vector2.ONE
 		hit_impact_vfx.rotation = randf_range(0,TAU)
 		var spv = func(nv):
 			hit_impact_vfx.material.set_shader_parameter("progress",nv)

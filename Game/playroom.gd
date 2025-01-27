@@ -11,7 +11,7 @@ signal PR_SESSION_END
 signal PR_DISCONNECT
 
 var PLAYER : Dictionary = {}
-var sync_objs : Array = []
+#var sync_objs : Array = []
 
 var connected_players : Array = []
 var connected : bool = false
@@ -34,7 +34,7 @@ func blog(txt : String):
 	"speaker":"nme",
 	"message":txt,
 	"type":LateralNotification.nt.SYSTEM,
-	"duration":80
+	"duration":10
 	})
 
 # Called when the host has started the game
@@ -46,8 +46,10 @@ func onInsertCoin(args):
 	Playroom.onPlayerJoin(bridgeToJS(onPlayerJoin))
 	PR_INSERT_COIN.emit()
 	
-	#set name
+	#set name and other things
 	Plyrm.PLAYER.state.setState("name",App.player_name)
+	Plyrm.PLAYER.state.setState("pMapSelect",false)
+	Plyrm.PLAYER.state.setState("pREADY",false)
 	SystemUI.sync_lateral({
 	"speaker":"nme",
 	"message":str("[color=b4ba46]",App.player_name,"[/color] has joined the server"),
@@ -57,29 +59,43 @@ func onInsertCoin(args):
 
 func onSessionEnd(args):
 	connected = false
+	clear_playroom_data()
 	print("Session has ended, ",args)
 	blog(str("Session has ended, ",args))
 	PR_SESSION_END.emit()
 
 func onDisconnect(args):
 	connected = false
+	clear_playroom_data()
 	print("Disconnect!", args.code," ",args.reason)
 	blog(str("Disconnect!", args.code," ",args.reason))
 	PR_DISCONNECT.emit(args)
 
+func clear_playroom_data():
+	PLAYER.clear()
+	connected_players.clear()
+
 # Called when a new player joins the game
 func onPlayerJoin(args):
 	var state = args[0]
-	connected_players.append(state)
+	var replace = false
+	for p in connected_players:
+		if p.id == state.id: 
+			connected_players.insert(connected_players.find(p),state)
+			replace = true
+	if !replace: 
+		connected_players.append(state)
+		blog(str("new npc joined: ", state.id))
+		PR_PLAYER_JOIN.emit(args)
 	print("new npc joined: ", state.id)
-	blog(str("new npc joined: ", state.id))
-	PR_PLAYER_JOIN.emit(args)
 	# Listen to onQuit event
 	state.onQuit(bridgeToJS(onPlayerQuit))
  
 func onPlayerQuit(args):
 	var state = args[0];
 	connected_players.erase(state)
+	for p in connected_players:
+		if p.id == state.id: connected_players.erase(p)
 	print("npc quit: ", state.id)
 	blog(str("npc quit: ", state.id))
 	PR_PLAYER_QUIT.emit(args)
@@ -254,6 +270,13 @@ func spawn_dmg(data):
 	
 	App.spawn_dmg.emit(position,settings)
 
+func get_all_player_state(state := "") -> Array:
+	var all_state : Array = []
+	for p in connected_players:
+		all_state.append(p.getState(state))
+	
+	return all_state
+
 func game_state_update(data):
 	#data = var_to_str([int,...])
 	
@@ -316,6 +339,24 @@ func game_state_update(data):
 				return
 			var set_title_data = JSON.parse_string(unpacked_data[1])
 			SystemUI.set_title(set_title_data["state"],set_title_data["shake"],set_title_data["title"],set_title_data["subtitle"],Color(set_title_data["s_colr"]))
+		App.gsu.REMOTE_TITLE_PUSH:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_STRING: 
+				print_debug("Wrong Type")
+				return
+			var push_title_data = str_to_var(unpacked_data[1])
+			SystemUI.push_title(push_title_data)
+		App.gsu.REMOTE_BACKGROUND:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_STRING: 
+				print_debug("Wrong Type")
+				return
+			var set_background_data = JSON.parse_string(unpacked_data[1])
+			SystemUI.set_background(set_background_data["state"],set_background_data["colr"])
 		App.gsu.DISABLE_CLIENT_BOSS: #kill client boss
 			var mnstr = get_tree().get_first_node_in_group("monster")
 			if !mnstr: return
@@ -341,3 +382,14 @@ func game_state_update(data):
 			Plyrm.PLAYER.state.setState("pMetrics",JSON.stringify(metrics))
 		App.gsu.SHOW_PERFORMANCE:
 			SystemUI.remote_perf()
+		App.gsu.HIDE_LEVEL_SELECT:
+			SystemUI.open_level_select(false)
+			SystemUI.force_close_perf()
+		App.gsu.SYNC_LEVEL:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_INT: 
+				print_debug("Wrong Type")
+				return
+			App.load_level(unpacked_data[1])

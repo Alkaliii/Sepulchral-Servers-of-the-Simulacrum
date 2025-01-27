@@ -40,8 +40,8 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 			var line_point_idx = l.find(i)
 			var new = DAMAGE_RADIUS.instantiate()
 			new.settings = _get_settings(line_point_idx).duplicate()
-			if new.settings.movement_type == DamageRadiusSettings.mt.ORBIT:
-				print("no orbit on line")
+			if new.settings.movement_type == DamageRadiusSettings.mt.ORBIT and derive_dir != ld.POS:
+				print("no orbit on arbitrary line, (set to derive pos (1,0))")
 				new.settings.movement_type = DamageRadiusSettings.mt.NONE
 			new.settings.movement_origin = p
 			new.settings.movement_radius = (i-p).length()

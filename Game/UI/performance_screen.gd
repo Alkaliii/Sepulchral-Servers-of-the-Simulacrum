@@ -16,15 +16,21 @@ extends MarginContainer
 @onready var b_health = $StatList/bHealth
 @onready var timetaken = $StatList/Time
 
+@onready var nextbtn = $nextbtn
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
+	nextbtn.pressed.connect(on_next_pressed)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
+func on_next_pressed():
+	nextbtn.release_focus()
+	#show level select
+	await appear(false)
+	SystemUI.open_level_select(true)
 
 const STAT_LISTING = preload("res://Game/UI/performance_screen_stat_listing.tscn")
 func size_list():
@@ -45,6 +51,9 @@ func appear(state:bool):
 	
 	match state:
 		true: #show
+			if Plyrm.connected: 
+				Plyrm.PLAYER.state.setState("pMapSelect",false)
+				Plyrm.PLAYER.state.setState("pREADY",false)
 			await SystemUI.set_title(false)
 			await SystemUI.set_background(true,Color("#b4b4b6"))
 			position.x = get_viewport().size.x
@@ -52,16 +61,20 @@ func appear(state:bool):
 			atw = create_tween()
 			atw.tween_property(self,"position:x",0.0,0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 			await atw.finished
+			await App.time_delay(1.0)
+			nextbtn.show()
 		false:
 			atw = create_tween()
 			atw.tween_property(self,"position:x",-get_viewport().size.x,0.5).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
 			await atw.finished
-			position.x = get_viewport().size.x
 			hide()
-			
+			nextbtn.hide()
+			position.x = get_viewport().size.x
 
 func setlist():
 	size_list()
+	
+	App.set_floor_complete(App.current_floor)
 	
 	var perfdata : Array = []
 	var total_dmg = 0

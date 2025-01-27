@@ -6,6 +6,11 @@ extends Node2D
 func _ready():
 	add_to_group("monster")
 	hit_detector.DAMAGED.connect(on_damage)
+	if Plyrm.connected: 
+		Plyrm.PLAYER.state.setState("pMapSelect",false)
+		Plyrm.PLAYER.state.setState("pREADY",false)
+	await App.time_delay(3.0)
+	App.tutorial_start.emit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

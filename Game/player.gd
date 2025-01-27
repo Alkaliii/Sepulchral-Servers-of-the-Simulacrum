@@ -35,10 +35,10 @@ var BDMG : int = 2
 
 @onready var health_bar = $UI/Stats/MarginContainer/stats/HealthBar
 @onready var under_bar = $UI/Stats/MarginContainer/stats/HealthBar/UnderBar
-@onready var s_cache_lbl = $UI/Stats/MarginContainer/VBoxContainer/sCache
-@onready var charge_bar = $UI/Stats/MarginContainer/VBoxContainer/Charge
+@onready var s_cache_lbl = $UI/Stats/MarginContainer/PanelContainer/VBoxContainer/sCache#$UI/Stats/MarginContainer/VBoxContainer/sCache
+#@onready var charge_bar = $UI/Stats/MarginContainer/VBoxContainer/Charge
 @onready var p_cache_bar = $UI/Stats/MarginContainer/stats/pCacheBar#$UI/Stats/pCacheBar
-@onready var cooldown = $UI/Stats/MarginContainer/VBoxContainer/Cooldown
+#@onready var cooldown = $UI/Stats/MarginContainer/VBoxContainer/Cooldown
 @onready var p_cooldown_bar = $UI/Stats/MarginContainer/stats/pCooldownBar#$UI/Stats/pCooldownBar
 
 const FTXT = preload("res://Game/float_text.tscn")
@@ -83,9 +83,9 @@ func set_job():
 	SCACHE = 0
 	dash_cooldown = 0.0
 	p_cooldown_bar.value = p_cooldown_bar.max_value
-	charge_bar.max_value = MAX_PCACHE
+	#charge_bar.max_value = MAX_PCACHE
 	p_cache_bar.max_value = MAX_PCACHE
-	charge_bar.value = CURRENT_PCACHE
+	#charge_bar.value = CURRENT_PCACHE
 	p_cache_bar.value = CURRENT_PCACHE
 	update_s_charge()
 
@@ -129,7 +129,6 @@ func on_damage(amt : int):
 		})
 		App.can_click = false
 		await create_tween().tween_property(self,"modulate:a",0.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
-		App.purge_attacks.emit()
 		SystemAudio.stop_music(1.0)
 		remove_from_group("player")
 		#remove puppets from other machines (auto)
@@ -137,6 +136,7 @@ func on_damage(amt : int):
 		#If so reload boss
 		var death_back_col = Color.BLACK
 		if Plyrm.connected: death_back_col.a = 0.5
+		else: App.purge_attacks.emit()
 		SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_B))
 		await SystemUI.set_title(true,2,str("[color=red]",fTxt.defeattitle),fTxt.defeatSubtitles.pick_random(),Color("#a89f94"))
 		SystemUI.push_title(Vector2(0,-80))
@@ -264,13 +264,13 @@ func _physics_process(delta):
 				new_cooldown += dash_cooldown 
 				discharge()
 			dash_cooldown = new_cooldown
-			cooldown.max_value = dash_cooldown
+			#cooldown.max_value = dash_cooldown
 			p_cooldown_bar.max_value = dash_cooldown
 			kill_spin()
 		else:
 			print("on cooldown ", dash_cooldown)
 	elif dash_cooldown > 0.0:
-		cooldown.value = cooldown.max_value - dash_cooldown
+		#cooldown.value = cooldown.max_value - dash_cooldown
 		p_cooldown_bar.value = p_cooldown_bar.max_value - dash_cooldown
 		dash_cooldown -= delta
 	if dash_cooldown <= 0.0 and (tspin_vfx.modulate.a == 0.0 or bspin_vfx.modulate.a == 0.0):
@@ -305,7 +305,7 @@ func charge(ca = CHARGE_AMOUNT):
 	else:
 		disp_ftxt("MAX!",global_position + Vector2(0,25),FloatingText.a.POP)
 		print(CURRENT_PCACHE," MAX!")
-	charge_bar.value = CURRENT_PCACHE
+	#charge_bar.value = CURRENT_PCACHE
 	p_cache_bar.value = CURRENT_PCACHE
 
 var scfxtw : Tween
@@ -330,8 +330,8 @@ func s_charge():
 	s_cache_lbl.text = str(wve,"%.2f" % SCACHE,"[b]ghz")
 	#print(min,"/",max,"->",val)
 
-@onready var s_chrg_emphasis = $UI/Stats/MarginContainer/VBoxContainer/sCache/emphasis
-@onready var s_charge_fx = $UI/Stats/MarginContainer/VBoxContainer/sCache/charge_fx
+@onready var s_chrg_emphasis = $UI/Stats/MarginContainer/PanelContainer/VBoxContainer/sCache/emphasis
+@onready var s_charge_fx = $UI/Stats/MarginContainer/PanelContainer/VBoxContainer/sCache/charge_fx
 func scfxpv(nv : float): #set charge fx progress value
 	s_charge_fx.material.set_shader_parameter("progress",nv)
 
@@ -373,7 +373,7 @@ func tw_sc_cnt(nv : float):
 func discharge() -> bool:
 	if CURRENT_PCACHE > 0:
 		CURRENT_PCACHE -= 1
-		charge_bar.value = CURRENT_PCACHE
+		#charge_bar.value = CURRENT_PCACHE
 		p_cache_bar.value = CURRENT_PCACHE
 		#disp_ftxt(str("[font_size=10][color=orange]-1!"),global_position + Vector2(0,25),FloatingText.a.POP)
 		return true

@@ -42,6 +42,7 @@ enum mt {
 var movement_origin : Vector2 = Vector2.ZERO #position in global space to calculate movement with
 @export var movement_speed : float = 5.0 #how fast the dr moves
 var movement_offset : float = 0.0
+var movement_offset_additional : float = 0.0
 var movement_radius : float = 0.0
 
 @export_group("Sound")
@@ -71,6 +72,7 @@ func serialize() -> Dictionary:
 	sset["movement_origin"] = var_to_str(movement_origin)
 	sset["movement_speed"] = movement_speed
 	sset["movement_offset"] = movement_offset
+	sset["movement_offset_additional"] = movement_offset_additional
 	sset["movement_radius"] = movement_radius
 	sset["spawn_sound"] = spawn_sound
 	
@@ -92,5 +94,6 @@ func deserialize(sset : Dictionary):
 	movement_origin = str_to_var(sset["movement_origin"])
 	movement_speed = sset["movement_speed"]
 	movement_offset = sset["movement_offset"]
+	movement_offset_additional = sset["movement_offset_additional"]
 	movement_radius = sset["movement_radius"]
 	spawn_sound = sset["spawn_sound"]

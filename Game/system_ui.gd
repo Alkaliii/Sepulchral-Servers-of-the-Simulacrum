@@ -39,6 +39,16 @@ func check_move() -> bool:
 	if Input.is_action_just_pressed("MUP"): return true
 	return false
 
+func sync_and_set_background(state : bool, colr : Color = Color.BLACK):
+	var data = {
+		"state":state,
+		"colr":colr.to_html()
+	}
+	var pack = JSON.stringify(data)
+	
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.REMOTE_BACKGROUND,pack]),Plyrm.Playroom.RPC.Mode.OTHERS)
+	set_background(state,colr)
+
 @onready var background = $cl/Back/Background
 @onready var background_texture = $cl/Back/Background/BackTexture
 var btw : Tween #background tween
@@ -46,7 +56,7 @@ func set_background(state : bool, colr : Color = Color.BLACK):
 	if btw: btw.kill()
 	btw = create_tween()
 	
-	btw.tween_property(background,"color",colr,0.25).set_ease(Tween.EASE_IN_OUT)
+	if state: btw.tween_property(background,"color",colr,0.25).set_ease(Tween.EASE_IN_OUT)
 	#background.color = colr
 	match state:
 		true: #open
@@ -60,6 +70,7 @@ func set_background(state : bool, colr : Color = Color.BLACK):
 			btw.parallel().tween_property(background,"scale:y",-1.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
 			await btw.finished
 			background.hide()
+			background.color = colr
 			#background_texture.material.set_shader_parameter("polar_coordinates",[true,false].pick_random())
 			#background_texture.material.set_shader_parameter("spin_rotation",randf_range(5,-5))
 
@@ -113,6 +124,11 @@ func set_title(state : bool = true, shake : int = 2, title : String = "", subtit
 			ttw = create_tween()
 			ttw.tween_property(titletext,"visible_ratio",1.0,0.125).set_ease(Tween.EASE_IN_OUT)
 			await ttw.finished
+
+func sync_and_push_title(offset : Vector2):
+	var pack = var_to_str(offset)
+	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.REMOTE_TITLE_PUSH,pack]),Plyrm.Playroom.RPC.Mode.OTHERS)
+	push_title(offset)
 
 var pttw : Tween #push title tween
 func push_title(offset : Vector2):
@@ -233,3 +249,10 @@ func prepare_stats():
 
 func remote_perf():
 	performance_screen.setlist()
+
+@onready var level_select = $cl/Top/LevelSelect
+func open_level_select(state:bool):
+	level_select.appear(state)
+
+func force_close_perf():
+	performance_screen.appear(false)

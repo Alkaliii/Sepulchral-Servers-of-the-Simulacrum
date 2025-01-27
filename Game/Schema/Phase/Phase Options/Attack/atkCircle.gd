@@ -24,6 +24,7 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 			new.settings.movement_origin = p
 			new.settings.movement_radius = radius
 			new.settings.movement_offset = ((c.find(i) + 1) / float(attack_points)) * (2.0*PI)
+			new.settings.movement_offset_additional = float(attack_points)
 			_monster.get_parent().add_child(new)
 			new.top_level = true
 			new.global_position = i + p

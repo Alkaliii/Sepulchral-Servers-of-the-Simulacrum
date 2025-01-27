@@ -33,12 +33,13 @@ job = SubResource("Resource_tdh4b")
 
 [node name="GameCamera" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
 ignore_rotation = false
-limit_left = -800
-limit_top = -800
-limit_right = 800
-limit_bottom = 800
+limit_left = -1000
+limit_top = -500
+limit_right = 1000
+limit_bottom = 500
 limit_smoothed = true
 position_smoothing_enabled = true
+editor_draw_limits = true
 script = ExtResource("6_cmqed")
 target = NodePath("../Player")
 decay = 0.2

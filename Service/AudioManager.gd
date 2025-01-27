@@ -49,18 +49,18 @@ func set_music_volume_b(nv : float):
 func fade_music_b(state : bool,duration : float = 1.0):
 	match state:
 		false:
-			await create_tween().tween_property(music_player_b,"volume_db",-100.0,duration).from_current().set_ease(Tween.EASE_OUT).finished
+			await create_tween().tween_property(music_player_b,"volume_db",-100.0,duration).from_current().finished#.set_ease(Tween.EASE_OUT).finished
 			music_player_b.stop()
 		true:
-			await create_tween().tween_property(music_player_b,"volume_db",0.0,duration).from_current().set_ease(Tween.EASE_IN).finished
+			await create_tween().tween_property(music_player_b,"volume_db",0.0,duration).from_current().finished#.set_ease(Tween.EASE_IN).finished
 
 func fade_music_a(state : bool,duration : float = 1.0):
 	match state:
 		false:
-			await create_tween().tween_property(music_player_a,"volume_db",-100.0,duration).from_current().set_ease(Tween.EASE_OUT).finished
+			await create_tween().tween_property(music_player_a,"volume_db",-100.0,duration).from_current().finished#.set_ease(Tween.EASE_OUT).finished
 			music_player_a.stop()
 		true:
-			await create_tween().tween_property(music_player_a,"volume_db",0.0,duration).from_current().set_ease(Tween.EASE_IN).finished
+			await create_tween().tween_property(music_player_a,"volume_db",0.0,duration).from_current().finished#.set_ease(Tween.EASE_IN).finished
 
 var mtw : Tween
 func play_music(sound_path,fade : Vector2 = Vector2(2.0,2.0)):
@@ -87,14 +87,14 @@ func play_music(sound_path,fade : Vector2 = Vector2(2.0,2.0)):
 	
 	if cross_to == 1: #fade B in, fade A out
 		fade_music_a(false,fade.y)
-		fade_music_b(true,fade.y)
+		fade_music_b(true,fade.y * .8)
 		#mtw.tween_method(set_music_volume_a,music_player_a.volume_db,0.0,fade.y).set_ease(Tween.EASE_IN_OUT).finished
 		#mtw.tween_method(set_music_volume_b,music_player_b.volume_db,1.0,fade.y).set_ease(Tween.EASE_IN_OUT).finished
 		#await mtw.finished
 		#music_player_a.stop()
 	
 	elif cross_to == 0: #fade A in, fade B out
-		fade_music_a(true,fade.y)
+		fade_music_a(true,fade.y * .8)
 		fade_music_b(false,fade.y)
 		#mtw.tween_method(set_music_volume_a,music_player_a.volume_db,1.0,fade.y).set_ease(Tween.EASE_IN_OUT).finished
 		#mtw.tween_method(set_music_volume_b,music_player_b.volume_db,0.0,fade.y).set_ease(Tween.EASE_IN_OUT).finished

@@ -66,12 +66,15 @@ func set_noti(data : Dictionary = {
 		nt.SYSTEM: 
 			spkr = "(!)"
 			notitext.text = systemfs % [spkr,msg]
+			print_rich(msg)
 		nt.WARN: 
 			spkr = "(!)"
 			notitext.text = warnfs % [spkr,msg]
+			print_rich(msg)
 		nt.DANGER: 
 			spkr = "(!)"
 			notitext.text = dangerfs % [spkr,msg]
+			print_rich(msg)
 		nt.SPECIAL:
 			notitext.text = specialfs % [spkr,msg]
 	

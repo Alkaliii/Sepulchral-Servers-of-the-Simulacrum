@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://t6xwa6fxikjk"]
+[gd_scene load_steps=45 format=3 uid="uid://t6xwa6fxikjk"]
 
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_d5ssp"]
 [ext_resource type="Script" path="res://Game/system_ui.gd" id="1_lreom"]
@@ -7,28 +7,12 @@
 [ext_resource type="Shader" path="res://Assets/Shaders/soko.gdshader" id="3_bnsld"]
 [ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="3_dhot8"]
 [ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="3_es8be"]
-[ext_resource type="Shader" path="res://Assets/Shaders/balatroPaintMix.gdshader" id="3_i3u1e"]
 [ext_resource type="Shader" path="res://Assets/Shaders/speedlines.gdshader" id="3_lnnwt"]
 [ext_resource type="PackedScene" uid="uid://ya8kaicfslaw" path="res://Game/UI/objectivepanel.tscn" id="3_nx2cb"]
 [ext_resource type="Shader" path="res://Assets/Shaders/crt.gdshader" id="3_vrl4t"]
 [ext_resource type="Shader" path="res://Assets/Shaders/slipgate.gdshader" id="4_3d3qu"]
 [ext_resource type="PackedScene" uid="uid://brxo7jbspxwqt" path="res://Game/UI/performance_screen.tscn" id="8_uiocd"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qiyfm"]
-shader = ExtResource("3_i3u1e")
-shader_parameter/polar_coordinates = false
-shader_parameter/polar_center = Vector2(0.5, 0.5)
-shader_parameter/polar_zoom = 1.0
-shader_parameter/polar_repeat = 1.0
-shader_parameter/spin_rotation = 2.0
-shader_parameter/spin_speed = 5.0
-shader_parameter/offset = Vector2(0, 0)
-shader_parameter/colour_1 = Color(0, 0, 0, 1)
-shader_parameter/colour_2 = Color(0.745098, 0.745098, 0.745098, 1)
-shader_parameter/colour_3 = Color(0.201527, 0.201527, 0.201527, 1)
-shader_parameter/contrast = 2.0
-shader_parameter/spin_amount = 0.36
-shader_parameter/pixel_filter = 1080.0
+[ext_resource type="PackedScene" uid="uid://betkr5wshs2u4" path="res://Game/UI/level_select.tscn" id="10_8wywk"]
 
 [sub_resource type="Gradient" id="Gradient_q0prr"]
 offsets = PackedFloat32Array(0, 0.6, 0.8, 1)
@@ -333,18 +317,6 @@ grow_vertical = 2
 scale = Vector2(1, -1)
 pivot_offset = Vector2(0, 360)
 color = Color(0, 0, 0, 1)
-
-[node name="BackgroundTexture" type="ColorRect" parent="cl/Back/Background"]
-visible = false
-modulate = Color(1, 1, 1, 0.137255)
-material = SubResource("ShaderMaterial_qiyfm")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
 
 [node name="BackTexture" type="ColorRect" parent="cl/Back/Background"]
 modulate = Color(1, 1, 1, 0.0980392)
@@ -676,6 +648,12 @@ text = "GAUSSGRANDINE SANDBOX"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[node name="LevelSelect" parent="cl/Top" instance=ExtResource("10_8wywk")]
+visible = false
+layout_mode = 1
+offset_top = 360.0
+offset_bottom = 360.0
 
 [node name="effects" type="CanvasLayer" parent="."]
 layer = 9

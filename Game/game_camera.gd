@@ -19,6 +19,21 @@ func _ready():
 	add_to_group("camera")
 	randomize()
 	noise.seed = randi()
+	App.tutorial_start.connect(on_tut_begin)
+	App.tutorial_end.connect(on_tut_end)
+	on_tut_end()
+
+func on_tut_begin():
+	limit_left = -500
+	limit_top = -250
+	limit_right = 500
+	limit_bottom = 250
+
+func on_tut_end():
+	limit_left = -1000
+	limit_top = -500
+	limit_right = 1000
+	limit_bottom = 500
 
 func set_target(new : Node2D,ofst : Vector2 = Vector2.ZERO):
 	target = new
@@ -49,7 +64,7 @@ func add_trauma(amount : float, dec := decay):
 func _process(delta):
 	#if Input.is_action_just_pressed("ACTIONA"): add_trauma(10.0)
 	
-	if target:
+	if target and is_instance_valid(target):
 		global_position = lerp(global_position,target.global_position + offset_target,0.5)
 	#elif offset.x != 0 or offset.y != 0 or rotation != 0:
 		#lerp(offset.x,0.0,1)

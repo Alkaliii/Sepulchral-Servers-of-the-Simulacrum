@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://jvlvkbccv6ur"]
+[gd_scene load_steps=47 format=3 uid="uid://jvlvkbccv6ur"]
 
 [ext_resource type="Script" path="res://Game/boss.gd" id="1_5lnwp"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="1_yr56s"]
@@ -6,11 +6,18 @@
 [ext_resource type="Script" path="res://Game/hit_detector.gd" id="2_354gp"]
 [ext_resource type="Script" path="res://Game/Schema/Status.gd" id="3_fi5qo"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="3_xghth"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase.gd" id="4_03se6"]
 [ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="4_dh5bv"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/attackOption.gd" id="5_ctekm"]
 [ext_resource type="PackedScene" uid="uid://oas5aab7on8x" path="res://Game/damage_radius.tscn" id="6_1htco"]
+[ext_resource type="Script" path="res://Game/Schema/DamageSettings.gd" id="6_kcwsd"]
 [ext_resource type="Shader" path="res://Assets/Shaders/ProceduralGleam.gdshader" id="7_c5t82"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkFocus.gd" id="7_cym4e"]
 [ext_resource type="Shader" path="res://Assets/Shaders/flash.gdshader" id="7_fq6pi"]
 [ext_resource type="Shader" path="res://Assets/Shaders/ProceduralSpark.gdshader" id="7_u3e0q"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Condition/conditionOption.gd" id="8_3loq0"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/movementOption.gd" id="9_avm6y"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/specialOption.gd" id="10_u8blp"]
 
 [sub_resource type="Resource" id="Resource_83p26"]
 script = ExtResource("3_fi5qo")
@@ -27,6 +34,48 @@ status = SubResource("Resource_83p26")
 normal_music = 0
 halfway_music = 1
 roar = 0
+
+[sub_resource type="Resource" id="Resource_7nxo2"]
+script = ExtResource("6_kcwsd")
+dmg = 1
+radius = 60
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 5
+movement_speed = 5.0
+spawn_sound = 1
+
+[sub_resource type="Resource" id="Resource_1noiy"]
+script = ExtResource("7_cym4e")
+attack_number = 6
+intra_spawn_delay = 1.0
+spawn_position = 1
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_kcwsd")]([SubResource("Resource_7nxo2")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_dpcn2"]
+script = ExtResource("4_03se6")
+schedule = Array[int]([1, 4])
+on_heavy = 0
+on_end = 0
+chance_to_stop = 0.0
+ohspi = -1
+oespi = -1
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_avm6y")]([])
+ATTACK_OPTIONS = Array[ExtResource("5_ctekm")]([SubResource("Resource_1noiy")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_ctekm")]([])
+SPECIAL_OPTIONS = Array[ExtResource("10_u8blp")]([])
+CONDITION_OPTIONS = Array[ExtResource("8_3loq0")]([])
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_toek4"]
 noise_type = 2
@@ -254,6 +303,7 @@ y_sort_enabled = true
 motion_mode = 1
 script = ExtResource("1_5lnwp")
 monster_data = SubResource("Resource_4md7q")
+phases = Array[ExtResource("4_03se6")]([SubResource("Resource_dpcn2")])
 
 [node name="PullVFX" type="CPUParticles2D" parent="."]
 modulate = Color(1, 1, 1, 0.498039)

@@ -18,6 +18,7 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 		_monster.get_parent().add_child(new)
 		new.top_level = true
 		new.global_position = _get_spawn_position(_monster).pick_random()
+		new.settings.movement_radius = (_monster.global_position-new.global_position).length()
 		new.settings.movement_origin = _monster.global_position
 		new.settings.movement_offset = ((i+1) / float(attack_number)) * (2.0*PI)
 		new.warn()

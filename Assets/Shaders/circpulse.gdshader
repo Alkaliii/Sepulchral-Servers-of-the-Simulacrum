@@ -122,7 +122,7 @@ void vertex() {
 		//MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0), vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), vec4(0.0, 0.0, 0.0, 1.0));
 	//}
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
-	
+
 	LIFETIME = INSTANCE_CUSTOM.y;
 	INDEX = float(INSTANCE_ID);
 }
@@ -158,7 +158,7 @@ void fragment() {
 
 	vec2 cod = UV + (vec2((texture(col_ovr_distort,UV).r - 0.5) * 2.0) * col_ovr_dis_str);
 	vec3 co = texture(color_overlay,cod).rgb * mix_strength + clamp((1.0 * (1.0-mix_strength)),0.0,1.0);
-	
+
 	if (mask == true) {
 		vec4 mt = texture(world_masked_texture,world_position * wscale + (mask_scroll * TIME));
 		COLOR.rgb = mt.rgb;

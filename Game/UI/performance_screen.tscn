@@ -1,11 +1,68 @@
-[gd_scene load_steps=5 format=3 uid="uid://brxo7jbspxwqt"]
+[gd_scene load_steps=11 format=3 uid="uid://brxo7jbspxwqt"]
 
 [ext_resource type="Script" path="res://Game/UI/performance_screen.gd" id="1_fkyv5"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_wknbi"]
 [ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="2_bb82i"]
+[ext_resource type="Shader" path="res://Assets/Shaders/bounce.gdshader" id="4_v4sml"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_l7p7c"]
 color = Color(0.333333, 0.333333, 0.333333, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8kbwf"]
+shader = ExtResource("4_v4sml")
+shader_parameter/do_abs = false
+shader_parameter/do_quantize = null
+shader_parameter/quantize_to = 1.0
+shader_parameter/sine_amplitude = Vector2(0, 2)
+shader_parameter/sine_speed = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gspws"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b5u3d"]
+content_margin_left = 15.0
+content_margin_top = 0.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ui0d0"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rbtxa"]
+content_margin_left = 30.0
+content_margin_top = 2.0
+content_margin_right = 30.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
 
 [node name="PerformanceScreen" type="MarginContainer"]
 custom_minimum_size = Vector2(640, 360)
@@ -38,7 +95,7 @@ theme_override_fonts/bold_font = ExtResource("1_wknbi")
 theme_override_font_sizes/normal_font_size = 10
 theme_override_font_sizes/bold_font_size = 10
 bbcode_enabled = true
-text = "[wave]DUNGEON CLEARED!"
+text = "[wave]FLOOR CLEARED!"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
@@ -268,3 +325,17 @@ text = "3000000"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[node name="nextbtn" type="Button" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_8kbwf")
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("1_wknbi")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gspws")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b5u3d")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ui0d0")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rbtxa")
+text = "NEXT"

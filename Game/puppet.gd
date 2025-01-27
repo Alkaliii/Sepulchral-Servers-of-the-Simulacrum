@@ -1,5 +1,5 @@
 extends CharacterBody2D
-
+class_name system_player_puppet
 
 var my_id
 var state

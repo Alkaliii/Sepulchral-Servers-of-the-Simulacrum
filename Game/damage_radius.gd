@@ -58,7 +58,9 @@ func process_dr_movement(delta):
 			if !orb_accum: 
 				var ip = (global_position - settings.movement_origin)
 				ip.y *= 2.0
-				orb_accum = ip.normalized().angle() - ((1.0/6.0) * 2.0*PI)
+				orb_accum = ip.normalized().angle()#
+				if settings.movement_offset_additional != 0.0:
+					orb_accum -= ((1.0/settings.movement_offset_additional) * 2.0*PI)
 				#orb_accum = settings.movement_offset
 			global_position = lerp(global_position,settings.movement_origin + Vector2(
 				cos(orb_accum),
@@ -103,10 +105,10 @@ func warn():
 	var activation_time = 1.0
 	if settings: activation_time = settings.warn_activation_time
 	sfx(randf_range(0.2,0.5))
+	move = true
 	wtw.tween_method(sosv,0.0,1.0,activation_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	wtw.parallel().tween_method(swsp,0.0,1.0,activation_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	await wtw.finished
-	move = true
 	
 	var pre_warn_time = 0.5
 	if settings: pre_warn_time = settings.pre_warn

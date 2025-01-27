@@ -190,6 +190,10 @@ func pWAIT(cwt : float = 0.0):
 	play_phase()
 
 func pMOVE():
+	if MOVEMENT_OPTIONS.is_empty():
+		schedule.erase(ord.MOVE)
+		play_phase()
+		return
 	var mve : phaseMovementOption = MOVEMENT_OPTIONS.pick_random()
 	mve.movement_complete.connect(play_phase)
 	mve.move(my_monster)
@@ -197,6 +201,10 @@ func pMOVE():
 	cur_option = mve
 
 func pATTACK():
+	if ATTACK_OPTIONS.is_empty():
+		schedule.erase(ord.ATTACK)
+		play_phase()
+		return
 	var atk : phaseAttackOption = ATTACK_OPTIONS.pick_random()
 	atk.attack_complete.connect(play_phase)
 	atk.attack(my_monster)
@@ -205,6 +213,10 @@ func pATTACK():
 	cur_option = atk
 
 func pSUBATTACK():
+	if SUB_ATTACK_OPTIONS.is_empty():
+		schedule.erase(ord.SUB_ATTACK)
+		play_phase()
+		return
 	var satk : phaseAttackOption = SUB_ATTACK_OPTIONS.pick_random()
 	satk.attack_started.connect(play_phase)
 	satk.attack(my_monster)
@@ -213,6 +225,10 @@ func pSUBATTACK():
 	cur_option = satk
 
 func pSPECIAL():
+	if SPECIAL_OPTIONS.is_empty():
+		schedule.erase(ord.SPECIAL)
+		play_phase()
+		return
 	print("I'M DOING SOMETHIN! ", phase_idx)
 	var spc : phaseSpecialOption = SPECIAL_OPTIONS.pick_random()
 	spc.special_complete.connect(play_phase)
@@ -259,7 +275,7 @@ func cancel_movement(caller = null):
 		mve.cancel_movement()
 
 func validate_damage(click : int) -> bool:
-	for c in CONDITION_OPTIONS:
-		if !c.validate_on_condition(click):
+	for con in CONDITION_OPTIONS:
+		if !con.validate_on_condition(click):
 			return false
 	return true
