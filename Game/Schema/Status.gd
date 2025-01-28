@@ -3,17 +3,17 @@ class_name system_status
 
 enum effects {
 	NONE, #NA
-	STUN, #BAD, Stops entity from moving and forces them to do nothing for 1 secs
-	DOT, #BAD, Deals 1 damage every second for a period of time
-	FEAR, #BAD, No weapon bonus
-	WEAK, #BAD, Attacks deal half damage (ceil)
-	MUTE, #BAD, Can't click self or others for aid, can't send msgs either
-	BLIND, #BAD, Screen goes black
-	SICK, #BAD, Can't receive aid (healing/armor), can be cleared still
-	SLOW, #BAD, Cooldown is slow
+	STUN, #BAD, Stops entity from moving and forces them to do nothing for 1 secs (X icon)
+	DOT, #BAD, Deals 1 damage every second for a period of time (broken heart icon)
+	FEAR, #BAD, No weapon bonus (radial wiggly lines icon)
+	WEAK, #BAD, Attacks deal half damage (ceil) (down arrow)
+	MUTE, #BAD, Can't click self or others for aid, can't send msgs either (chat bubble with cross in it icon)
+	BLIND, #BAD, Screen goes black (eye with no pupil icon)
+	SICK, #BAD, Can't receive aid (healing/armor), can be cleared still (thermostat icn)
+	SLOW, #BAD, Cooldown is slow (snail icon)
 	ARMOR, #GOOD, Prevents damage for duration 
-	HEALTHY, #GOOD, Restores 1 health every second for a period of time
-	JUICED, #GOOD, Cooldown is fast
+	HEALTHY, #GOOD, Restores 1 health every second for a period of time (up arrow)
+	JUICED, #GOOD, Cooldown is fast (lightning bolt)
 }
 #Effects are cleared when a monster gets defeated or the time elapses, they shouldn't process unless there is a monster with health
 #Effects inflicted by weapons last for primary damage (calc heal) in seconds
