@@ -152,6 +152,21 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
+[node name="TotalTime" type="RichTextLabel" parent="StatList"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("1_wknbi")
+theme_override_fonts/bold_font = ExtResource("1_wknbi")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "00:00:00"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
 [node name="spacer" type="Control" parent="StatList"]
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2

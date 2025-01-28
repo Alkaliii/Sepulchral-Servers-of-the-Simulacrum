@@ -37,6 +37,7 @@ enum mt {
 	PULL, #will move away from defined position in the direction found by the difference between it and the position
 	ORTHO_WIGGLE, #moves back and forth perpandicular to the vector derived from global_position - movement_origin, skewed for perspective
 	LATERAL_WIGGLE, #like ortho but not rotated
+	DIAXIS_WIGGLE, #ortho and lateral at the same time
 }
 @export var movement_type : mt = mt.NONE
 var movement_origin : Vector2 = Vector2.ZERO #position in global space to calculate movement with

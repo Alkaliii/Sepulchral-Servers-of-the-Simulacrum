@@ -81,6 +81,8 @@ func set_job():
 	
 	CURRENT_PCACHE = 0
 	SCACHE = 0
+	s_chrg_emphasis.modulate.a = 0.0
+	
 	dash_cooldown = 0.0
 	p_cooldown_bar.value = p_cooldown_bar.max_value
 	#charge_bar.max_value = MAX_PCACHE
@@ -197,6 +199,8 @@ func can_see(sub : Node2D) -> bool:
 var knocked : bool = false
 func knockback(from : Vector2, strr : float = 10):
 	knocked = true
+	var cam = get_tree().get_first_node_in_group("camera")
+	cam.add_trauma(0.4,0.9)
 	var kbdir = global_position - from
 	velocity += kbdir.normalized() * strr
 	await get_tree().create_timer(1.2).timeout
@@ -309,8 +313,10 @@ func charge(ca = CHARGE_AMOUNT):
 	p_cache_bar.value = CURRENT_PCACHE
 
 var scfxtw : Tween
+var sclbltw : Tween
 func s_charge():
 	if !decay: return
+	var oldsc = SCACHE
 	#var minc = 0.1 * pow(2.718,-0.9 * (SCACHE - 2.0))
 	#var maxc = 0.45 * pow(2.718,-0.9 * (SCACHE - 2.0))
 	disp_ftxt(str("[font_size=10][shake]!!!"),global_position + Vector2(0,45),FloatingText.a.POP)
@@ -327,7 +333,11 @@ func s_charge():
 	SCACHE += val
 	#s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
 	var wve = "[wave]" if SCACHE >= 5.0 else ""
-	s_cache_lbl.text = str(wve,"%.2f" % SCACHE,"[b]ghz")
+	#s_cache_lbl.text = str(wve,"%.2f" % (SCACHE * 1000.0),"[b]rpm")
+	#s_cache_lbl.text = str(wve,round(SCACHE * 1000.0),"[b]rpm")
+	if sclbltw: sclbltw.kill()
+	sclbltw = create_tween()
+	sclbltw.tween_method(tw_sc_cnt,oldsc,SCACHE,0.125).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
 	#print(min,"/",max,"->",val)
 
 @onready var s_chrg_emphasis = $UI/Stats/MarginContainer/PanelContainer/VBoxContainer/sCache/emphasis
@@ -337,7 +347,8 @@ func scfxpv(nv : float): #set charge fx progress value
 
 func update_s_charge():
 	#s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
-	s_cache_lbl.text = str("%.2f" % SCACHE,"[b]ghz")
+	#s_cache_lbl.text = str("%.2f" % (SCACHE * 1000.0),"[b]rpm")
+	s_cache_lbl.text = str(round(SCACHE * 1000.0),"[b]rpm")
 
 func s_discharge() -> float:
 	if !decay: return 0.0

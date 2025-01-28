@@ -35,8 +35,9 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 	var growth_index = 1
 	for p in _get_spawn_position(_monster):
 		l = line(p, _monster)
-		if shuffle_spawn_order and !bifurcate: l.shuffle()
-		for i in l:
+		#App.debug_line.emit(l)
+		#if shuffle_spawn_order and !bifurcate: l.shuffle()
+		for i : Vector2 in l:
 			var line_point_idx = l.find(i)
 			var new = DAMAGE_RADIUS.instantiate()
 			new.settings = _get_settings(line_point_idx).duplicate()
@@ -46,13 +47,26 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 			new.settings.movement_origin = p
 			new.settings.movement_radius = (i-p).length()
 			new.settings.movement_offset = ((l.find(i) + 1) / l.size()) * (2.0*PI)
-			if grow_factor != 1.0 and line_point_idx != 0: #need to % for bifurcate
-				if line_point_idx % 2 == 0 and bifurcate:
-					new.settings.radius = new.settings.radius * (grow_factor * (growth_index))
-					growth_index += 1
-				else:
-					new.settings.radius = new.settings.radius * (grow_factor * (growth_index))
-					if !bifurcate: growth_index += 1
+			#if grow_factor != 1.0 and line_point_idx != 0: #need to % for bifurcate
+				#if line_point_idx % 2 == 0 and bifurcate:
+					#new.settings.radius = new.settings.radius * (grow_factor * (growth_index))
+					#growth_index += 1
+				#else:
+			if grow_factor != 1.0 and line_point_idx != 0:
+				new.settings.radius = new.settings.radius * (grow_factor * (growth_index))
+				growth_index += 1
+					#if !bifurcate: growth_index += 1
+			
+			if bifurcate:
+				var new2 = DAMAGE_RADIUS.instantiate()
+				new2.settings = new.settings.duplicate()
+				_monster.get_parent().add_child(new2)
+				new2.top_level = true
+				new2.global_position = (Vector2(i.x - p.x,i.y - p.y).rotated(deg_to_rad(180.0)) + p)# * Vector2(1.0,0.5) 
+				new2.warn()
+				if Plyrm.connected: sync_attack(new2.global_position,new2.settings)
+				my_radi.append(new2)
+				new2.finished.connect(_on_damage_finished)
 			
 			_monster.get_parent().add_child(new)
 			new.top_level = true
@@ -67,7 +81,7 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 			elif intra_spawn_delay == 0.0:
 				await App.process_frame()
 			else:
-				await App.time_delay(intra_spawn_delay)
+				await App.time_delay((intra_spawn_delay * 0.5) if _monster.halfway_dead else intra_spawn_delay)
 			if cancel: return
 	
 	_check_complete()
@@ -105,14 +119,14 @@ func line(origin : Vector2, _m : system_monster_controller) -> Array[Vector2]:
 		points.append(new_point)
 		last_point = new_point
 	
-	if bifurcate: points = bifurcate_points(points)
+	#if bifurcate: points = bifurcate_points(points)
 	
 	return points
 
 func bifurcate_points(points : Array[Vector2]) -> Array[Vector2]:
 	var new_set : Array[Vector2] = []
 	for p in points:
-		var np = p * -1
+		var np = p.rotated(deg_to_rad(180))# * -1
 		new_set.append(p)
 		new_set.append(np)
 	

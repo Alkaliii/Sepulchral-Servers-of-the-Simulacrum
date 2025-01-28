@@ -256,3 +256,7 @@ func open_level_select(state:bool):
 
 func force_close_perf():
 	performance_screen.appear(false)
+
+@onready var objectivepanel = $cl/InGameMenu/MarginContainer/objectivepanel
+func close_obj():
+	objectivepanel.hide_obj()

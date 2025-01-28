@@ -15,6 +15,7 @@ extends MarginContainer
 @onready var trevlbl = $StatList/statTotals/rev
 @onready var b_health = $StatList/bHealth
 @onready var timetaken = $StatList/Time
+@onready var totaltimetaken = $StatList/TotalTime
 
 @onready var nextbtn = $nextbtn
 
@@ -54,6 +55,9 @@ func appear(state:bool):
 			if Plyrm.connected: 
 				Plyrm.PLAYER.state.setState("pMapSelect",false)
 				Plyrm.PLAYER.state.setState("pREADY",false)
+				var plyr = get_tree().get_first_node_in_group("player_persistant")
+				plyr.set_job()
+			App.remove_boss()
 			await SystemUI.set_title(false)
 			await SystemUI.set_background(true,Color("#b4b4b6"))
 			position.x = get_viewport().size.x
@@ -82,6 +86,7 @@ func setlist():
 	var total_rev = 0
 	var total_click = 0
 	var ttl_time_taken = 0
+	var ttl_ttl_time_taken = 0
 	var ttl_boss_health = 0
 	
 	if Plyrm.connected:
@@ -117,6 +122,7 @@ func setlist():
 		var bm_data 
 		if boss_metric: bm_data = JSON.parse_string(boss_metric)
 		if bm_data:
+			ttl_ttl_time_taken = bm_data.total_time
 			ttl_time_taken = bm_data.time
 			ttl_boss_health = bm_data.bhp
 	else:
@@ -133,6 +139,7 @@ func setlist():
 		total_rev = App.revolutions_made
 		total_click = App.clicks_made
 		ttl_time_taken = App.performance_screen_details["time"]
+		ttl_ttl_time_taken = App.performance_screen_details["total_time"]
 		ttl_boss_health = App.performance_screen_details["bhp"]
 		
 		if perfdata[0]["dmg"] > App.performance_screen_details["bhp"]:
@@ -148,6 +155,7 @@ func setlist():
 	trevlbl.text = str(total_rev)
 	tclickslbl.text = str(total_click)
 	timetaken.text = str("time/ ",seconds2hhmmss(ttl_time_taken))
+	totaltimetaken.text = str(seconds2hhmmss(ttl_ttl_time_taken))
 	b_health.text = str(ttl_boss_health," hp")
 	
 	appear(true)

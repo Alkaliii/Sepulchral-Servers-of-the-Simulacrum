@@ -3,12 +3,21 @@ class_name system_player_puppet
 
 var my_id
 var state
+@onready var mp_status = $mpStatus
 
 func _ready():
 	add_to_group("puppet")
 	Plyrm.PR_PLAYER_QUIT.connect(on_quit)
 	tspin_vfx.play("topSPIN")
 	bspin_vfx.play("bottomSPIN")
+	
+	while true:
+		var pname
+		if state: pname = state.getState("name")
+		if pname: 
+			mp_status.set_plyr_name(pname)
+			break
+		await App.time_delay(1.0)
 
 func on_quit(args):
 	await create_tween().tween_property(self,"scale",Vector2.ZERO,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
@@ -18,9 +27,9 @@ func on_quit(args):
 		queue_free()
 
 var dead : bool = false
-func sync_dead(state:bool):
-	dead = state
-	match state:
+func sync_dead(dstate:bool):
+	dead = dstate
+	match dstate:
 		true:
 			#turn on off hit detection here (for aid)
 			#make request to check game state (auto)
@@ -42,7 +51,7 @@ func knockback(from : Vector2, strr : float = 10):
 	
 	Plyrm.Playroom.RPC.call("player_knockback",var_to_str(data),Plyrm.Playroom.RPC.Mode.OTHERS)
 
-func _process(delta):
+func _process(_delta):
 	if state:
 		var data
 		var puppet_state = state.getState("pState")
@@ -53,15 +62,16 @@ func _process(delta):
 		manage_animation(str_to_var(data.direction))
 		manage_spin(data.on_cooldown)
 		if data.dead != dead: sync_dead(data.dead)
+		if str_to_var(data.health) != mp_status.cur: mp_status.set_status(str_to_var(data.health))
 		create_tween().tween_property(self,"global_position",pos,0.1).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 
 var stw : Tween
-func manage_spin(state : bool):
-	if !state and (tspin_vfx.modulate.a == 0.0 or bspin_vfx.modulate.a == 0.0):
+func manage_spin(sstate : bool):
+	if !sstate and (tspin_vfx.modulate.a == 0.0 or bspin_vfx.modulate.a == 0.0):
 		stw = create_tween()
 		stw.tween_property(tspin_vfx,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN_OUT)
 		stw.parallel().tween_property(bspin_vfx,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN_OUT)
-	elif state and (tspin_vfx.modulate.a != 0.0 or bspin_vfx.modulate.a != 0.0):
+	elif sstate and (tspin_vfx.modulate.a != 0.0 or bspin_vfx.modulate.a != 0.0):
 		tspin_vfx.modulate.a = 0.0
 		bspin_vfx.modulate.a = 0.0
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://cllt8ogsda34d"]
+[gd_scene load_steps=19 format=3 uid="uid://cllt8ogsda34d"]
 
 [ext_resource type="Script" path="res://Game/scarecrow.gd" id="1_60tn0"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="1_oerj1"]
 [ext_resource type="PackedScene" uid="uid://csx8nqe467f47" path="res://Game/hit_detector.tscn" id="2_qjvwk"]
+[ext_resource type="Script" path="res://Game/Other/tutorial_handler.gd" id="4_oellp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1n8ow"]
 atlas = ExtResource("1_oerj1")
@@ -149,3 +150,6 @@ hd_for = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
 position = Vector2(0, -15)
 shape = SubResource("CircleShape2D_8kclo")
+
+[node name="TutorialHandler" type="Node" parent="."]
+script = ExtResource("4_oellp")

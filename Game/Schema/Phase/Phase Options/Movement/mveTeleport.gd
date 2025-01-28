@@ -33,7 +33,7 @@ func move(monster : system_monster_controller):
 
 
 func cancel_movement(emit : bool = false):
-	if m: m.disappear(false)
+	if m and is_instance_valid(m): m.disappear(false)
 	if mTween: mTween.kill()
 	if emit: movement_complete.emit(self)
 

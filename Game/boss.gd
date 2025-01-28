@@ -19,10 +19,14 @@ var DIRECTION : Vector2 = Vector2.ZERO
 
 const FTXT = preload("res://Game/float_text.tscn")
 
-var halfway_dead := false
+var halfway_dead := false 
+#this causes double time
+#movement speed will increase by 2x
+#if applicable attack spawn interval will get shorter
 var dead := false
 var tiktok := false
 var time_elapsed := 0.0
+var total_time_elapsed := 0.0
 
 # On host, phase is selected, this is propagated via RPC to client bosses
 # During phase an attack is called, this is also propagated via RPC to client bosses
@@ -45,7 +49,7 @@ func _ready():
 	hit_detector.DAMAGED.connect(on_damage)
 	hit_detector.AFFLICTED.connect(on_afflict)
 	monster_data.status.DOT.connect(show_other_damage)
-	if OS.has_feature("pc"): test_start()
+	if OS.has_feature("pc") or !Plyrm.connected: test_start()
 
 func test_start():
 	await get_tree().create_timer(3.0).timeout
@@ -68,6 +72,7 @@ func check_host(args = null):
 		return
 	else:
 		set_physics_process(true)
+		#test_start()
 		#restart the game...?
 
 func reload():
@@ -104,6 +109,8 @@ func test_phase():
 var active_phase : Phase
 func change_phase(new_phase : int = -1):
 	if phases.is_empty(): return
+	kill_phase()
+	await App.process_frame()
 	print("CHANGING PHASE!"," RANDOM" if new_phase == -1 else str(new_phase))
 	var phs : Phase
 	if new_phase and new_phase != -1: phs = phases[new_phase]
@@ -118,8 +125,8 @@ func start_phase(phs : Phase):
 	phs.cancel = false
 	phs.last_phase_action = false
 	phs.phase_idx = 0
-	phs.play_phase()
 	active_phase = phs #sync active phase?
+	phs.play_phase()
 
 func kill_phase():
 	print("kill")
@@ -230,6 +237,7 @@ func check_progress():
 		App.purge_attacks.emit()
 		if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.PURGE_ATTACKS]),Plyrm.Playroom.RPC.Mode.OTHERS)
 		App.performance_screen_details["time"] = time_elapsed
+		App.performance_screen_details["total_time"] = total_time_elapsed
 		App.performance_screen_details["bhp"] = monster_data.status.max_health
 		await roar(str(monster_data.name," has been defeated."))
 		
@@ -290,12 +298,16 @@ func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingTex
 	get_parent().add_child(new)
 
 func _physics_process(delta):
+	if active_phase and !active_phase.cur_option is phaseMovementOption:
+		velocity = lerp(velocity,Vector2.ZERO,0.5)
 	sync_state()
 	#check_host()
 	#chase(delta)
 
 func _process(delta):
-	if tiktok: time_elapsed += delta
+	if tiktok: 
+		time_elapsed += delta
+		total_time_elapsed += delta
 	if Plyrm.PLAYER and !is_physics_processing():
 		var data
 		var boss_state = Plyrm.Playroom.getState("bState")

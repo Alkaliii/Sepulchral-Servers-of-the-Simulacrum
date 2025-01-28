@@ -10,6 +10,7 @@ var help : String = "Use WASD to move around."
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	add_to_group("objective_panel")
 	modulate.a = 0
 	pass # Replace with function body.
 
@@ -25,6 +26,7 @@ func set_objective(data:Dictionary):
 	help = data.help
 	if otw: otw.kill()
 	otw = create_tween()
+	show()
 	
 	otw.tween_property(self,"modulate:a",0.0,0.25).set_ease(Tween.EASE_IN_OUT)
 	await otw.finished
@@ -44,6 +46,7 @@ func hide_obj():
 	otw.tween_property(objective_text,"visible_ratio",0.0,0.25).set_ease(Tween.EASE_IN_OUT)
 	otw.parallel().tween_property(self,"modulate:a",0.0,0.25).set_ease(Tween.EASE_IN_OUT)
 	await otw.finished
+	hide()
 
 var ptw : Tween
 func set_objective_progress(ratio : float):

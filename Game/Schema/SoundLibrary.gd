@@ -4,10 +4,10 @@ class_name SoundLib
 enum music_files {
 	BATTLE_DAWN, #https://youfulca.com/en/2022/08/14/boss_queen-of-the-white-dawn/
 	BATTLE_KANNAGI, #https://youfulca.com/en/2022/08/14/boss_kannagi/ #victory theme practically
-	MYTHICAL_TOWN,
-	TOWER_OF_THE_ARCHMAGE,
-	NIGHTTIME, #tutorial
-	NIGHTTIMENOPERC, #title screen and ambient
+	MYTHICAL_TOWN, #(HB) Chris Logsdon https://chrislsound.com/
+	TOWER_OF_THE_ARCHMAGE, #(HB) Ryan Smith https://audiojungle.net/user/blinnaudio?ref=Blinn
+	NIGHTTIME, #(HB) Andrea Baroni https://andreabaroni.com/ - tutorial 
+	NIGHTTIMENOPERC, #(HB) Andrea Baroni https://andreabaroni.com/ - title screen and ambient
 }
 
 #https://ateliermagicae.itch.io/monster-sound-effects-vol1

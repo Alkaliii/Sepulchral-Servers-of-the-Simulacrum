@@ -385,6 +385,8 @@ func game_state_update(data):
 		App.gsu.HIDE_LEVEL_SELECT:
 			SystemUI.open_level_select(false)
 			SystemUI.force_close_perf()
+			SystemUI.close_obj()
+			App.tutorial_end.emit()
 		App.gsu.SYNC_LEVEL:
 			if unpacked_data.size() < 2: 
 				print_debug("Not enough data")

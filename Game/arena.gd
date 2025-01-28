@@ -13,6 +13,9 @@ func _ready():
 	App.spawn_dmg.connect(spawn_dmg)
 	App.load_boss.connect(load_boss)
 	App.load_misc.connect(load_misc)
+	
+	App.debug_line.connect(debug_draw_line)
+
 
 func spawn_dmg(pos : Vector2, data : DamageRadiusSettings):
 	var new = DAMAGE_RADIUS.instantiate()
@@ -103,8 +106,17 @@ func on_player_join(args):
 			return
 	
 	var inst = PUPPET.instantiate()
+	inst.state = args[0]
 	add_child(inst)
 	inst.position.x = randf_range(30,60)
 	inst.my_id = args[0].id
 	
-	inst.state = args[0]
+
+func debug_draw_line(p : Array):
+	var new = Line2D.new()
+	new.points = PackedVector2Array(p)
+	new.default_color = Color.GREEN
+	add_child(new)
+	#new.global_position = p[0]
+	await App.time_delay(8.0)
+	new.queue_free()

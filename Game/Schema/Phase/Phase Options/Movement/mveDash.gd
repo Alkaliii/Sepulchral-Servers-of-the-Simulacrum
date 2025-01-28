@@ -12,6 +12,7 @@ var plyr : Node2D
 
 func move(monster : system_monster_controller):
 	cancel_movement()
+	await App.process_frame()
 	mTween = monster.create_tween()
 	
 	var npos : Vector2 = monster.check_position(get_player(monster).pick_random())
@@ -23,6 +24,7 @@ func move(monster : system_monster_controller):
 	
 	if (plyr.global_position - monster.global_position).length() < 50:
 		plyr.knockback(initpos,2222)
+
 	else: print("Too far to knockback")
 	movement_complete.emit(self)
 
@@ -31,6 +33,8 @@ func get_player(_m : system_monster_controller) -> Array[Vector2]:
 	var p : Array = _m.get_tree().get_nodes_in_group("player")
 	p.append_array(_m.get_tree().get_nodes_in_group("puppet"))
 	
-	plyr = p.pick_random()
-	pos.append(plyr.global_position)
+	if !p.is_empty():
+		plyr = p.pick_random()
+		pos.append(plyr.global_position)
+	else: pos.append(_m.global_position)
 	return pos

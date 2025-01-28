@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://ya8kaicfslaw"]
+[gd_scene load_steps=10 format=3 uid="uid://ya8kaicfslaw"]
 
 [ext_resource type="Script" path="res://Game/UI/objectivepanel.gd" id="1_4pjse"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="2_0r5cx"]
-[ext_resource type="Script" path="res://Game/Other/tutorial_handler.gd" id="3_g17ks"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2sdaq"]
 content_margin_left = 14.0
@@ -135,9 +134,5 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_pvux3")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_l7krc")
 theme_override_styles/normal = SubResource("StyleBoxFlat_hpsei")
 text = "?"
-
-[node name="TutorialHandler" type="Node" parent="." node_paths=PackedStringArray("objective_ui")]
-script = ExtResource("3_g17ks")
-objective_ui = NodePath("..")
 
 [connection signal="pressed" from="Control/help" to="." method="_on_help_pressed"]

@@ -301,7 +301,7 @@ height = 64
 seamless = true
 noise = SubResource("FastNoiseLite_fdjte")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3bq7h"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6jbik"]
 shader = ExtResource("15_wudql")
 shader_parameter/mask = false
 shader_parameter/mask_scroll = Vector2(0, 0)
@@ -317,7 +317,7 @@ shader_parameter/pulse_max_scale = 0.4
 shader_parameter/pulse_offset = 0.0
 shader_parameter/outer_feather = 0.1
 shader_parameter/inner_feather = 0.1
-shader_parameter/ss_edges = Vector2(0, 0)
+shader_parameter/ss_edges = Vector2(0, 0.5)
 shader_parameter/mix_strength = 0.0
 shader_parameter/col_ovr_dis_str = 0.0
 shader_parameter/polarize_opacity_noise = true
@@ -577,14 +577,14 @@ theme_override_fonts/bold_font = ExtResource("5_pn2lt")
 theme_override_font_sizes/normal_font_size = 15
 theme_override_font_sizes/bold_font_size = 10
 bbcode_enabled = true
-text = "0.00[b]ghz"
+text = "0.0[b]rpm"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
 [node name="emphasis" type="ColorRect" parent="UI/Stats/MarginContainer/PanelContainer/VBoxContainer/sCache"]
 modulate = Color(1, 1, 1, 0)
-material = SubResource("ShaderMaterial_3bq7h")
+material = SubResource("ShaderMaterial_6jbik")
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 1
 anchors_preset = 8

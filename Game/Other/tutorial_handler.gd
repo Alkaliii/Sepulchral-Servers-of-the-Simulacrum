@@ -3,10 +3,10 @@ extends Node
 #{"obj":"",
 	#"help":""}
 
-@export var objective_ui : ObjectiveNotification
+var objective_ui : ObjectiveNotification
 
 var tutorial_text = [
-	{"obj":"Find the mannequin",
+	{"obj":"Update your position",
 	"help":"Use [color=f2b63d][wave][WASD][/wave][/color] to move around!"},
 	
 	{"obj":"Allocate memory to cache",
@@ -94,7 +94,7 @@ func _process(delta):
 			next_objective()
 	
 	if watch_SPACEBAR:
-		if Input.is_action_just_pressed("ACTIONA"):
+		if Input.is_action_just_pressed("ACTIONA") and Input.get_vector("MLEFT", "MRIGHT", "MUP", "MDOWN").length() >= 0.3:
 			SPACEBAR_progress += 1.0/3.0
 			objective_ui.set_objective_progress(clamp(SPACEBAR_progress,0.0,1.0))
 		if SPACEBAR_progress >= 1.0:
@@ -158,6 +158,7 @@ func clear_progress():
 
 var tutorial_idx : int = 0
 func start_tutorial():
+	objective_ui = get_tree().get_first_node_in_group("objective_panel")
 	if !objective_ui: return
 	clear_progress()
 	SystemAudio.play_music(SoundLib.get_file(SoundLib.music_files.NIGHTTIME))

@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dx17q5krsqh70"]
+
+[ext_resource type="Shader" path="res://Assets/Shaders/sway.gdshader" id="1_q7ja0"]
+[ext_resource type="Texture2D" uid="uid://gm7mws5n4782" path="res://Assets/enviromentalAtlas.png" id="2_wrb8n"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3uc8"]
+shader = ExtResource("1_q7ja0")
+shader_parameter/speed = 1.0
+shader_parameter/minStrength = 0.05
+shader_parameter/maxStrength = 0.01
+shader_parameter/strengthScale = 50.0
+shader_parameter/interval = 3.5
+shader_parameter/detail = 3.0
+shader_parameter/distortion = null
+shader_parameter/heightOffset = 0.9
+shader_parameter/offset = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ibiem"]
+atlas = ExtResource("2_wrb8n")
+region = Rect2(18, 10, 12, 18)
+
+[node name="GrassB" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_r3uc8")
+texture = SubResource("AtlasTexture_ibiem")
+offset = Vector2(0, -9)

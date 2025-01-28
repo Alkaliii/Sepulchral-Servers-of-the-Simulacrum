@@ -15,6 +15,8 @@ signal tutorial_start
 signal tutorial_click
 signal tutorial_end
 
+signal debug_line
+
 #var saved_job : system_job
 #var saved_weapon : system_weapon
 var player_name : String
@@ -28,7 +30,8 @@ var revolutions_made : int = 0 #how many times you spun your cursor
 
 var performance_screen_details : Dictionary = {
 	"bhp":1000,
-	"time":300
+	"time":300,
+	"total_time":300,
 }
 
 var current_floor : int = 0
@@ -53,11 +56,16 @@ enum gsu {
 	SYNC_LEVEL,
 }
 
+var uptime : float = 0.0
+
+
 func _ready():
+	process_mode = PROCESS_MODE_ALWAYS
 	player_name = fTxt.playerNames.pick_random()
 	print(player_name)
 
 func _process(_delta):
+	uptime += _delta
 	if Input.is_action_just_pressed("debug_reload"):
 		get_tree().reload_current_scene()
 	if Input.is_action_just_pressed("debug_shader_precomp"):
@@ -133,12 +141,14 @@ func reset_performace_metrics():
 
 func set_floor_complete(flr : int):
 	if floors_completed.has(flr): 
-		floors_completed[flr].completions += 1
+		floors_completed[flr].amount += 1
 		floors_completed[flr].times.append(performance_screen_details.time)
+		floors_completed[flr].playtime += performance_screen_details.total_time
 	else:
 		floors_completed[flr] = {
-			"completions":1,
-			"times":[],
+			"amount":1,
+			"times":[performance_screen_details.time],
+			"playtime":performance_screen_details.total_time
 		}
 
 func sync_level(level : int):

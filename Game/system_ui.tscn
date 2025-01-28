@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://t6xwa6fxikjk"]
+[gd_scene load_steps=46 format=3 uid="uid://t6xwa6fxikjk"]
 
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_d5ssp"]
 [ext_resource type="Script" path="res://Game/system_ui.gd" id="1_lreom"]
@@ -13,6 +13,7 @@
 [ext_resource type="Shader" path="res://Assets/Shaders/slipgate.gdshader" id="4_3d3qu"]
 [ext_resource type="PackedScene" uid="uid://brxo7jbspxwqt" path="res://Game/UI/performance_screen.tscn" id="8_uiocd"]
 [ext_resource type="PackedScene" uid="uid://betkr5wshs2u4" path="res://Game/UI/level_select.tscn" id="10_8wywk"]
+[ext_resource type="PackedScene" uid="uid://cfovd0vcbsc4m" path="res://Game/UI/settings_pause.tscn" id="10_urdwa"]
 
 [sub_resource type="Gradient" id="Gradient_q0prr"]
 offsets = PackedFloat32Array(0, 0.6, 0.8, 1)
@@ -654,6 +655,12 @@ visible = false
 layout_mode = 1
 offset_top = 360.0
 offset_bottom = 360.0
+
+[node name="Settings" parent="cl/Top" instance=ExtResource("10_urdwa")]
+visible = false
+layout_mode = 1
+offset_left = -640.0
+offset_right = -427.0
 
 [node name="effects" type="CanvasLayer" parent="."]
 layer = 9

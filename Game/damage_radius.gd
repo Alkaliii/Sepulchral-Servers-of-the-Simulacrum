@@ -49,6 +49,7 @@ var orb_rad
 var orb_accum
 var pp_dir
 var wiggle_dir
+var wiggle_dirB
 var wiggle_accum := 0.0
 func process_dr_movement(delta):
 	if !settings: return
@@ -82,7 +83,7 @@ func process_dr_movement(delta):
 				wiggle_dir = (global_position - settings.movement_origin).rotated(deg_to_rad(90)).normalized()
 				wiggle_dir.y /= 2.0
 				wiggle_dir *= (settings.radius/5.0)
-				print(wiggle_dir)
+				#print(wiggle_dir)
 			global_position = lerp(global_position,global_position + (wiggle_dir * cos(wiggle_accum)),0.5)
 			wiggle_accum += delta * settings.movement_speed
 		DamageRadiusSettings.mt.LATERAL_WIGGLE:
@@ -90,8 +91,21 @@ func process_dr_movement(delta):
 				wiggle_dir = (global_position - settings.movement_origin).normalized()
 				wiggle_dir.y /= 2.0
 				wiggle_dir *= (settings.radius/5.0)
-				print(wiggle_dir)
+				#print(wiggle_dir)
 			global_position = lerp(global_position,global_position + (wiggle_dir * cos(wiggle_accum)),0.5)
+			wiggle_accum += delta * settings.movement_speed
+		DamageRadiusSettings.mt.DIAXIS_WIGGLE:
+			if wiggle_dir == null: 
+				wiggle_dir = (global_position - settings.movement_origin).rotated(deg_to_rad(90)).normalized()
+				wiggle_dir.y /= 2.0
+				wiggle_dir *= (settings.radius/5.0)
+				#print(wiggle_dir)
+			if wiggle_dirB == null: 
+				wiggle_dirB = (global_position - settings.movement_origin).normalized()
+				wiggle_dirB.y /= 2.0
+				wiggle_dirB *= (settings.radius/5.0)
+				#print(wiggle_dirB)
+			global_position = lerp(global_position,global_position + (wiggle_dir * sin(wiggle_accum)) + (wiggle_dirB * cos(wiggle_accum)),0.5)
 			wiggle_accum += delta * settings.movement_speed
 
 func reset_dr():

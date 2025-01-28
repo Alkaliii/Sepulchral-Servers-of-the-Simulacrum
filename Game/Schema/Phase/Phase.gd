@@ -127,8 +127,13 @@ func kill_phase():
 	is_active = false
 
 func play_phase(retrn = null):
+	print("last phase finished!")
 	if retrn: dconr(retrn)
 	if cancel or !is_active: return
+	if my_monster.dead: return
+	if my_monster.active_phase != self:
+		is_active = false
+		return
 	
 	if phase_idx == 0 and last_phase_action: # last, perform on end
 		match on_end:
@@ -177,6 +182,7 @@ func dconr(retrn = null):
 		retrn.special_complete.disconnect(play_phase)
 
 func pWAIT(cwt : float = 0.0):
+	if my_monster.dead: return
 	cur_option = null
 	var wait_time = randf_range(wait_range.x,wait_range.y)
 	if cwt != 0.0: wait_time = clamp(cwt,0.0,3.0)
@@ -184,12 +190,13 @@ func pWAIT(cwt : float = 0.0):
 	while true:
 		if wait_time <= 0: break
 		if cancel: return
-		wait_time -= my_monster.get_process_delta_time()
+		wait_time -= App.get_process_delta_time()
 		await App.process_frame()
 	
 	play_phase()
 
 func pMOVE():
+	if my_monster.dead: return
 	if MOVEMENT_OPTIONS.is_empty():
 		schedule.erase(ord.MOVE)
 		play_phase()
@@ -201,6 +208,7 @@ func pMOVE():
 	cur_option = mve
 
 func pATTACK():
+	if my_monster.dead: return
 	if ATTACK_OPTIONS.is_empty():
 		schedule.erase(ord.ATTACK)
 		play_phase()
@@ -213,6 +221,7 @@ func pATTACK():
 	cur_option = atk
 
 func pSUBATTACK():
+	if my_monster.dead: return
 	if SUB_ATTACK_OPTIONS.is_empty():
 		schedule.erase(ord.SUB_ATTACK)
 		play_phase()
@@ -225,6 +234,7 @@ func pSUBATTACK():
 	cur_option = satk
 
 func pSPECIAL():
+	if my_monster.dead: return
 	if SPECIAL_OPTIONS.is_empty():
 		schedule.erase(ord.SPECIAL)
 		play_phase()

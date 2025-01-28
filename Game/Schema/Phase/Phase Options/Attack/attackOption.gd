@@ -63,10 +63,11 @@ func _check_complete():
 			my_radi.clear()
 			break
 		
-		if !my_phase.is_active: return #return here
+		if !my_phase.is_active: break #DO NOT RETURN HERE
 		await App.process_frame()
 	
 	attack_complete.emit(self)
+	print("Attack finished")
 
 func _on_damage_finished(d : Area2D):
 	my_radi.erase(d)

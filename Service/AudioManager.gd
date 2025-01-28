@@ -12,7 +12,8 @@ var music_player_a : AudioStreamPlayer
 var music_player_b : AudioStreamPlayer
 
 func _ready():
-	AudioServer.set_bus_volume_db(0,linear_to_db(0.4))
+	process_mode = PROCESS_MODE_ALWAYS
+	AudioServer.set_bus_volume_db(0,linear_to_db(0.6))
 	
 	for i in num_players:
 		var p = AudioStreamPlayer.new()

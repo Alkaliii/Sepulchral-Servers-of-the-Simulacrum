@@ -38,7 +38,7 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 			elif intra_spawn_delay == 0.0:
 				await App.process_frame()
 			else:
-				await App.time_delay(intra_spawn_delay)
+				await App.time_delay((intra_spawn_delay * 0.5) if _monster.halfway_dead else intra_spawn_delay)
 			if cancel: return
 	
 	_check_complete()
