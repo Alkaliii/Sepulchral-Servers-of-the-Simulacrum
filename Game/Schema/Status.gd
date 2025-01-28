@@ -5,13 +5,13 @@ enum effects {
 	NONE, #NA
 	STUN, #BAD, Stops entity from moving and forces them to do nothing for 1 secs
 	DOT, #BAD, Deals 1 damage every second for a period of time
-	FEAR, #BAD, Movement speed down
+	FEAR, #BAD, No weapon bonus
 	WEAK, #BAD, Attacks deal half damage (ceil)
-	MUTE, #BAD, Can't click self or others for aid
+	MUTE, #BAD, Can't click self or others for aid, can't send msgs either
 	BLIND, #BAD, Screen goes black
 	SICK, #BAD, Can't receive aid (healing/armor), can be cleared still
 	SLOW, #BAD, Cooldown is slow
-	ARMOR, #GOOD, Prevents damage once
+	ARMOR, #GOOD, Prevents damage thrice
 	HEALTHY, #GOOD, Restores 1 health every second for a period of time
 	JUICED, #GOOD, Cooldown is fast
 }
