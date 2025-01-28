@@ -11,7 +11,7 @@ enum effects {
 	BLIND, #BAD, Screen goes black
 	SICK, #BAD, Can't receive aid (healing/armor), can be cleared still
 	SLOW, #BAD, Cooldown is slow
-	ARMOR, #GOOD, Prevents damage thrice
+	ARMOR, #GOOD, Prevents damage for duration 
 	HEALTHY, #GOOD, Restores 1 health every second for a period of time
 	JUICED, #GOOD, Cooldown is fast
 }
