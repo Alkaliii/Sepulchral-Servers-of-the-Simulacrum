@@ -113,17 +113,17 @@ func play_music(sound_path,fade : Vector2 = Vector2(2.0,2.0)):
 	if music_player_a.playing:
 		cross_to = 1
 		music_player_b.stream = load(sound_path)
-		await App.process_frame()
+		await App.process_frame() #remove
 		music_player_b.play()
 	elif music_player_b.playing:
 		cross_to = 0
 		music_player_a.stream = load(sound_path)
-		await App.process_frame()
+		await App.process_frame() #remove
 		music_player_a.play()
 	else:
 		cross_to = 0
 		music_player_a.stream = load(sound_path)
-		await App.process_frame()
+		await App.process_frame() #remove
 		music_player_a.play()
 	
 	#if mtw: mtw.kill()
