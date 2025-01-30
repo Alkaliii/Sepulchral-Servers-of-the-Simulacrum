@@ -24,7 +24,7 @@ func move(monster : system_monster_controller):
 	var spd = (monster.global_position - npos).length() / dash_speed
 	var initpos = monster.global_position
 	
-	await App.time_delay(0.25 if monster.halfway_dead else 0.5)
+	await App.time_delay(0.25 if monster.halfway_dead else 0.5) #cut in half?
 	
 	mTween = monster.create_tween()
 	mTween.tween_property(monster,"global_position",npos,spd).set_ease(move_ease).set_trans(move_trans)
