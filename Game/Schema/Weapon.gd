@@ -27,6 +27,8 @@ enum i {
 	BLADE, #50% chance to block 
 	GAUNTLET #50% to block,self heal, and recharge
 }
+#on damage effects: block, parry
+#on attack effects: self heal, recharge
 
 @export var icon : i = i.SWORD
 @export var primary_damage : wd = wd.D3
@@ -34,6 +36,33 @@ enum i {
 @export var tertiary_damage : wd = wd.D0
 
 @export var inflict_status : system_status.effects = system_status.effects.NONE #flat 15 on light 50 on heavy across all weapons
+
+func on_damage_effect() -> int: #-1 means nothing, 0 means attack was blocked, 1 means it was parried
+	match icon:
+		i.SWORD: if randf() < 0.1: return 1
+		i.HAMMER: 
+			if randf() < 0.2: return 1 #parry takes priority
+			elif randf() < 0.2: return 0
+		i.AXE: if randf() < 0.4: return 1
+		i.WARAXE: if randf() < 0.2: return 0
+		i.TRIDENT: if randf() < 0.5: return 1
+		i.BLADE: if randf() < 0.5: return 0
+		i.GAUNTLET: if randf() < 0.5: return 0
+	return -1
+
+func on_attack_effect() -> int: #-1 means nothing, 0 means self heal, 1 means recharge
+	match icon:
+		i.DAGGER: if randf() < 0.3: return 1
+		i.SWORD: if randf() < 0.2: return 1
+		i.STAFF: if randf() < 0.3: return 0
+		i.GLASS: if randf() < 0.4: return 0
+		i.WARAXE: if randf() < 0.2: return 1
+		i.BOW: if randf() < 0.5: return 1
+		i.GAUNTLET:
+			if randf() < 0.5: return 1 #recharge takes priority
+			elif randf() < 0.5: return 0
+	return -1
+
 
 func calc_damage(base : int) -> int:
 	var final : int = base
@@ -79,6 +108,36 @@ func roll(weapon_damage : wd) -> int:
 		wd.D10: return randi_range(1,10)
 		wd.D20: return randi_range(1,20)
 	return 0
+
+func _get_dice_average(weapon_damage : wd) -> float:
+	match weapon_damage:
+		wd.D0: return 0.0
+		wd.D3: return (1.0+2.0+3.0)/3.0
+		wd.D4: return (1.0+2.0+3.0+4.0)/4.0
+		wd.D5: return (1.0+2.0+3.0+4.0+5.0)/5.0
+		wd.D6: return (1.0+2.0+3.0+4.0+5.0+6.0)/6.0
+		wd.D7: return (1.0+2.0+3.0+4.0+5.0+6.0+7.0)/7.0
+		wd.D8: return (1.0+2.0+3.0+4.0+5.0+6.0+7.0+8.0)/8.0
+		wd.D9: return (1.0+2.0+3.0+4.0+5.0+6.0+7.0+8.0+9.0)/9.0
+		wd.D10: return (1.0+2.0+3.0+4.0+5.0+6.0+7.0+8.0+9.0+10.0)/10.0
+		wd.D20: return (1.0+2.0+3.0+4.0+5.0+6.0+7.0+8.0+9.0+10.0+11.0+12.0+13.0+14.0+15.0+16.0+17.0+18.0+19.0+20.0)/20.0
+	return 0
+
+func get_average() -> float:
+	var final : float = 3.0
+	final += _get_dice_average(primary_damage)
+	final += _get_dice_average(secondary_damage)
+	final += _get_dice_average(tertiary_damage)
+	return final
+
+func get_heavy_average() -> float:
+	var light : float = get_average()
+	var final : float = (float(light) + 5.0) * 5.0
+	final -= _get_dice_average(primary_damage)
+	return final
+
+func dmg_rating() -> int:
+	return primary_damage + secondary_damage + tertiary_damage
 
 const p_damage_weight = [0.0,2.0,1.0,1.0,0.5,0.5,0.5,0.5,0.25,0.24]
 const st_damage_weight = [1.0,1.0,1.0,1.0,0.5,0.5,0.5,0.5,0.25,0.24]

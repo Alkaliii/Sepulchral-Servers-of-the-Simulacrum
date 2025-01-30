@@ -4,11 +4,30 @@ class_name SoundLib
 enum music_files {
 	BATTLE_DAWN, #https://youfulca.com/en/2022/08/14/boss_queen-of-the-white-dawn/
 	BATTLE_KANNAGI, #https://youfulca.com/en/2022/08/14/boss_kannagi/ #victory theme practically
+	BATTLE_KANNAGI_INTRO,
+	BATTLE_MASYOU, #https://youfulca.com/en/2022/08/14/boss_masyou/ #very grandious feeling good for battle start
+	BATTLE_MASYOU_INTRO,
+	BATTLE_FATALBLOOD, #https://youfulca.com/en/2022/08/14/boss_fatal-blood/ #high energy, second phase for sure
+	BATTLE_ARIADNE, #https://youfulca.com/en/2022/08/14/boss_the-song-of-the-end/
+	BATTLE_ARIADNE_INTRO,
+	BATTLE_TRUTH, #https://youfulca.com/en/2022/08/14/boss_two-sides-of-the-truth/
+	BATTLE_TRUTH_INTRO,
 	MYTHICAL_TOWN, #(HB) Chris Logsdon https://chrislsound.com/
 	TOWER_OF_THE_ARCHMAGE, #(HB) Ryan Smith https://audiojungle.net/user/blinnaudio?ref=Blinn
 	NIGHTTIME, #(HB) Andrea Baroni https://andreabaroni.com/ - tutorial 
 	NIGHTTIMENOPERC, #(HB) Andrea Baroni https://andreabaroni.com/ - title screen and ambient
 }
+
+static var has_intro : Array[music_files] = [
+	music_files.BATTLE_KANNAGI,
+	music_files.BATTLE_KANNAGI_INTRO,
+	music_files.BATTLE_MASYOU,
+	music_files.BATTLE_MASYOU_INTRO,
+	music_files.BATTLE_ARIADNE,
+	music_files.BATTLE_ARIADNE_INTRO,
+	music_files.BATTLE_TRUTH,
+	music_files.BATTLE_TRUTH_INTRO
+]
 
 #https://ateliermagicae.itch.io/monster-sound-effects-vol1
 #https://denissetakes.itch.io/crystalcaves # NOTICE needs credit
@@ -35,6 +54,15 @@ enum sound_files {
 	NOTIFICATION_E, #mystical
 	NOTIFICATION_F, #mystical 2
 	NOTIFICATION_G, #hummmm
+	IMPACT_A, #chop stone
+	IMPACT_B, #chop wood
+	DOOR,
+	ATTACK_FIRE_A,
+	ATTACK_FIRE_B,
+	DOOR_SHUT,
+	BEEP_A,
+	NOTIFICATION_H, #not really notif but idk what else to call it lol
+	WHOOSH,
 }
 
 static func get_file(key) -> String:
@@ -42,10 +70,19 @@ static func get_file(key) -> String:
 		#Music
 		music_files.BATTLE_DAWN: return "res://Assets/Music/Battle-Dawn_loop.ogg"
 		music_files.BATTLE_KANNAGI: return "res://Assets/Music/Battle-kannagi_loop.ogg"
+		music_files.BATTLE_KANNAGI_INTRO: return "res://Assets/Music/Battle-kannagi_intro.ogg"
+		music_files.BATTLE_MASYOU: return "res://Assets/Music/Battle-masyou_loop.ogg"
+		music_files.BATTLE_MASYOU_INTRO: return "res://Assets/Music/Battle-masyou_intro.ogg"
+		music_files.BATTLE_FATALBLOOD: return "res://Assets/Music/Battle-FatalBlood_loop.ogg"
+		music_files.BATTLE_ARIADNE: return "res://Assets/Music/Ariadne-LastBoss_loop.ogg"
+		music_files.BATTLE_ARIADNE_INTRO: return "res://Assets/Music/Ariadne-LastBoss_intro.ogg"
+		music_files.BATTLE_TRUTH: return "res://Assets/Music/Two-Sides-of-the-Truth_loop.ogg"
+		music_files.BATTLE_TRUTH_INTRO: return "res://Assets/Music/Two-Sides-of-the-Truth_intro.ogg"
 		music_files.MYTHICAL_TOWN: return "res://Assets/Music/Mystical Town (Loop).wav"
 		music_files.TOWER_OF_THE_ARCHMAGE: return "res://Assets/Music/Tower of the Archmage.wav"
 		music_files.NIGHTTIME: return "res://Assets/Music/NightTime_Short(loop)(78).wav"
 		music_files.NIGHTTIMENOPERC: return "res://Assets/Music/NightTime_ShortNoPerc(loop)(78).wav"
+		music_files:return""
 	
 	printerr(key, "NOT FOUND in sound lib")
 	return ""
@@ -68,12 +105,22 @@ static func get_file_sfx(key) -> String:
 		sound_files.NOTIFICATION_E: return "res://Assets/SFX/Fantasy_UI (40).wav"
 		sound_files.NOTIFICATION_F: return "res://Assets/SFX/Fantasy_UI (41).wav"
 		sound_files.NOTIFICATION_G: return "res://Assets/SFX/Fantasy_UI (42).wav"
+		sound_files.NOTIFICATION_H: return "res://Assets/SFX/Piano_Ui (4).wav"
 		sound_files.ATTACK_ACID_A: return "res://Assets/SFX/MMO_Game_Magic_Designed_Acid_Impact_01.wav"
 		sound_files.ATTACK_ACID_B: return "res://Assets/SFX/MMO_Game_Magic_Designed_Acid_Impact_02.wav"
 		sound_files.ATTACK_ICE_A: return "res://Assets/SFX/MMO_Game_Magic_Designed_Ice_Impact_01.wav"
 		sound_files.ATTACK_ICE_B: return "res://Assets/SFX/MMO_Game_Magic_Designed_Ice_Impact_02.wav"
 		sound_files.ATTACK_LIGHTNING_A: return "res://Assets/SFX/MMO_Game_Magic_Designed_Lightning_Impact_01.wav"
 		sound_files.ATTACK_LIGHTNING_B: return "res://Assets/SFX/MMO_Game_Magic_Designed_Lightning_Impact_02.wav"
+		sound_files.ATTACK_FIRE_A: return "res://Assets/SFX/MMO_Game_Magic_Designed_Fire_Impact_03.wav"
+		sound_files.ATTACK_FIRE_B: return "res://Assets/SFX/MMO_Game_Magic_Designed_Fire_Impact_09.wav"
+		sound_files.IMPACT_A: return "res://Assets/SFX/Chop Stone.wav"
+		sound_files.IMPACT_B: return "res://Assets/SFX/Chop Wood.wav"
+		sound_files.DOOR: return "res://Assets/SFX/Dungeon Door 3 - Metal Handle.wav"
+		sound_files.DOOR_SHUT: return "res://Assets/SFX/Dungeon Door - Shut.wav"
+		sound_files.BEEP_A: return "res://Assets/SFX/Fantasy_UI (10).wav"
+		sound_files.WHOOSH: return "res://Assets/SFX/SFX_swordSwing.wav" #cyberleaf
+		sound_files:return""
 	
 	printerr(key, "NOT FOUND in sound lib")
 	return ""

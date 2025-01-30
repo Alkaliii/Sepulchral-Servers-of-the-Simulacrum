@@ -57,7 +57,7 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 				growth_index += 1
 					#if !bifurcate: growth_index += 1
 			
-			if bifurcate:
+			if bifurcate and line_point_idx != 0:
 				var new2 = DAMAGE_RADIUS.instantiate()
 				new2.settings = new.settings.duplicate()
 				_monster.get_parent().add_child(new2)

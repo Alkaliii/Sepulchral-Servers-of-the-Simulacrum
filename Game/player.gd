@@ -40,6 +40,7 @@ var BDMG : int = 2
 @onready var p_cache_bar = $UI/Stats/MarginContainer/stats/pCacheBar#$UI/Stats/pCacheBar
 #@onready var cooldown = $UI/Stats/MarginContainer/VBoxContainer/Cooldown
 @onready var p_cooldown_bar = $UI/Stats/MarginContainer/stats/pCooldownBar#$UI/Stats/pCooldownBar
+@onready var hit_detector = $HitDetector
 
 const FTXT = preload("res://Game/float_text.tscn")
 
@@ -59,6 +60,10 @@ func _ready():
 	bspin_vfx.play("bottomSPIN")
 	gesture.circle_drawn.connect(s_charge)
 	
+	hit_detector.HEALED.connect(on_heal)
+	hit_detector.CLEARED.connect(on_clear)
+	hit_detector.GUARDED.connect(on_guard)
+	
 	set_job()
 
 func set_job():
@@ -69,7 +74,9 @@ func set_job():
 	if job:
 		job.setup()
 		#HEALTH = job.final_health
-		if !status: status = system_status.new()
+		if !status: 
+			status = system_status.new()
+			status.for_player = true
 		status.setup(job.final_health)
 		MAX_PCACHE = job.final_m_pc
 		CHARGE_AMOUNT = job.final_pc_c
@@ -101,13 +108,81 @@ func random_start_position():
 	pos *= 200
 	global_position = pos
 
-func on_afflict(c : Array):
+func on_heal(amt:int):
+	if !status: return
+	status._heal(amt)
+	tween_health(status.health)
+	for i in amt:
+		disp_ftxt(str("[color=#b4ba46]+"),global_position + Vector2(0,25),FloatingText.a.POP)
+		await App.process_frame()
+
+func on_clear():
+	if !status: return
+	var idx = 0
+	for e in status.current_effects:
+		if e in status._bad_effects:
+			status.current_effects[e] = 0.1
+			idx += 1
+	for i in idx:
+		disp_ftxt(str("[color=#b4ba46]~"),global_position + Vector2(0,25),FloatingText.a.POP)
+		await App.process_frame()
+
+func on_guard():
+	if !status: return
+	if status.current_effects.has(system_status.effects.ARMOR):
+		if status.current_effects[system_status.effects.ARMOR] > 6.0: return
+	#status.add_effect(system_status.effects.ARMOR,5.0)
+	on_afflict(system_status.effects.ARMOR,5.0)
+
+func on_afflict(effect : system_status.effects, duration : float):
 	#TODO
-	pass
+	#print("pass inflict")
+	disp_ftxt(str("[color=orange]&"),global_position + Vector2(0,25),FloatingText.a.POP)
+	status.add_effect(effect,duration)
 
 var dead : bool = false
 func on_damage(amt : int):
 	if dead: return
+	
+	if status and status.current_effects.has(system_status.effects.ARMOR):
+		disp_ftxt(str("[color=#e34262]-"),global_position + Vector2(0,25),FloatingText.a.POP)
+		#sfx here would be nice
+		SystemUI.push_lateral({
+		"speaker":"(+)",
+		"message":"Block!",
+		"type":LateralNotification.nt.BASIC,
+		"duration":2.0
+		})
+		return
+	
+	if weapon and status and !status.current_effects.has(system_status.effects.FEAR):
+		match weapon.on_damage_effect():
+			0: #Block
+				disp_ftxt(str("[color=#e34262]-"),global_position + Vector2(0,25),FloatingText.a.POP)
+				SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.BEEP_A),0.8,"sfx",randf_range(0.9,1.1))
+				#sfx here would be nice
+				SystemUI.push_lateral({
+				"speaker":"(+)",
+				"message":"Block!",
+				"type":LateralNotification.nt.BASIC,
+				"duration":2.0
+				})
+				return
+			1: #Parry
+				disp_ftxt(str("[color=#e34262]%"),global_position + Vector2(0,25),FloatingText.a.POP)
+				SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.BEEP_A),0.8,"sfx",randf_range(0.9,1.1))
+				var mnstr = get_tree().get_first_node_in_group("monster")
+				if mnstr:
+					mnstr.on_damage(amt,0)
+				#sfx here would be nice
+				SystemUI.push_lateral({
+				"speaker":"(+)",
+				"message":"Parry!",
+				"type":LateralNotification.nt.BASIC,
+				"duration":2.0
+				})
+				return
+	
 	status._damage(amt)
 	disp_ftxt(str("[color=#e34262]",amt),global_position + Vector2(0,25),FloatingText.a.POP)
 	#health_bar.value = status.health
@@ -166,14 +241,46 @@ func disp_ftxt(text : String, pos : Vector2, anim : FloatingText.a = FloatingTex
 
 func calc_light_dmg() -> int:
 	var d : int = BDMG
-	if weapon: d = weapon.calc_damage(BDMG)
+	if weapon: 
+		d = weapon.calc_damage(BDMG)
+		weapon_bonus()
 	#disp_ftxt(str(d),get_global_mouse_position(),FloatingText.a.FLOAT)
+	
+	if status and status.current_effects.has(system_status.effects.WEAK):
+		d = int(ceil(float(d)/2.0))
 	return d
+
+func weapon_bonus():
+	if status and status.current_effects.has(system_status.effects.FEAR): return
+	match weapon.on_attack_effect():
+		0: #self heal
+			status._heal(1)
+			tween_health(status.health)
+			disp_ftxt(str("[color=#b4ba46]+"),global_position + Vector2(0,25),FloatingText.a.POP)
+			SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.BEEP_A),0.8,"sfx",randf_range(0.9,1.1))
+			SystemUI.push_lateral({
+			"speaker":"(+)",
+			"message":"Heal!",
+			"type":LateralNotification.nt.BASIC,
+			"duration":2.0
+			})
+		1: #recharge
+			charge(1)
+			SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.BEEP_A),0.8,"sfx",randf_range(0.9,1.1))
+			SystemUI.push_lateral({
+			"speaker":"(+)",
+			"message":"Cache!",
+			"type":LateralNotification.nt.BASIC,
+			"duration":2.0
+			})
 
 func calc_heavy_dmg(s : float) -> int:
 	var d : int = int(floor((float(BDMG) + s) * s))
 	if weapon: d = weapon.calc_heavy_damage(BDMG,s)
 	#disp_ftxt(str(d),get_global_mouse_position(),FloatingText.a.POP_SHOOT)
+	
+	if status and status.current_effects.has(system_status.effects.WEAK):
+		d = int(ceil(float(d)/2.0))
 	return d
 
 func calc_heal() -> int:
@@ -203,6 +310,8 @@ func knockback(from : Vector2, strr : float = 10):
 	cam.add_trauma(0.4,0.9)
 	var kbdir = global_position - from
 	velocity += kbdir.normalized() * strr
+	if status:
+		status.notify_status(true,system_status.effects.STUN,1.2)
 	await get_tree().create_timer(1.2).timeout
 	knocked = false
 
@@ -225,10 +334,12 @@ func remote_drag():
 			drag(rd_target[0].global_position,boss_drag_data["strr"])
 		else: rd_target.clear()
 
-func _process(_delta):
+func _process(delta):
 	#if SCACHE > 0.0 and decay:
 		#SCACHE -= 0.001
 		#update_s_charge()
+	if status and !status.current_effects.is_empty():
+		status.process_current(delta)
 	pass
 
 func _physics_process(delta):
@@ -237,6 +348,16 @@ func _physics_process(delta):
 		var nw = system_weapon.new()
 		nw.generate_random()
 		App.weapon_inventory.append(nw)
+		
+		#job.JOB = [system_job.j.KNIGHT,system_job.j.MAGE,system_job.j.SAINT].pick_random()
+		#SystemUI.push_lateral({
+		#"speaker":"nme",
+		#"message":str("You are a ",system_job.j.keys()[job.JOB]," now"),
+		#"type":LateralNotification.nt.SYSTEM,
+		#"duration":4.0
+		#})
+		#set_job()
+
 	if App.can_input and !knocked and !dead:
 		DIRECTION = isometrize(Input.get_vector("MLEFT", "MRIGHT", "MUP", "MDOWN").rotated(deg_to_rad(-45))).normalized()
 		if invertControls:
@@ -262,6 +383,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("ACTIONA") and DIRECTION:
 		if dash_cooldown <= 0.0 or CURRENT_PCACHE != 0:
 			velocity += (DIRECTION * abs(velocity)) * DASH_STRENGTH
+			SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.WHOOSH),0.8,"sfx",randf_range(0.9,1.1))
 			var new_cooldown = dash_cooldown_length
 			if dash_cooldown <= dash_cooldown_length * 0.2: charge()
 			else:
@@ -276,7 +398,9 @@ func _physics_process(delta):
 	elif dash_cooldown > 0.0:
 		#cooldown.value = cooldown.max_value - dash_cooldown
 		p_cooldown_bar.value = p_cooldown_bar.max_value - dash_cooldown
-		dash_cooldown -= delta
+		if status and status.current_effects.has(system_status.effects.SLOW):
+			dash_cooldown -= (delta / 2.0)
+		else: dash_cooldown -= delta
 	if dash_cooldown <= 0.0 and (tspin_vfx.modulate.a == 0.0 or bspin_vfx.modulate.a == 0.0):
 		stw = create_tween()
 		stw.tween_property(tspin_vfx,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN_OUT)
@@ -332,7 +456,7 @@ func s_charge():
 	var val = 5.0 / 3.0#randf_range(minc,maxc)
 	SCACHE += val
 	#s_cache_lbl.text = str(snappedf(SCACHE,0.01),"[b]ghz")
-	var wve = "[wave]" if SCACHE >= 5.0 else ""
+	#var wve = "[wave]" if SCACHE >= 5.0 else ""
 	#s_cache_lbl.text = str(wve,"%.2f" % (SCACHE * 1000.0),"[b]rpm")
 	#s_cache_lbl.text = str(wve,round(SCACHE * 1000.0),"[b]rpm")
 	if sclbltw: sclbltw.kill()
@@ -363,11 +487,16 @@ func s_discharge() -> float:
 		decrease_s_cache()
 	return amt
 
+@onready var sc_icn = $UI/Stats/MarginContainer/PanelContainer/VBoxContainer/icn
 func decrease_s_cache():
 	decay = false
 	var tw = create_tween()
 	tw.tween_method(tw_sc_cnt,SCACHE,0.0,3.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+	sc_icn.modulate = Color.ORANGE
+	s_cache_lbl.modulate = Color.ORANGE
 	await tw.finished
+	sc_icn.modulate = Color.WHITE
+	s_cache_lbl.modulate = Color.WHITE
 	#while SCACHE > 0.0:
 		#SCACHE -= 0.1
 		#if SCACHE < 0.0: SCACHE = 0.0
@@ -375,7 +504,7 @@ func decrease_s_cache():
 		#await get_tree().process_frame
 	SCACHE = 0.0
 	decay = true
-	update_s_charge()
+	#update_s_charge()
 
 func tw_sc_cnt(nv : float):
 	SCACHE = nv

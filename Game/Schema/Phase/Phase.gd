@@ -172,14 +172,16 @@ func play_phase(retrn = null):
 
 func dconr(retrn = null):
 	if retrn is phaseMovementOption:
-		retrn.movement_complete.disconnect(play_phase)
+		if retrn.movement_complete.is_connected(play_phase):
+			retrn.movement_complete.disconnect(play_phase)
 	if retrn is phaseAttackOption:
 		if retrn.attack_started.is_connected(play_phase):
 			retrn.attack_started.disconnect(play_phase)
 		if retrn.attack_complete.is_connected(play_phase):
 			retrn.attack_complete.disconnect(play_phase)
 	if retrn is phaseSpecialOption:
-		retrn.special_complete.disconnect(play_phase)
+		if retrn.special_complete.is_connected(play_phase):
+			retrn.special_complete.disconnect(play_phase)
 
 func pWAIT(cwt : float = 0.0):
 	if my_monster.dead: return

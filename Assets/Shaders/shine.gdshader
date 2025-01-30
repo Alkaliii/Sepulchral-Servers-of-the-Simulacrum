@@ -62,5 +62,5 @@ void fragment() {
     vec4 blurred = texture(SCREEN_TEXTURE, blur_uv);
     shine = screen(blurred, vec4(shine, rays)).rgb;
     
-    COLOR = vec4(shine, rays * gradient_color.a);
+    COLOR.rgb = vec4(shine, rays * gradient_color.a).rgb;
 }

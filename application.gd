@@ -41,6 +41,7 @@ enum gsu {
 	ASSERT_STATE,
 	RELOAD_STATE,
 	REMOTE_MUSIC,
+	REMOTE_MUSIC_INTRO,
 	REMOTE_STOP_MUSIC,
 	REMOTE_SFX,
 	REMOTE_LATERAL, #send messages
@@ -69,7 +70,8 @@ func _process(_delta):
 	if Input.is_action_just_pressed("debug_reload"):
 		get_tree().reload_current_scene()
 	if Input.is_action_just_pressed("debug_shader_precomp"):
-		load_misc.emit("res://Game/Other/precompile_shader.tscn")
+		SystemAudio.play_intro_then_loop(SoundLib.get_file(SoundLib.music_files.BATTLE_ARIADNE_INTRO),SoundLib.get_file(SoundLib.music_files.BATTLE_ARIADNE))
+		#load_misc.emit("res://Game/Other/precompile_shader.tscn")
 
 func isometrize(v : Vector2) -> Vector2:
 	var new : Vector2 = Vector2()
@@ -84,6 +86,28 @@ func process_frame():
 func time_delay(time_sec : float = 1.0, process_always : bool = true,process_in_physics : bool = false,ignore_time_scale : bool = false):
 	await get_tree().create_timer(time_sec,process_always,process_in_physics,ignore_time_scale).timeout
 	return
+
+func determine_boss_health(mod : float = 1.0) -> int:
+	var boss_health : float = 100
+	#boss should take 200 light attacks, or 6 max heavy attacks
+	#this is determined using the average damage of your best weapon, assuming base 3 (HOST)
+	#you best weapon is the weapon with the highest damage when all of it's damaged is summed
+	#this value is increased by player count / HP + ((HP * .8) * Player count - 1)
+	
+	var best_weapon : system_weapon
+	if weapon_inventory.is_empty(): best_weapon = preload("res://Game/Content/DefaultWeapons/OldBlade.tres")
+	for w in weapon_inventory:
+		if !best_weapon or w.dmg_rating() > best_weapon.dmg_rating(): 
+			best_weapon = w
+	
+	var heavy = best_weapon.get_heavy_average()
+	boss_health = (heavy * (6.0 + randf_range(0.0,3.0))) * mod
+	
+	if Plyrm.connected:
+		boss_health += ((boss_health * .8) * (Plyrm.connected_players.size() - 1))
+	
+	print("New health: ",int(round(boss_health))," HP")
+	return int(round(boss_health))
 
 func validate_alive() -> int:
 	#check for players and puppets and return the number
@@ -161,8 +185,15 @@ func remove_boss():
 		m.get_parent().remove_child(m)
 		m.queue_free()
 
+func remove_environment():
+	var e = get_tree().get_first_node_in_group("environment")
+	if e:
+		e.get_parent().remove_child(e)
+		e.queue_free()
+
 func load_level(level : int):
 	remove_boss()
+	remove_environment()
 	var plyr = get_tree().get_first_node_in_group("player_persistant")
 	plyr.set_job()
 	plyr.random_start_position()
@@ -170,8 +201,12 @@ func load_level(level : int):
 	current_floor = level
 	match level:
 		0:
+			load_misc.emit("res://Game/Content/ArenaEnvironment/Field.tscn")
+			await App.load_complete
 			load_boss.emit("res://Game/scarecrow.tscn")
 		1:
+			load_misc.emit("res://Game/Content/ArenaEnvironment/Forest.tscn")
+			await App.load_complete
 			load_boss.emit("res://Game/boss.tscn")
 		_:
 			load_boss.emit("res://Game/scarecrow.tscn")

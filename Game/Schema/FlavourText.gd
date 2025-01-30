@@ -112,3 +112,10 @@ static var playerNames = [
 	"del",
 	"alt",
 ]
+
+static var tips = [
+	"Some jobs let you click on players to perform a support skill.",
+	"Some Barrels contain weapons, click to loot them.",
+	"Stay out of the red!",
+	"Wells contain surprises, try clicking on one.",
+]

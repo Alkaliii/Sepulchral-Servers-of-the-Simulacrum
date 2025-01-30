@@ -1,8 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://xjewknybu4ah"]
+[gd_scene load_steps=7 format=3 uid="uid://xjewknybu4ah"]
 
 [ext_resource type="Texture2D" uid="uid://ga5kr1hn7yih" path="res://Assets/IconAtlas@4x.png" id="1_82vhb"]
 [ext_resource type="Script" path="res://Game/UI/mp_status.gd" id="1_st7q0"]
+[ext_resource type="Shader" path="res://Assets/Shaders/bounce.gdshader" id="2_nsemn"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="2_u8sfc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dcyog"]
+shader = ExtResource("2_nsemn")
+shader_parameter/do_abs = true
+shader_parameter/do_quantize = false
+shader_parameter/quantize_to = 1.0
+shader_parameter/sine_amplitude = Vector2(0, -1)
+shader_parameter/sine_speed = Vector2(0, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jngqg"]
 atlas = ExtResource("1_82vhb")
@@ -11,11 +20,13 @@ region = Rect2(0, 0, 128, 128)
 [node name="mpStatus" type="HBoxContainer"]
 offset_right = 88.0
 offset_bottom = 15.0
+theme_override_constants/separation = 0
 alignment = 1
 script = ExtResource("1_st7q0")
 
 [node name="health" type="TextureProgressBar" parent="."]
-custom_minimum_size = Vector2(20, 20)
+material = SubResource("ShaderMaterial_dcyog")
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 4
 value = 100.0
@@ -24,6 +35,7 @@ nine_patch_stretch = true
 texture_under = SubResource("AtlasTexture_jngqg")
 texture_progress = SubResource("AtlasTexture_jngqg")
 tint_under = Color(0.168627, 0.168627, 0.14902, 0.784314)
+tint_progress = Color(0.705882, 0.729412, 0.27451, 1)
 
 [node name="name" type="RichTextLabel" parent="."]
 clip_contents = false
@@ -33,8 +45,8 @@ size_flags_vertical = 4
 theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_fonts/normal_font = ExtResource("2_u8sfc")
 theme_override_fonts/bold_font = ExtResource("2_u8sfc")
-theme_override_font_sizes/normal_font_size = 15
-theme_override_font_sizes/bold_font_size = 15
+theme_override_font_sizes/normal_font_size = 13
+theme_override_font_sizes/bold_font_size = 13
 bbcode_enabled = true
 text = "arc"
 fit_content = true

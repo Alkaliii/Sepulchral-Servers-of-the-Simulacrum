@@ -324,7 +324,7 @@ autowrap_mode = 0
 layout_mode = 2
 max_value = 1.0
 step = 0.01
-value = 1.0
+value = 0.6
 tick_count = 4
 
 [node name="SfxVolume" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/vbc"]

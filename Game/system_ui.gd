@@ -154,8 +154,31 @@ func roar_effect(state : bool):
 func srslmev(nv : float): #set roar speed lines mask edge value
 	roar_sl.material.set_shader_parameter("mask_edge",nv)
 
+@onready var blur = $effects/Blur
+var blrtw : Tween
+func blur_effect(state : bool):
+	if blrtw: blrtw.kill()
+	blrtw = create_tween()
+	match state:
+		true: #show
+			blur.show()
+			blrtw.tween_property(blur,"modulate:a",1.0,0.5).set_ease(Tween.EASE_IN_OUT)
+			blrtw.parallel().tween_method(sbbv,0.0,16.0,0.5).set_ease(Tween.EASE_IN_OUT)
+			await blrtw.finished
+		false: #hide
+			blrtw.tween_property(blur,"modulate:a",0.0,0.5).set_ease(Tween.EASE_IN_OUT)
+			blrtw.parallel().tween_method(sbbv,16.0,0.0,0.5).set_ease(Tween.EASE_IN_OUT)
+			await blrtw.finished
+			blur.hide()
+
+func sbbv(nv):
+	blur.material.set_shader_parameter("blur_amount",nv)
 
 func open_console():
+	var plyr = get_tree().get_first_node_in_group("player")
+	if plyr:
+		if plyr.status and plyr.status.current_effects.has(system_status.effects.MUTE): return
+	
 	if weapon_inventory.visible: open_w_inv()
 	console.visible = !console.visible 
 	match console.visible:
@@ -212,6 +235,17 @@ func push_lateral(data : Dictionary = {}):
 	lat_notifications.add_child(ln)
 	ln.global_position = np.global_position + Vector2(-200,0)
 	ln.set_noti(data)
+
+func remove_lateral(id : String):
+	for n : LateralNotification in lat_notifications.get_children():
+		if n.id == id:
+			n.remove()
+
+func set_lateral_duration(id : String, new_duration : float):
+	for n : LateralNotification in lat_notifications.get_children():
+		if n.id == id:
+			n.liftime = new_duration
+			break
 
 func sync_and_push_lateral(data : Dictionary = {}):
 	var chat_data = data.duplicate()

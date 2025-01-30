@@ -91,7 +91,8 @@ func _condition_augment(_m : system_monster_controller):
 	
 	for a in damage_settings:
 		a.dmg += d_up
-		a.inflict = infl
+		if infl != system_status.effects.NONE:
+			a.inflict = infl
 
 func _get_spawn_position(_m : Node2D) -> Array[Vector2]:
 	#print("getting positions!")

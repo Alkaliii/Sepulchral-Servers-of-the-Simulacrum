@@ -51,7 +51,8 @@ enum sfx {
 	NONE,
 	ACID,
 	ICE,
-	LIGHTNING
+	LIGHTNING,
+	FIRE
 }
 @export var spawn_sound : sfx = sfx.ACID
 

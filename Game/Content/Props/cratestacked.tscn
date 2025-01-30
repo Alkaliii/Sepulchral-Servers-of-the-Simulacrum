@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://cceekg1fvcxi4"]
+
+[ext_resource type="Texture2D" uid="uid://gm7mws5n4782" path="res://Assets/enviromentalAtlas.png" id="1_mwmxc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_33s8j"]
+atlas = ExtResource("1_mwmxc")
+region = Rect2(98, 52, 28, 38)
+
+[node name="CrateStacked" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+texture = SubResource("AtlasTexture_33s8j")
+offset = Vector2(0, -13)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(0, -8)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(-12, 8, 0, 12, 12, 8, 0, 4)

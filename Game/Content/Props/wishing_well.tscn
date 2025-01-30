@@ -1,0 +1,165 @@
+[gd_scene load_steps=18 format=3 uid="uid://cr884onj6cvfe"]
+
+[ext_resource type="Script" path="res://Game/Content/Props/wishing_well.gd" id="1_7et6y"]
+[ext_resource type="Texture2D" uid="uid://d4rydin40qb3" path="res://Assets/WishingWell.png" id="1_b73le"]
+[ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="2_gwqgg"]
+[ext_resource type="Script" path="res://Game/hit_detector.gd" id="3_4hqy2"]
+[ext_resource type="Shader" path="res://Assets/Shaders/ProceduralGleam.gdshader" id="5_g0n7j"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cmudy"]
+noise_type = 2
+fractal_type = 3
+fractal_octaves = 4
+fractal_gain = 2.0
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ot7aj"]
+width = 256
+invert = true
+seamless = true
+noise = SubResource("FastNoiseLite_cmudy")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b5s26"]
+shader = ExtResource("2_gwqgg")
+shader_parameter/mask = false
+shader_parameter/mask_scroll = Vector2(0, 0)
+shader_parameter/wscale = 1.0
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 1.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/auto_fade = true
+shader_parameter/direction = 1.0
+shader_parameter/modulate = Color(0.745098, 0.745098, 0.745098, 1)
+shader_parameter/pulse_max_scale = 0.35
+shader_parameter/pulse_offset = 0.0
+shader_parameter/outer_feather = 0.1
+shader_parameter/inner_feather = 0.05
+shader_parameter/ss_edges = Vector2(0, 0.4)
+shader_parameter/mix_strength = 0.0
+shader_parameter/col_ovr_dis_str = 0.0
+shader_parameter/polarize_opacity_noise = true
+shader_parameter/animate_opacity_noise = Vector3(0, 0, -1)
+shader_parameter/scale_opacity_noise = Vector2(1, 0.2)
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ot7aj")
+
+[sub_resource type="Gradient" id="Gradient_3t6bd"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_s0hkh"]
+gradient = SubResource("Gradient_3t6bd")
+width = 400
+height = 200
+
+[sub_resource type="Curve" id="Curve_8lp3x"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4xrcf"]
+radius = 42.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8xjg"]
+shader = ExtResource("5_g0n7j")
+shader_parameter/billboard = false
+shader_parameter/progress = 0.5
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/index_rot = 0.0
+shader_parameter/shimer_speed = 8.0
+shader_parameter/shimer_amt = 0.1
+shader_parameter/points = 4.0
+shader_parameter/arc = 0.25
+shader_parameter/feather = 0.0
+shader_parameter/radi = Vector2(2, 0.5)
+shader_parameter/gleam_position = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation = 0.0
+shader_parameter/edge = Vector2(0, 1)
+shader_parameter/ptedt = Vector2(1, 1)
+shader_parameter/ptedtofst = 0.0
+shader_parameter/uvn_str = 0.0
+shader_parameter/enabled_b = 0.0
+shader_parameter/points_b = 3.0
+shader_parameter/arc_b = 0.1
+shader_parameter/radi_b = Vector2(2, 0.25)
+shader_parameter/gleam_position_b = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation_b = null
+shader_parameter/edge_b = Vector2(0, 1)
+shader_parameter/ptedt_b = Vector2(1, 1)
+shader_parameter/ptedtofst_b = 0.0
+shader_parameter/mix_str = 1.0
+shader_parameter/rotate_lookup = 0.0
+shader_parameter/chromatic_offset = Projection(1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_1x3lv"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_172wp"]
+gradient = SubResource("Gradient_1x3lv")
+width = 8
+height = 8
+
+[sub_resource type="Curve" id="Curve_dbg4d"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.750572, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_cdyfl"]
+max_value = 3.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.254005, 3), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="WishingWell" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_7et6y")
+
+[node name="PullVFX" type="CPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+show_behind_parent = true
+material = SubResource("ShaderMaterial_b5s26")
+amount = 4
+speed_scale = 0.5
+texture = SubResource("GradientTexture2D_s0hkh")
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_8lp3x")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+texture = ExtResource("1_b73le")
+offset = Vector2(0, -23)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="dmgShape" type="CollisionPolygon2D" parent="StaticBody2D"]
+visible = false
+polygon = PackedVector2Array(31.3007, 3.32659, 29.2335, 6.50779, 25.8885, 9.40456, 21.4122, 11.8903, 16, 13.8564, 9.88854, 15.2169, 3.34491, 15.9123, -3.34491, 15.9124, -9.88855, 15.2169, -16, 13.8564, -21.4122, 11.8903, -25.8885, 9.40456, -29.2335, 6.50779, -31.3007, 3.32659, -32, -1.43051e-06, -31.3007, -3.32659, -29.2335, -6.50779, -25.8885, -9.40457, -21.4122, -11.8903, -16, -13.8564, -9.88855, -15.2169, -3.34491, -15.9124, 3.34491, -15.9124, 9.88855, -15.2169, 16, -13.8564, 21.4122, -11.8903, 25.8885, -9.40456, 29.2335, -6.50778, 31.3007, -3.32659, 32, 2.38419e-06)
+
+[node name="HitDetector" type="Area2D" parent="."]
+position = Vector2(0, -24)
+script = ExtResource("3_4hqy2")
+hd_for = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
+shape = SubResource("CircleShape2D_4xrcf")
+
+[node name="Starburst" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_e8xjg")
+scale = Vector2(4, 4)
+emitting = false
+amount = 16
+lifetime = 3.0
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 60
+texture = SubResource("GradientTexture2D_172wp")
+direction = Vector2(0, -1)
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+radial_accel_min = -90.0
+radial_accel_max = -25.0
+damping_min = 100.0
+damping_max = 100.0
+damping_curve = SubResource("Curve_dbg4d")
+angle_max = 360.0
+scale_amount_min = 0.5
+scale_amount_curve = SubResource("Curve_cdyfl")

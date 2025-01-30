@@ -43,9 +43,9 @@ func _ready():
 	
 	hit_detector.disabled = true
 	add_to_group("monster")
-	monster_data.status.setup(monster_data.base_health)
-	healthbar.max_value = monster_data.base_health
-	healthbar.value = monster_data.status.health
+	monster_data.status.setup(App.determine_boss_health())
+	#healthbar.max_value = monster_data.base_health
+	#healthbar.value = monster_data.status.health
 	hit_detector.DAMAGED.connect(on_damage)
 	hit_detector.AFFLICTED.connect(on_afflict)
 	monster_data.status.DOT.connect(show_other_damage)
@@ -56,7 +56,8 @@ func test_start():
 	await SystemUI.sync_and_set_title(true,2,monster_data.name,monster_data.stitle,Color("#a89f94"))
 	hit_detector.disabled = false
 	await roar(str("You encounter [shake]",monster_data.name))
-	SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.normal_music))
+	#SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.normal_music))
+	jukebox(monster_data.normal_music)
 	time_elapsed = 0.0
 	tiktok = true
 	SystemUI.sync_and_set_title(false)
@@ -181,6 +182,7 @@ func on_afflict(c : Array):
 
 func on_damage(amt : int, click : int): #send player data in
 	#check condition before validating
+	if dead: return
 	if active_phase and !active_phase.validate_damage(click): 
 		return
 	
@@ -214,6 +216,7 @@ func sync_damage(amt : int, click : int):
 	Plyrm.Playroom.RPC.call("dmg_boss",var_to_str(data),Plyrm.Playroom.RPC.Mode.HOST)
 
 func remote_damage(amt : int, click : int):
+	if dead: return
 	if active_phase and !active_phase.validate_damage(click): 
 		return
 	
@@ -230,7 +233,7 @@ func show_other_damage(od : int = 1):
 	disp_ftxt(str(od),global_position - Vector2(0,45),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
 
 func check_progress():
-	if monster_data.status.health <= 0 and !dead:
+	if monster_data.status.health <= 0.0 and !dead:
 		kill_phase()
 		tiktok = false
 		dead = true
@@ -250,9 +253,34 @@ func check_progress():
 	elif monster_data.status.health < (monster_data.status.max_health * .5) and !halfway_dead:
 		kill_phase()
 		halfway_dead = true
-		SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.halfway_music))
+		#SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.halfway_music))
+		jukebox(monster_data.halfway_music)
 		await roar(str(monster_data.name," is weak!"))
 		if !phases.is_empty(): start_phase(phases.pick_random())
+
+
+func jukebox(filekey : SoundLib.music_files):
+	if filekey in SoundLib.has_intro:
+		var intro : String
+		var loop : String
+		match filekey:
+			SoundLib.music_files.BATTLE_KANNAGI, SoundLib.music_files.BATTLE_KANNAGI_INTRO:
+				intro = SoundLib.get_file(SoundLib.music_files.BATTLE_KANNAGI_INTRO)
+				loop = SoundLib.get_file(SoundLib.music_files.BATTLE_KANNAGI)
+			SoundLib.music_files.BATTLE_MASYOU, SoundLib.music_files.BATTLE_MASYOU_INTRO:
+				intro = SoundLib.get_file(SoundLib.music_files.BATTLE_MASYOU_INTRO)
+				loop = SoundLib.get_file(SoundLib.music_files.BATTLE_MASYOU)
+			SoundLib.music_files.BATTLE_ARIADNE, SoundLib.music_files.BATTLE_ARIADNE_INTRO:
+				intro = SoundLib.get_file(SoundLib.music_files.BATTLE_ARIADNE_INTRO)
+				loop = SoundLib.get_file(SoundLib.music_files.BATTLE_ARIADNE)
+			SoundLib.music_files.BATTLE_TRUTH, SoundLib.music_files.BATTLE_TRUTH_INTRO:
+				intro = SoundLib.get_file(SoundLib.music_files.BATTLE_TRUTH_INTRO)
+				loop = SoundLib.get_file(SoundLib.music_files.BATTLE_TRUTH)
+		
+		SystemAudio.sync_and_play_intro_then_loop(intro,loop)
+		return
+	else:
+		SystemAudio.sync_and_play_music(SoundLib.get_file(filekey))
 
 func roar(msg : String = "!!!"):
 	App.can_click = false

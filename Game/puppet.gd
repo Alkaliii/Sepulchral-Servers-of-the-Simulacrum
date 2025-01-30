@@ -4,12 +4,17 @@ class_name system_player_puppet
 var my_id
 var state
 @onready var mp_status = $mpStatus
+@onready var hit_detector = $HitDetector
 
 func _ready():
 	add_to_group("puppet")
 	Plyrm.PR_PLAYER_QUIT.connect(on_quit)
 	tspin_vfx.play("topSPIN")
 	bspin_vfx.play("bottomSPIN")
+	
+	hit_detector.HEALED.connect(on_heal)
+	hit_detector.CLEARED.connect(on_clear)
+	hit_detector.GUARDED.connect(on_guard)
 	
 	while true:
 		var pname
@@ -18,6 +23,31 @@ func _ready():
 			mp_status.set_plyr_name(pname)
 			break
 		await App.time_delay(1.0)
+
+func on_heal(amt:int):
+	var data : Array = []
+	data.append(my_id)
+	data.append(0) #0 means heal here
+	data.append(App.player_name)
+	data.append(amt)
+	
+	Plyrm.Playroom.RPC.call("player_aid",var_to_str(data),Plyrm.Playroom.RPC.Mode.OTHERS)
+
+func on_clear():
+	var data : Array = []
+	data.append(my_id)
+	data.append(1) #0 means clear here
+	data.append(App.player_name)
+	
+	Plyrm.Playroom.RPC.call("player_aid",var_to_str(data),Plyrm.Playroom.RPC.Mode.OTHERS)
+
+func on_guard():
+	var data : Array = []
+	data.append(my_id)
+	data.append(2) #0 means guard here
+	data.append(App.player_name)
+	
+	Plyrm.Playroom.RPC.call("player_aid",var_to_str(data),Plyrm.Playroom.RPC.Mode.OTHERS)
 
 func on_quit(args):
 	await create_tween().tween_property(self,"scale",Vector2.ZERO,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished

@@ -43,7 +43,7 @@ func size_list():
 			remove.queue_free()
 	else: #Positive or Zero, add or do nothing
 		for i in dif:
-			var add =STAT_LISTING.instantiate()
+			var add = STAT_LISTING.instantiate()
 			list.add_child(add)
 
 var atw : Tween

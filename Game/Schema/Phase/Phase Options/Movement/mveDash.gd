@@ -13,19 +13,27 @@ var plyr : Node2D
 func move(monster : system_monster_controller):
 	cancel_movement()
 	await App.process_frame()
-	mTween = monster.create_tween()
 	
-	var npos : Vector2 = monster.check_position(get_player(monster).pick_random())
+	var ogpos : Vector2 = get_player(monster).pick_random()
+	var npos : Vector2 = monster.check_position(ogpos)
+	
+	if npos != ogpos:
+		npos = ((npos - monster.global_position) * 0.8) + monster.global_position
+		print("dash mod")
+	
 	var spd = (monster.global_position - npos).length() / dash_speed
 	var initpos = monster.global_position
 	
+	await App.time_delay(0.25 if monster.halfway_dead else 0.5)
+	
+	mTween = monster.create_tween()
 	mTween.tween_property(monster,"global_position",npos,spd).set_ease(move_ease).set_trans(move_trans)
 	await mTween.finished
 	
 	if (plyr.global_position - monster.global_position).length() < 50:
 		plyr.knockback(initpos,2222)
-
 	else: print("Too far to knockback")
+	
 	movement_complete.emit(self)
 
 func get_player(_m : system_monster_controller) -> Array[Vector2]:

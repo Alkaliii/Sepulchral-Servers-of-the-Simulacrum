@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://jvlvkbccv6ur"]
+[gd_scene load_steps=59 format=3 uid="uid://jvlvkbccv6ur"]
 
 [ext_resource type="Script" path="res://Game/boss.gd" id="1_5lnwp"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="1_yr56s"]
@@ -27,6 +27,7 @@ script = ExtResource("3_fi5qo")
 health = 5
 current_effects = {}
 immunity = Array[int]([])
+for_player = false
 
 [sub_resource type="Resource" id="Resource_4md7q"]
 script = ExtResource("2_44a56")
@@ -34,7 +35,7 @@ stitle = "vanguard of observation"
 name = "System Unit Test"
 base_health = 100
 status = SubResource("Resource_83p26")
-normal_music = 0
+normal_music = 8
 halfway_music = 1
 roar = 0
 
@@ -144,7 +145,7 @@ fractal_octaves = 4
 fractal_gain = 2.0
 cellular_distance_function = 1
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ot7aj"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j8aok"]
 width = 256
 invert = true
 seamless = true
@@ -172,19 +173,32 @@ shader_parameter/col_ovr_dis_str = 0.0
 shader_parameter/polarize_opacity_noise = true
 shader_parameter/animate_opacity_noise = Vector3(0, 0, -1)
 shader_parameter/scale_opacity_noise = Vector2(1, 0.2)
-shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ot7aj")
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_j8aok")
 
-[sub_resource type="Gradient" id="Gradient_3t6bd"]
+[sub_resource type="Gradient" id="Gradient_ickkg"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_op2kc"]
-gradient = SubResource("Gradient_3t6bd")
+gradient = SubResource("Gradient_ickkg")
 width = 800
 height = 400
 
 [sub_resource type="Curve" id="Curve_21qdy"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cmudy"]
+noise_type = 2
+fractal_type = 3
+fractal_octaves = 4
+fractal_gain = 2.0
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ot7aj"]
+width = 256
+invert = true
+seamless = true
+noise = SubResource("FastNoiseLite_cmudy")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t0pa2"]
 shader = ExtResource("4_dh5bv")
@@ -299,11 +313,11 @@ shader_parameter/mix_str = 1.0
 shader_parameter/rotate_lookup = 0.0
 shader_parameter/chromatic_offset = Projection(1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
 
-[sub_resource type="Gradient" id="Gradient_1x3lv"]
+[sub_resource type="Gradient" id="Gradient_ajayp"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_pbrue"]
-gradient = SubResource("Gradient_1x3lv")
+gradient = SubResource("Gradient_ajayp")
 width = 16
 height = 16
 
@@ -378,8 +392,11 @@ shader_parameter/mix_str = 1.0
 shader_parameter/rotate_lookup = 0.0
 shader_parameter/chromatic_offset = Projection(1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
 
+[sub_resource type="Gradient" id="Gradient_7sbh5"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_i0nhs"]
-gradient = SubResource("Gradient_1x3lv")
+gradient = SubResource("Gradient_7sbh5")
 width = 8
 height = 8
 

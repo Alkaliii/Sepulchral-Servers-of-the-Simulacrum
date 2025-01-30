@@ -23,6 +23,9 @@ func move(monster : system_monster_controller):
 	while true:
 		if !mTween: break
 		if idx >= spd: break
+		if App.get_tree().paused: 
+			await App.process_frame()
+			continue
 		monster.velocity = lerp(monster.velocity,(npos - monster.global_position).normalized() * roam_speeddd,0.5)
 		monster.move_and_slide()
 		await App.process_frame()

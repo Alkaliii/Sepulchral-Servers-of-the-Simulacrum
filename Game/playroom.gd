@@ -155,6 +155,7 @@ func register_rpc():
 	Playroom.RPC.register("cam_target",bridgeToJS(cam_target))
 	Playroom.RPC.register("cam_trauma",bridgeToJS(cam_trauma))
 	Playroom.RPC.register("player_knockback",bridgeToJS(player_knockback))
+	Playroom.RPC.register("player_aid",bridgeToJS(player_aid))
 	Playroom.RPC.register("dmg_boss",bridgeToJS(dmg_boss))
 	Playroom.RPC.register("hide_boss",bridgeToJS(hide_boss))
 
@@ -188,6 +189,60 @@ func dmg_boss(data):
 	var mnstr = get_tree().get_first_node_in_group("monster")
 	if !mnstr: return
 	mnstr.remote_damage(unpacked_data[0],unpacked_data[1])
+
+func player_aid(data):
+	if typeof(data) != TYPE_ARRAY: 
+		printerr("Bad Data in player_aid()")
+		return
+	if !data.size() > 0:
+		printerr("No Data in player_aid()")
+		return
+	
+	#id,aid_type,source,additional
+	var unpacked_data = str_to_var(data[0])
+	if PLAYER and PLAYER.id != unpacked_data[0]:
+		printerr("Not for me! player_aid call ignored")
+		return
+	
+	var plyr = get_tree().get_first_node_in_group("player")
+	if !plyr: return
+	
+	if unpacked_data.size() < 3:
+		printerr("not enough data")
+		print_debug("here: ",unpacked_data)
+		return
+	match unpacked_data[1]:
+		0: #HEAL
+			if plyr.status and plyr.status.current_effects.has(system_status.effects.SICK): return
+			if unpacked_data.size() < 4:
+				printerr("not enough data")
+				print_debug("here: ",unpacked_data)
+				return
+			plyr.on_heal(unpacked_data[3])
+			SystemUI.push_lateral({
+			"speaker":"(+)",
+			"message":str("[color=b4ba46]",unpacked_data[2],"[/color] healed you!"),
+			"type":LateralNotification.nt.SYSTEM,
+			"duration":4.0
+			})
+		1: #CLEAR
+			plyr.on_clear()
+			SystemUI.push_lateral({
+			"speaker":"(+)",
+			"message":str("[color=b4ba46]",unpacked_data[2],"[/color] cured you!"),
+			"type":LateralNotification.nt.SYSTEM,
+			"duration":4.0
+			})
+		2: #GUARD
+			if plyr.status and plyr.status.current_effects.has(system_status.effects.SICK): return
+			plyr.on_guard()
+			SystemUI.push_lateral({
+			"speaker":"(+)",
+			"message":str("[color=b4ba46]",unpacked_data[2],"[/color] guarded you!"),
+			"type":LateralNotification.nt.SYSTEM,
+			"duration":4.0
+			})
+
 
 func player_knockback(data):
 	#data = var_to_str([id,Vector2,float*])
@@ -304,6 +359,15 @@ func game_state_update(data):
 				return
 			var play_music_data = JSON.parse_string(unpacked_data[1])
 			SystemAudio.play_music(play_music_data["sound_path"],str_to_var(play_music_data["fade"]))
+		App.gsu.REMOTE_MUSIC_INTRO:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			if typeof(unpacked_data[1]) != TYPE_STRING: 
+				print_debug("Wrong Type")
+				return
+			var play_intro_data = JSON.parse_string(unpacked_data[1])
+			SystemAudio.play_intro_then_loop(play_intro_data["intro_sound_path"],play_intro_data["loop_sound_path"],str_to_var(play_intro_data["fade_in"]))
 		App.gsu.REMOTE_STOP_MUSIC:
 			if unpacked_data.size() < 2: 
 				print_debug("Not enough data")
@@ -320,7 +384,7 @@ func game_state_update(data):
 				print_debug("Wrong Type")
 				return
 			var play_data = JSON.parse_string(unpacked_data[1])
-			SystemAudio.play(play_data["sound_path"],play_data["volume"],play_data["bus"])
+			SystemAudio.play(play_data["sound_path"],play_data["volume"],play_data["bus"],play_data["pitch"])
 		App.gsu.REMOTE_LATERAL:
 			if unpacked_data.size() < 2: 
 				print_debug("Not enough data")

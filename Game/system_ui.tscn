@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://t6xwa6fxikjk"]
+[gd_scene load_steps=48 format=3 uid="uid://t6xwa6fxikjk"]
 
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_d5ssp"]
 [ext_resource type="Script" path="res://Game/system_ui.gd" id="1_lreom"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://brxo7jbspxwqt" path="res://Game/UI/performance_screen.tscn" id="8_uiocd"]
 [ext_resource type="PackedScene" uid="uid://betkr5wshs2u4" path="res://Game/UI/level_select.tscn" id="10_8wywk"]
 [ext_resource type="PackedScene" uid="uid://cfovd0vcbsc4m" path="res://Game/UI/settings_pause.tscn" id="10_urdwa"]
+[ext_resource type="Shader" path="res://Assets/Shaders/Blur.gdshader" id="13_nfpu2"]
 
 [sub_resource type="Gradient" id="Gradient_q0prr"]
 offsets = PackedFloat32Array(0, 0.6, 0.8, 1)
@@ -229,6 +230,14 @@ shader_parameter/roll_line_amount = 0.0
 shader_parameter/roll_speed = 1.0
 shader_parameter/scan_line_strength = -8.0
 shader_parameter/pixel_strength = -2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uko73"]
+resource_local_to_scene = true
+shader = ExtResource("13_nfpu2")
+shader_parameter/blur_type = 0
+shader_parameter/blur_amount = 16
+shader_parameter/blur_radius = 1.0
+shader_parameter/blur_direction = Vector2(1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_4s2lq"]
 
@@ -678,6 +687,18 @@ mouse_filter = 2
 [node name="CRT" type="ColorRect" parent="effects"]
 visible = false
 material = SubResource("ShaderMaterial_45nge")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Blur" type="ColorRect" parent="effects"]
+visible = false
+show_behind_parent = true
+top_level = true
+material = SubResource("ShaderMaterial_uko73")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

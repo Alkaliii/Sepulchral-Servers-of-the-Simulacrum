@@ -21,7 +21,7 @@ var select_idx : int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	focus_idx()
+	focus_idx(false,false)
 	upbtn.pressed.connect(_on_up_pressed)
 	downbtn.pressed.connect(_on_down_pressed)
 	startbtn.pressed.connect(_on_start_pressed)
@@ -67,12 +67,21 @@ func _process(_delta):
 		if Input.is_action_just_pressed("MUP"): _on_up_pressed()
 		if Input.is_action_just_pressed("MDOWN"): _on_down_pressed()
 
+func focus_sfx():
+	#for i in randi_range(3,4):
+		#var sound = [SoundLib.sound_files.IMPACT_A,SoundLib.sound_files.IMPACT_B]
+		#SystemAudio.play(SoundLib.get_file_sfx(sound.pick_random()),0.5,"sfx",randf_range(0.9,1.1))
+		#await App.time_delay(randf_range(0.1,0.2))
+	SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.DOOR),0.5,"sfx",randf_range(0.9,1.1))
+
 var ftw : Tween
-func focus_idx(reverse_list = false):
+func focus_idx(reverse_list := false, with_sound := true):
 	if ftw: ftw.kill()
 	ftw = create_tween()
 	
 	floorlbl.text = str("[code]floor-[/code][wave]",select_idx)
+	if with_sound: focus_sfx()
+	
 	ftw.tween_property(description,"visible_ratio",0.0,0.125).set_ease(Tween.EASE_IN_OUT)
 	var loop : Array = floor_icns.duplicate()
 	if reverse_list: loop.reverse()
@@ -109,6 +118,8 @@ func _on_start_pressed():
 	#map selection is client side but after the host makes a selection clients have 30seconds to do the same
 	#If they don't press START, the game will choose for them at the end of the 30 seconds
 	#system is democratic with no bias (other than time pressure)
+	
+	SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.DOOR_SHUT),1.0)
 	
 	appear(false)
 	if Plyrm.connected:

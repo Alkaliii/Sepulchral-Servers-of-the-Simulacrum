@@ -53,7 +53,7 @@ enum j {
 	## Left click will heal
 	ORACLE, #Saint + Saint
 	
-	#Secret Jobs!?
+	#Weird Jobs!?
 	LEGIONNAIRE, #Abnormal Knight
 	ARCANE_MYSTIC, #Abnormal Mage
 	OCCULT_PSYCHIC, #Abnormal Saint
@@ -68,7 +68,6 @@ enum j {
 @export var can_guard : bool = false
 @export var can_clear : bool = false
 @export var can_heal : bool = false
-@export var can_parry : bool = false #click attack to...?
 @export var need_sight : bool = false #clicks only validate if a raycast can be drawn from player to subject
 
 var m_pc : int = 3
@@ -82,6 +81,10 @@ var final_health : int
 var final_base_dmg : int
 
 func setup():
+	can_guard = false
+	can_clear = false
+	can_heal = false
+	need_sight = false
 	match JOB:
 		j.KNIGHT:
 			m_pc = 6
@@ -145,9 +148,25 @@ func setup():
 			base_dmg = 2
 			can_heal = true
 			need_sight = true
-		j.LEGIONNAIRE: pass
-		j.ARCANE_MYSTIC: pass
-		j.OCCULT_PSYCHIC: pass
+		j.LEGIONNAIRE:
+			m_pc = 6
+			pc_c = 1
+			health = 8
+			base_dmg = 2
+			can_clear = true
+			need_sight = true
+		j.ARCANE_MYSTIC:
+			m_pc = 3
+			pc_c = 3
+			health = 5
+			base_dmg = 3
+			can_heal = true
+		j.OCCULT_PSYCHIC:
+			m_pc = 4
+			pc_c = 2
+			health = 4
+			base_dmg = 4
+			can_guard = true
 	
 	final_m_pc = m_pc + additional_max_pcache
 	final_pc_c = pc_c + additional_pcache_charge_amt

@@ -37,11 +37,27 @@ func _input_event(viewport, event, shape_idx):
 		if Input.is_action_just_pressed("ACTIONB"):
 			exit = false
 			repeat()
+			#sfx()
 		if Input.is_action_pressed("ACTIONC"):
 			if player_callback(1): 
 				print("ACTION C Intercepted.")
+				heavy_sfx()
 				pseudo_control.accept_event()
 				App.clicks_made += 1
+
+const hit_sounds = [SoundLib.sound_files.IMPACT_A,SoundLib.sound_files.IMPACT_B]
+func sfx():
+	var sounds = hit_sounds
+	var pitch = randf_range(0.9,1.1)
+	
+	SystemAudio.play(SoundLib.get_file_sfx(sounds.pick_random()),0.5,"sfx",pitch)
+
+const h_hit_sounds = [SoundLib.sound_files.ATTACK_LIGHTNING_A,SoundLib.sound_files.ATTACK_FIRE_A,SoundLib.sound_files.ATTACK_FIRE_B]
+func heavy_sfx():
+	var sounds = h_hit_sounds
+	var pitch = randf_range(0.9,1.1)
+	
+	SystemAudio.play(SoundLib.get_file_sfx(sounds.pick_random()),0.8,"sfx",pitch)
 
 func repeat():
 	var increment := 0.5
@@ -52,6 +68,7 @@ func repeat():
 			increment = 0.0
 			if player_callback(0): 
 				print("ACTION B Intercepted.")
+				sfx()
 				pseudo_control.accept_event()
 				App.clicks_made += 1
 		if !Input.is_action_pressed("ACTIONB"): break
@@ -74,12 +91,15 @@ func determine_and_signal_outcome(p : system_controller, c : int) -> bool:
 		hdf.UNASSIGNED: pass
 		hdf.PLAYER:
 			if c != 0: return false
+			if p.status and p.status.current_effects.has(system_status.effects.MUTE): return false
+			
+			if p.job and p.job.can_clear: CLEARED.emit() #free
+			if p.job and p.job.can_guard: GUARDED.emit() #free
 			if p.job and p.job.can_heal:
 				if !p.discharge(): return false 
 				delta = p.calc_heal()
 				HEALED.emit(delta)
-			if p.job and p.job.can_clear: CLEARED.emit() #free
-			if p.job and p.job.can_guard: GUARDED.emit() #free
+				App.healing_performed += delta
 			print("AID! ",delta)
 		hdf.ENEMY:
 			if p.job.need_sight and !p.can_see(sight_subject): return false

@@ -34,10 +34,17 @@ func _ready():
 
 func damage_body(body : Node2D):
 	var dmg_amt = 1
+	var inflict = system_status.effects.NONE
 	#print(body.name)
-	if settings: dmg_amt = settings.dmg
+	if settings: 
+		dmg_amt = settings.dmg
+		inflict = settings.inflict
+		#print("set inflict ", settings.inflict)
 	if body is system_controller:
 		body.on_damage(dmg_amt)
+		if inflict != system_status.effects.NONE:
+			#print("start inflict")
+			body.on_afflict(inflict,[3.0,4.0,5.0].pick_random())
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -135,18 +142,21 @@ func sfx(vol = 1.0):
 	
 	if sp == DamageRadiusSettings.sfx.NONE or [true,false].pick_random(): return
 	
-	var sfx : Array = []
+	var ssfx : Array = []
 	match sp:
 		DamageRadiusSettings.sfx.ACID:
-			sfx.append(SoundLib.sound_files.ATTACK_ACID_A)
-			sfx.append(SoundLib.sound_files.ATTACK_ACID_B)
+			ssfx.append(SoundLib.sound_files.ATTACK_ACID_A)
+			ssfx.append(SoundLib.sound_files.ATTACK_ACID_B)
 		DamageRadiusSettings.sfx.ICE:
-			sfx.append(SoundLib.sound_files.ATTACK_ICE_A)
-			sfx.append(SoundLib.sound_files.ATTACK_ICE_B)
+			ssfx.append(SoundLib.sound_files.ATTACK_ICE_A)
+			ssfx.append(SoundLib.sound_files.ATTACK_ICE_B)
 		DamageRadiusSettings.sfx.LIGHTNING:
-			sfx.append(SoundLib.sound_files.ATTACK_LIGHTNING_A)
-			sfx.append(SoundLib.sound_files.ATTACK_LIGHTNING_B)
-	SystemAudio.play(SoundLib.get_file_sfx(sfx.pick_random()),vol)
+			ssfx.append(SoundLib.sound_files.ATTACK_LIGHTNING_A)
+			ssfx.append(SoundLib.sound_files.ATTACK_LIGHTNING_B)
+		DamageRadiusSettings.sfx.FIRE:
+			ssfx.append(SoundLib.sound_files.ATTACK_FIRE_A)
+			ssfx.append(SoundLib.sound_files.ATTACK_FIRE_B)
+	SystemAudio.play(SoundLib.get_file_sfx(ssfx.pick_random()),vol)
 
 func damage():
 	var dtw : Tween = create_tween()
@@ -187,13 +197,15 @@ func on_fin():
 func destroy():
 	if Engine.is_editor_hint(): return
 	finished.emit(self)
-	get_parent().remove_child(self)
+	if get_parent():
+		get_parent().remove_child(self)
 	queue_free()
 
 func fast_destroy():
 	if Engine.is_editor_hint(): return
 	print("fast destory")
-	get_parent().remove_child(self)
+	if get_parent():
+		get_parent().remove_child(self)
 	queue_free()
 
 func swsp(nv : float): #set warning shader progress

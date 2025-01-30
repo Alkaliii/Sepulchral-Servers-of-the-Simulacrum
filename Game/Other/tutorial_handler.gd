@@ -10,7 +10,7 @@ var tutorial_text = [
 	"help":"Use [color=f2b63d][wave][WASD][/wave][/color] to move around!"},
 	
 	{"obj":"Allocate memory to cache",
-	"help":"Press [color=f2b63d][wave][SPACEBAR][/wave][/color] to dash!"},
+	"help":"While moving, press [color=f2b63d][wave][SPACEBAR][/wave][/color] to dash!"},
 	
 	{"obj":"Attack the mannequin",
 	"help":"After allocating memory, use [color=f2b63d][wave]LEFT CLICK[/wave][/color] to attack!"},
@@ -195,6 +195,13 @@ func next_objective():
 				App.weapon_inventory.append(OLD_STAFF)
 			elif [true,false,false,false].pick_random(): 
 				tutorial_secret()
+			else:
+				SystemUI.push_lateral({
+				"speaker":"(?)",
+				"message":"There might be a secret here...",
+				"type":LateralNotification.nt.BASIC,
+				"duration":4.0
+				})
 			player = get_tree().get_first_node_in_group("player")
 			track_weapon = player.weapon
 			watch_WEAPON = true
