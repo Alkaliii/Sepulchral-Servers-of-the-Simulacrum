@@ -3,4 +3,4 @@ Welcome, this repository contains the source code for my game jam game SSS. A ga
 
 SSS was made using Godot 4 and implements PlayroomKit for online multiplayer. The game was designed by me, but I sourced my music and sound effects from the internet. Since that stuff isn't mine, it wasn't uploaded to the repo. Additionally, I care a tiny bit about the art so I ask that you don't use it. 
 
-All the code in this repo falls under whatever licence I end up setting. I would like to reserve all rights to everything else. Thanks for stopping by!
+All the code in this repo falls under whatever licence I end up setting, or whatever licence it belongs under (some code in this repo was not written by me). I would like to reserve all rights to everything else. Thanks for stopping by!
