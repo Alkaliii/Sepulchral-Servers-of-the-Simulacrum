@@ -27,6 +27,7 @@ func move(monster : system_monster_controller):
 	mTween = monster.create_tween()
 	mTween.tween_property(monster,"global_position",pos,hold)
 	await mTween.finished
+	monster.stare()
 	monster.disappear(false)
 	
 	movement_complete.emit(self)

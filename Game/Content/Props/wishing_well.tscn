@@ -116,6 +116,7 @@ script = ExtResource("1_7et6y")
 modulate = Color(1, 1, 1, 0.498039)
 show_behind_parent = true
 material = SubResource("ShaderMaterial_b5s26")
+emitting = false
 amount = 4
 speed_scale = 0.5
 texture = SubResource("GradientTexture2D_s0hkh")

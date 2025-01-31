@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cnfmh1lfbx1dp"]
+[gd_scene load_steps=22 format=3 uid="uid://cnfmh1lfbx1dp"]
 
 [ext_resource type="Shader" path="res://Assets/Shaders/texture_mask.gdshader" id="1_a2h1r"]
 [ext_resource type="Script" path="res://Game/Content/ArenaEnvironment/AE.gd" id="1_x1wm4"]
@@ -12,7 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://c00cpxbxa7gtp" path="res://Game/Content/Props/crate.tscn" id="9_xagkw"]
 [ext_resource type="PackedScene" uid="uid://cceekg1fvcxi4" path="res://Game/Content/Props/cratestacked.tscn" id="10_1o6ue"]
 [ext_resource type="PackedScene" uid="uid://c1toti3mv16lk" path="res://Game/Content/Props/cratestackedb.tscn" id="11_jquqq"]
-[ext_resource type="PackedScene" uid="uid://cr884onj6cvfe" path="res://Game/Content/Props/wishing_well.tscn" id="13_0n3b4"]
+[ext_resource type="PackedScene" uid="uid://dri5o3mm8e38c" path="res://Game/Content/Props/tall_fence_post.tscn" id="13_10j2t"]
+[ext_resource type="PackedScene" uid="uid://cnupr3rts4py" path="res://Game/Content/Props/fence_post.tscn" id="14_qf6iy"]
+[ext_resource type="PackedScene" uid="uid://beyd0j3xxlehj" path="res://Game/Content/Props/loot_barrel.tscn" id="15_5sdwy"]
+[ext_resource type="PackedScene" uid="uid://cyhffvbddfb6f" path="res://Game/Content/Props/oil_barrel.tscn" id="16_7622e"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_mv8de"]
 noise_type = 3
@@ -4073,5 +4076,38 @@ position = Vector2(-274, 348)
 [node name="CrateB4" parent="." instance=ExtResource("8_kmpa1")]
 position = Vector2(-116, -347)
 
-[node name="WishingWell" parent="." instance=ExtResource("13_0n3b4")]
-position = Vector2(-674, -19)
+[node name="FencePost5" parent="." instance=ExtResource("13_10j2t")]
+position = Vector2(292, -47)
+
+[node name="FencePost6" parent="." instance=ExtResource("14_qf6iy")]
+position = Vector2(-286, -44)
+
+[node name="FencePost7" parent="." instance=ExtResource("14_qf6iy")]
+position = Vector2(233, 150)
+
+[node name="FencePost8" parent="." instance=ExtResource("14_qf6iy")]
+position = Vector2(118, -181)
+
+[node name="FencePost9" parent="." instance=ExtResource("7_rtlif")]
+position = Vector2(196, -220)
+
+[node name="FencePost10" parent="." instance=ExtResource("13_10j2t")]
+position = Vector2(490, 116)
+
+[node name="FencePost11" parent="." instance=ExtResource("13_10j2t")]
+position = Vector2(-155, 172)
+
+[node name="FencePost12" parent="." instance=ExtResource("13_10j2t")]
+position = Vector2(-582, 249)
+
+[node name="Barrel" parent="." instance=ExtResource("15_5sdwy")]
+position = Vector2(-450, 62)
+
+[node name="Barrel2" parent="." instance=ExtResource("15_5sdwy")]
+position = Vector2(434, 92)
+
+[node name="Barrel3" parent="." instance=ExtResource("15_5sdwy")]
+position = Vector2(63, -172)
+
+[node name="OilBarrel" parent="." instance=ExtResource("16_7622e")]
+position = Vector2(-563, 256)

@@ -1,0 +1,214 @@
+[gd_scene load_steps=12 format=3 uid="uid://dqpv64vj40eal"]
+
+[ext_resource type="Script" path="res://Game/UI/title_screen.gd" id="1_63vr5"]
+[ext_resource type="Shader" path="res://Assets/Shaders/bounce.gdshader" id="1_b65uj"]
+[ext_resource type="Texture2D" uid="uid://dpg4bf02vhi15" path="res://Assets/titleLogoA.png" id="2_tx0lu"]
+[ext_resource type="Texture2D" uid="uid://brnr3nifbf58k" path="res://Assets/titleLogoB.png" id="3_xlmr4"]
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="4_drrjm"]
+[ext_resource type="Script" path="res://Game/Schema/Other/Ghost.gd" id="6_4788y"]
+[ext_resource type="Shader" path="res://Assets/Shaders/glitch.gdshader" id="7_1dg58"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fxt0"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ayvhl"]
+shader = ExtResource("1_b65uj")
+shader_parameter/do_abs = false
+shader_parameter/do_quantize = null
+shader_parameter/quantize_to = 1.0
+shader_parameter/sine_amplitude = Vector2(1, 2)
+shader_parameter/sine_speed = Vector2(0, 1)
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_jsal6"]
+script = ExtResource("6_4788y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a66rk"]
+shader = ExtResource("7_1dg58")
+shader_parameter/mask_softness = 1.4
+shader_parameter/mask_threshold = 0.6
+shader_parameter/sort = 0.0
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_63vr5")
+
+[node name="back" type="Panel" parent="."]
+modulate = Color(0.2, 0.2, 0.2, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6fxt0")
+
+[node name="Title" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(0.831373, 0.854902, 0.831373, 1)
+material = SubResource("ShaderMaterial_ayvhl")
+custom_minimum_size = Vector2(243, 48)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -121.5
+offset_top = -240.0
+offset_right = 121.5
+offset_bottom = -192.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_tx0lu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="tileb" type="TextureRect" parent="Title"]
+self_modulate = Color(0.831373, 0.854902, 0.831373, 1)
+custom_minimum_size = Vector2(243, 48)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -81.0
+offset_top = -20.0
+offset_right = 81.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_xlmr4")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="storyText" type="RichTextLabel" parent="."]
+clip_contents = false
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -83.0
+offset_top = 60.0
+offset_right = 83.0
+offset_bottom = 68.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_colors/default_color = Color(0.745098, 0.745098, 0.745098, 1)
+theme_override_fonts/normal_font = ExtResource("4_drrjm")
+theme_override_fonts/bold_font = ExtResource("4_drrjm")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[center]GAUSSGRANDINE PROGRAM PORTAL"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+custom_effects = [SubResource("RichTextEffect_jsal6")]
+visible_characters = 0
+visible_characters_behavior = 1
+visible_ratio = 0.0
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 60
+
+[node name="top" type="Control" parent="MarginContainer"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="click2start" type="RichTextLabel" parent="MarginContainer"]
+modulate = Color(1, 1, 1, 0)
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.745098, 0.745098, 0.745098, 1)
+theme_override_fonts/normal_font = ExtResource("4_drrjm")
+theme_override_fonts/mono_font = ExtResource("4_drrjm")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 15
+bbcode_enabled = true
+text = "[pulse]click to start"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+custom_effects = [SubResource("RichTextEffect_jsal6")]
+visible_characters_behavior = 1
+
+[node name="center" type="Control" parent="MarginContainer"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ClickDetect" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="click2continue" type="RichTextLabel" parent="ClickDetect"]
+visible = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -83.0
+offset_top = -56.0
+offset_right = 83.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_fonts/normal_font = ExtResource("4_drrjm")
+theme_override_fonts/bold_font = ExtResource("4_drrjm")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[center]LEFT CLICK TO CONTINUE
+[color=555]RIGHT CLICK TO SKIP"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+custom_effects = [SubResource("RichTextEffect_jsal6")]
+visible_characters_behavior = 1
+
+[node name="Glitch" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_a66rk")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[connection signal="gui_input" from="ClickDetect" to="." method="_on_click_detect_gui_input"]

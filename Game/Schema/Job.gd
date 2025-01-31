@@ -86,6 +86,11 @@ func setup():
 	can_heal = false
 	need_sight = false
 	match JOB:
+		j.JOBLESS:
+			m_pc = 3
+			pc_c = 1
+			health = 5
+			base_dmg = 2
 		j.KNIGHT:
 			m_pc = 6
 			pc_c = 1
@@ -172,3 +177,91 @@ func setup():
 	final_pc_c = pc_c + additional_pcache_charge_amt
 	final_health = health + additional_health
 	final_base_dmg = base_dmg + additional_damage
+
+static func get_info(key : j) -> Dictionary:
+	var info : Dictionary = {
+		"name": str(j.keys()[key]).replace("_"," "),
+		"desc":"",
+		"bhealth":5,
+		"bdamage":2,
+		"malloc":1,
+		"cache":3,
+	}
+	
+	match key:
+		j.JOBLESS:
+			info.desc = "No dedicated methods or functions."
+		j.KNIGHT:
+			info.bhealth = 7
+			info.bdamage = 3
+			info.malloc = 1
+			info.cache = 6
+			info.desc = "Click on yourself or others to prevent damage!"
+		j.MAGE:
+			info.bhealth = 6
+			info.bdamage = 1
+			info.malloc = 3
+			info.cache = 3
+			info.desc = "Click on yourself or others to cure bad status effects!"
+		j.SAINT:
+			info.bhealth = 4
+			info.bdamage = 1
+			info.malloc = 2
+			info.cache = 4
+			info.desc = "Click on yourself or others to regain health!"
+		j.MAGIC_KNIGHT:
+			info.bhealth = 8
+			info.bdamage = 3
+			info.malloc = 2
+			info.cache = 6
+			info.desc = "Click on yourself or others to cure bad status effects and prevent damage!"
+		j.DIVINE_SAGE:
+			info.bhealth = 8
+			info.bdamage = 2
+			info.malloc = 4
+			info.cache = 4
+			info.desc = "Click on yourself or others to regain health and cure bad status effects!"
+		j.HIGH_PALADIN:
+			info.bhealth = 8
+			info.bdamage = 3
+			info.malloc = 2
+			info.cache = 6
+			info.desc = "Click on yourself or others to regain health and prevent damage!"
+		j.GUARDIAN:
+			info.bhealth = 7
+			info.bdamage = 4
+			info.malloc = 2
+			info.cache = 8
+			info.desc = "Click on yourself or others to prevent damage!"
+		j.SIBYL:
+			info.bhealth = 7
+			info.bdamage = 2
+			info.malloc = 5
+			info.cache = 5
+			info.desc = "Click on yourself or others to cure bad status effects!"
+		j.ORACLE:
+			info.bhealth = 7
+			info.bdamage = 2
+			info.malloc = 3
+			info.cache = 6
+			info.desc = "Click on yourself or others to regain health!"
+		j.LEGIONNAIRE:
+			info.bhealth = 8
+			info.bdamage = 2
+			info.malloc = 1
+			info.cache = 6
+			info.desc = "Click on yourself or others to cure bad status effects!"
+		j.ARCANE_MYSTIC:
+			info.bhealth = 5
+			info.bdamage = 3
+			info.malloc = 3
+			info.cache = 3
+			info.desc = "Click on yourself or others to regain health!"
+		j.OCCULT_PSYCHIC:
+			info.bhealth = 4
+			info.bdamage = 4
+			info.malloc = 2
+			info.cache = 4
+			info.desc = "Click on yourself or others to prevent damage!"
+	
+	return info

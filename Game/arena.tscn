@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://bbaje3tan2k7o"]
+[gd_scene load_steps=13 format=3 uid="uid://bbaje3tan2k7o"]
 
 [ext_resource type="PackedScene" uid="uid://dgyaxcfmcseek" path="res://Game/player.tscn" id="1_f8ne3"]
 [ext_resource type="Script" path="res://Game/arena.gd" id="1_idpkm"]
 [ext_resource type="Script" path="res://Game/Schema/Job.gd" id="3_4dmae"]
-[ext_resource type="PackedScene" uid="uid://cllt8ogsda34d" path="res://Game/scarecrow.tscn" id="5_fd6p6"]
 [ext_resource type="Script" path="res://Game/game_camera.gd" id="6_cmqed"]
 [ext_resource type="PackedScene" uid="uid://cnfmh1lfbx1dp" path="res://Game/Content/ArenaEnvironment/Field.tscn" id="6_j4h3t"]
 [ext_resource type="Script" path="res://Game/Other/disperse_2d.gd" id="8_ff12j"]
@@ -14,7 +13,7 @@
 
 [sub_resource type="Resource" id="Resource_tdh4b"]
 script = ExtResource("3_4dmae")
-JOB = 2
+JOB = 0
 additional_health = 0
 additional_max_pcache = 0
 additional_pcache_charge_amt = 0
@@ -51,8 +50,6 @@ decay = 0.2
 max_offset = Vector2(200, 150)
 noise = SubResource("FastNoiseLite_f7y7t")
 
-[node name="Scarecrow" parent="." instance=ExtResource("5_fd6p6")]
-
 [node name="Envi" parent="." instance=ExtResource("6_j4h3t")]
 
 [node name="Disperse2D" type="Node2D" parent="."]
@@ -66,3 +63,17 @@ node_weights = PackedFloat32Array()
 add_nodes_internally = true
 allow_many = true
 slow_add = true
+
+[node name="spawn_objects" type="Node2D" parent="."]
+
+[node name="SpawnObject" type="Node2D" parent="spawn_objects" groups=["spawn"]]
+position = Vector2(-640, 360)
+
+[node name="SpawnObject2" type="Node2D" parent="spawn_objects" groups=["spawn"]]
+position = Vector2(640, 360)
+
+[node name="SpawnObject3" type="Node2D" parent="spawn_objects" groups=["spawn"]]
+position = Vector2(640, -360)
+
+[node name="SpawnObject4" type="Node2D" parent="spawn_objects" groups=["spawn"]]
+position = Vector2(-640, -360)

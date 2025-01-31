@@ -63,7 +63,7 @@ func repeat():
 	var increment := 0.5
 	while Input.is_action_pressed("ACTIONB") and !Input.is_action_just_released("ACTIONB"):
 		increment += get_process_delta_time()
-		await get_tree().process_frame
+		await get_tree().process_frame #change to App?
 		if increment > 0.5: 
 			increment = 0.0
 			if player_callback(0): 
@@ -72,7 +72,7 @@ func repeat():
 				pseudo_control.accept_event()
 				App.clicks_made += 1
 		if !Input.is_action_pressed("ACTIONB"): break
-		if exit: break
+		if exit or disabled: break
 
 func on_exit():
 	exit = true

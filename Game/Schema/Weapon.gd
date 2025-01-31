@@ -172,3 +172,20 @@ func generate_random():
 	}
 	
 	print(data)
+
+func get_stats_string() -> String:
+	var final = ""
+	
+	if primary_damage != wd.D0:
+		var first_slash = "" if secondary_damage == wd.D0 else "/"
+		final += str(wd.keys()[primary_damage],first_slash).replace("D","")
+	if secondary_damage != wd.D0:
+		var second_slash = "" if tertiary_damage == wd.D0 else "/"
+		final += str(wd.keys()[secondary_damage],second_slash).replace("D","")
+	if tertiary_damage != wd.D0:
+		final += str(wd.keys()[tertiary_damage]).replace("D","")
+	
+	if inflict_status != system_status.effects.NONE:
+		final += "!"
+	
+	return final

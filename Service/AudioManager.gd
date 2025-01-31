@@ -88,7 +88,7 @@ func play_intro_then_loop(intro_sound_path,loop_sound_path,fade_in : Vector2 = V
 				var pos = music_player_b.get_playback_position() + AudioServer.get_time_since_last_mix()
 				#if pos >= (music_player_b.stream.get_length() - 0.5):
 					#break
-				if !music_player_b.stream and music_player_b.stream.resource_path != intro_sound_path:
+				if music_player_b.stream and music_player_b.stream.resource_path != intro_sound_path:
 					return
 				elif kill_tandem: return
 				elif music_player_b.playing != true: break
@@ -98,7 +98,7 @@ func play_intro_then_loop(intro_sound_path,loop_sound_path,fade_in : Vector2 = V
 				var pos = music_player_a.get_playback_position() + AudioServer.get_time_since_last_mix()
 				#if pos >= (music_player_a.stream.get_length() - 0.5):
 					#break
-				if !music_player_a.stream and music_player_a.stream.resource_path != intro_sound_path:
+				if music_player_a.stream and music_player_a.stream.resource_path != intro_sound_path:
 					return
 				elif kill_tandem: return
 				elif music_player_a.playing != true: break
@@ -113,17 +113,17 @@ func play_music(sound_path,fade : Vector2 = Vector2(2.0,2.0)):
 	if music_player_a.playing:
 		cross_to = 1
 		music_player_b.stream = load(sound_path)
-		await App.process_frame() #remove
+		await App.process_frame()
 		music_player_b.play()
 	elif music_player_b.playing:
 		cross_to = 0
 		music_player_a.stream = load(sound_path)
-		await App.process_frame() #remove
+		await App.process_frame()
 		music_player_a.play()
 	else:
 		cross_to = 0
 		music_player_a.stream = load(sound_path)
-		await App.process_frame() #remove
+		await App.process_frame()
 		music_player_a.play()
 	
 	#if mtw: mtw.kill()
@@ -198,7 +198,7 @@ func clean_players():
 		kill.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	#play sound
 	if !queue_sound.is_empty() and !available.is_empty():
 		available[0].stream = load(queue_sound.pop_front())

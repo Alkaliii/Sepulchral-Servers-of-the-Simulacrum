@@ -1,0 +1,295 @@
+[gd_scene load_steps=21 format=3 uid="uid://bky52y5s76k4a"]
+
+[ext_resource type="Script" path="res://Game/UI/config_screen.gd" id="1_3vh1u"]
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_qhfdv"]
+[ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="2_sd8l0"]
+[ext_resource type="Shader" path="res://Assets/Shaders/bounce.gdshader" id="4_yx8vt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nm5o1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l1tct"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qhhfx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cxcjw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vswwm"]
+shader = ExtResource("4_yx8vt")
+shader_parameter/do_abs = false
+shader_parameter/do_quantize = null
+shader_parameter/quantize_to = 1.0
+shader_parameter/sine_amplitude = Vector2(0, 2)
+shader_parameter/sine_speed = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e3206"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w7rbk"]
+content_margin_left = 15.0
+content_margin_top = 0.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_amps5"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a24hi"]
+content_margin_left = 30.0
+content_margin_top = 2.0
+content_margin_right = 30.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lkram"]
+shader = ExtResource("4_yx8vt")
+shader_parameter/do_abs = false
+shader_parameter/do_quantize = null
+shader_parameter/quantize_to = 1.0
+shader_parameter/sine_amplitude = Vector2(0, -2)
+shader_parameter/sine_speed = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hjrjy"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w40xd"]
+content_margin_left = 15.0
+content_margin_top = 0.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_top_left = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oaa2o"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8k78r"]
+content_margin_left = 30.0
+content_margin_top = 2.0
+content_margin_right = 30.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_top_left = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uxrmc"]
+shader = ExtResource("4_yx8vt")
+shader_parameter/do_abs = false
+shader_parameter/do_quantize = null
+shader_parameter/quantize_to = 1.0
+shader_parameter/sine_amplitude = Vector2(0, -2)
+shader_parameter/sine_speed = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r1lww"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.8)
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+
+[node name="ConfigScreen" type="MarginContainer"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+script = ExtResource("1_3vh1u")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxEmpty_nm5o1")
+
+[node name="HeaderVbc" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = -5
+
+[node name="nameSubtitle" type="RichTextLabel" parent="PanelContainer/HeaderVbc"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_fonts/normal_font = ExtResource("1_qhfdv")
+theme_override_fonts/bold_font = ExtResource("1_qhfdv")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "IDENTIFIER:"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="nameInput" type="LineEdit" parent="PanelContainer/HeaderVbc"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/caret_color = Color(0.168627, 0.168627, 0.14902, 1)
+theme_override_colors/font_placeholder_color = Color(0.168627, 0.168627, 0.14902, 1)
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_fonts/font = ExtResource("2_sd8l0")
+theme_override_font_sizes/font_size = 100
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l1tct")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_qhhfx")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_cxcjw")
+placeholder_text = "ARC"
+max_length = 3
+flat = true
+select_all_on_focus = true
+caret_blink = true
+
+[node name="Header" type="RichTextLabel" parent="PanelContainer/HeaderVbc"]
+visible = false
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("2_sd8l0")
+theme_override_fonts/mono_font = ExtResource("1_qhfdv")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "SYSTEM"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="PLAY" type="Button" parent="VBoxContainer/HBoxContainer"]
+material = SubResource("ShaderMaterial_vswwm")
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_qhfdv")
+theme_override_styles/focus = SubResource("StyleBoxFlat_e3206")
+theme_override_styles/hover = SubResource("StyleBoxFlat_w7rbk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_amps5")
+theme_override_styles/normal = SubResource("StyleBoxFlat_a24hi")
+text = "PLAY"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="MULTIPLAYER" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+material = SubResource("ShaderMaterial_lkram")
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_qhfdv")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hjrjy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_w40xd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oaa2o")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8k78r")
+text = "MULTIPLAYER"
+
+[node name="roomInput" type="LineEdit" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+material = SubResource("ShaderMaterial_uxrmc")
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_qhfdv")
+theme_override_styles/focus = SubResource("StyleBoxFlat_r1lww")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_r1lww")
+theme_override_styles/normal = SubResource("StyleBoxFlat_r1lww")
+placeholder_text = "ROOM"
+alignment = 1
+max_length = 24
+expand_to_text_length = true
+caret_blink = true
+
+[node name="Subtitle" type="RichTextLabel" parent="VBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/default_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_fonts/normal_font = ExtResource("1_qhfdv")
+theme_override_fonts/bold_font = ExtResource("1_qhfdv")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "PROGRAM CONFIGURATION"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="ggoSubtitle" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_colors/default_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_fonts/normal_font = ExtResource("1_qhfdv")
+theme_override_fonts/bold_font = ExtResource("1_qhfdv")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[font_size=9]SANDBOX QUARANTINE[/font_size] / GAUSSGRANDINE ONLINE"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/PLAY" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/MULTIPLAYER" to="." method="_on_multiplayer_pressed"]

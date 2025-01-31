@@ -13,13 +13,13 @@ var tutorial_text = [
 	"help":"While moving, press [color=f2b63d][wave][SPACEBAR][/wave][/color] to dash!"},
 	
 	{"obj":"Attack the mannequin",
-	"help":"After allocating memory, use [color=f2b63d][wave]LEFT CLICK[/wave][/color] to attack!"},
+	"help":"With memory in [color=f2b63d][wave]cache[/wave][/color], use [color=f2b63d][wave]LEFT CLICK[/wave][/color] to attack!"}, #mention yellow
 	
 	{"obj":"Overclock your hardware",
 	"help":"Hold [color=f2b63d][wave]RIGHT CLICK[/wave][/color] and draw a circle around yourself!"},
 	
 	{"obj":"Perform a heavy attack",
-	"help":"Use [color=f2b63d][wave]RIGHT CLICK[/wave][/color] after overclocking to heavy attack!"},
+	"help":"With memory in [color=f2b63d][wave]cache[/wave][/color] and [color=f2b63d][wave]RPM[/wave][/color], use [color=f2b63d][wave]RIGHT CLICK[/wave][/color] to heavy attack!"},
 	
 	{"obj":"Equip a weapon",
 	"help":"Press [color=f2b63d][wave]ONE [1][/wave][/color] to access your inventory!"},
@@ -65,7 +65,7 @@ func check_skip(input : String):
 	else: track_input.clear()
 	if track_input == skip_code:
 		complete_tutorial()
-		SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_D))
+		#SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_D),0.5)
 		SystemUI.push_lateral({
 		"speaker":"(!)",
 		"message":"You found a secret!",
@@ -214,7 +214,7 @@ func complete_tutorial():
 	await objective_ui.hide_obj()
 	clear_progress()
 	App.tutorial_end.emit()
-	SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_D))
+	SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_D),0.3)
 	SystemUI.push_lateral({
 	"speaker":"nme",
 	"message":"Tutorial Complete!",
@@ -232,7 +232,7 @@ func complete_tutorial():
 	SystemUI.open_level_select(true)
 
 func tutorial_secret():
-	SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_D))
+	SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_D),0.5)
 	SystemUI.push_lateral({
 	"speaker":"(!)",
 	"message":"You found a secret!",

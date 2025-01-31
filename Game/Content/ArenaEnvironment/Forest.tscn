@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://48vgojxd3v74"]
+[gd_scene load_steps=24 format=3 uid="uid://48vgojxd3v74"]
 
 [ext_resource type="Script" path="res://Game/Content/ArenaEnvironment/AE.gd" id="1_7pjwk"]
 [ext_resource type="Shader" path="res://Assets/Shaders/texture_mask.gdshader" id="2_78wnb"]
@@ -12,9 +12,12 @@
 [ext_resource type="PackedScene" uid="uid://c00cpxbxa7gtp" path="res://Game/Content/Props/crate.tscn" id="10_cf3mf"]
 [ext_resource type="PackedScene" uid="uid://cceekg1fvcxi4" path="res://Game/Content/Props/cratestacked.tscn" id="11_dksa3"]
 [ext_resource type="PackedScene" uid="uid://c1toti3mv16lk" path="res://Game/Content/Props/cratestackedb.tscn" id="12_ijp62"]
-[ext_resource type="PackedScene" uid="uid://cr884onj6cvfe" path="res://Game/Content/Props/wishing_well.tscn" id="13_0eotn"]
 [ext_resource type="PackedScene" uid="uid://c1dpiw32iyw1j" path="res://Game/Content/Props/tree.tscn" id="13_rxjsy"]
 [ext_resource type="PackedScene" uid="uid://dbedxbo260fw1" path="res://Game/Content/Props/short_tree.tscn" id="14_wiijn"]
+[ext_resource type="PackedScene" uid="uid://dri5o3mm8e38c" path="res://Game/Content/Props/tall_fence_post.tscn" id="15_gxq2y"]
+[ext_resource type="PackedScene" uid="uid://cnupr3rts4py" path="res://Game/Content/Props/fence_post.tscn" id="16_ftbuu"]
+[ext_resource type="PackedScene" uid="uid://beyd0j3xxlehj" path="res://Game/Content/Props/loot_barrel.tscn" id="17_5uosc"]
+[ext_resource type="PackedScene" uid="uid://hmgcaj0xyx0o" path="res://Game/Content/Props/barrel.tscn" id="18_ad08a"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_knqx4"]
 noise_type = 3
@@ -6009,9 +6012,6 @@ position = Vector2(-274, 348)
 [node name="CrateB4" parent="." instance=ExtResource("9_12p56")]
 position = Vector2(-116, -347)
 
-[node name="WishingWell" parent="." instance=ExtResource("13_0eotn")]
-position = Vector2(111, -342)
-
 [node name="Tree" parent="." instance=ExtResource("13_rxjsy")]
 position = Vector2(-969, -40)
 
@@ -6078,3 +6078,33 @@ position = Vector2(581, 56)
 [node name="FencePost3" parent="." instance=ExtResource("8_s32pq")]
 position = Vector2(451, -63)
 scale = Vector2(-1, 1)
+
+[node name="FencePost4" parent="." instance=ExtResource("15_gxq2y")]
+position = Vector2(276, -352)
+
+[node name="FencePost5" parent="." instance=ExtResource("15_gxq2y")]
+position = Vector2(299, 49)
+
+[node name="FencePost6" parent="." instance=ExtResource("16_ftbuu")]
+position = Vector2(199, -126)
+
+[node name="FencePost7" parent="." instance=ExtResource("16_ftbuu")]
+position = Vector2(-991, 82)
+
+[node name="FencePost8" parent="." instance=ExtResource("15_gxq2y")]
+position = Vector2(-60, 334)
+
+[node name="LootBarrel" parent="." instance=ExtResource("17_5uosc")]
+position = Vector2(-228, -152)
+
+[node name="LootBarrel2" parent="." instance=ExtResource("17_5uosc")]
+position = Vector2(-664, -153)
+
+[node name="LootBarrel3" parent="." instance=ExtResource("17_5uosc")]
+position = Vector2(533, -222)
+
+[node name="Barrel" parent="." instance=ExtResource("18_ad08a")]
+position = Vector2(-495, 199)
+
+[node name="Barrel2" parent="." instance=ExtResource("18_ad08a")]
+position = Vector2(-80, 327)

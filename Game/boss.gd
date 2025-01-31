@@ -43,7 +43,7 @@ func _ready():
 	
 	hit_detector.disabled = true
 	add_to_group("monster")
-	monster_data.status.setup(App.determine_boss_health())
+	monster_data.status.setup(App.determine_boss_health(monster_data.health_mod,monster_data.clamp_health))
 	#healthbar.max_value = monster_data.base_health
 	#healthbar.value = monster_data.status.health
 	hit_detector.DAMAGED.connect(on_damage)
@@ -115,7 +115,15 @@ func change_phase(new_phase : int = -1):
 	print("CHANGING PHASE!"," RANDOM" if new_phase == -1 else str(new_phase))
 	var phs : Phase
 	if new_phase and new_phase != -1: phs = phases[new_phase]
-	else: phs = phases.pick_random()
+	else: 
+		var pick : Array[Phase] = []
+		for p in phases:
+			match p.context_exclusive:
+				Phase.e.NORMAL when !halfway_dead: pick.append(p)
+				Phase.e.HALFWAY when halfway_dead: pick.append(p)
+				Phase.e.BOTH: pick.append(p)
+		if pick.is_empty(): pick.append(phases[0])
+		phs = pick.pick_random()
 	
 	start_phase(phs)
 
@@ -344,6 +352,9 @@ func _process(delta):
 		
 		remote_drag()
 		var pos = Vector2(data.pos_x,data.pos_y)
+		var rsd = str_to_var(data.stare_dir)
+		if stare_dir != rsd:
+			stare(rsd)
 		create_tween().tween_property(self,"global_position",pos,0.1).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	else:
 		if !monster_data.status.current_effects.is_empty():
@@ -374,6 +385,7 @@ func sync_state():
 	var state = {
 		"pos_x":global_position.x,
 		"pos_y":global_position.y,
+		"stare_dir":var_to_str(stare_dir)
 		#"on_cooldown": !(dash_cooldown <= 0.0),
 		#"direction":var_to_str(DIRECTION)
 	}
@@ -438,6 +450,18 @@ func flash_vfx(hold_frames : int = 10):
 	for i in hold_frames:
 		await App.process_frame()
 	boss_sprite.material.set_shader_parameter("active",false)
+
+var stare_dir : Vector2 = Vector2.ZERO
+func stare(dir : Vector2 = Vector2.ZERO):
+	stare_dir = dir
+	print("stare ",dir)
+	if dir == Vector2.ZERO:
+		boss_sprite.flip_h = [true,false].pick_random()
+		print("rand flip")
+		return
+	if dir.x < 0.0: 
+		boss_sprite.flip_h = false
+	else: boss_sprite.flip_h = true
 
 #func set_behaviour_time(new_dura : float):
 	#behaviour_time_elapse = 0.0

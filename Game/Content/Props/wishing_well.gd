@@ -16,8 +16,35 @@ var player : system_controller
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if Plyrm.connected: 
+		Plyrm.PLAYER.state.setState("pMapSelect",false)
+		Plyrm.PLAYER.state.setState("pREADY",false)
+	
+	create_tween().tween_property(self,"modulate:a",1.0,0.5).set_ease(Tween.EASE_IN_OUT).set_delay(1.0)
+	App.can_job_change = true
+	hit_detector.disabled = true
+	add_to_group("monster")
 	hit_detector.CLICKED.connect(on_click)
 	pull_vfx.emitting = true
+	
+	await App.time_delay(3.0)
+	pull_vfx.emitting = true
+	hit_detector.disabled = false
+	SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.LEVEL_SKYLIGHT))
+	SystemAudio.play_music(SoundLib.get_file(SoundLib.music_files.NIGHTTIME))
+	
+	#"Press [color=f2b63d][wave]ONE [1][/wave][/color] to access your inventory!"
+	SystemUI.push_lateral({
+	"speaker":"s",
+	"message":"You can change your job here.",
+	"type":LateralNotification.nt.SYSTEM
+	})
+	
+	SystemUI.push_lateral({
+	"speaker":"s",
+	"message":"Press [color=f2b63d][wave]ONE [1][/wave][/color] to do so!",
+	"type":LateralNotification.nt.SYSTEM
+	})
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -60,9 +87,9 @@ func new_job():
 	var ana = "an" if system_job.j.keys()[select][0] in ["a","e","i","o","u"] else "a"
 	
 	SystemUI.push_lateral({
-	"speaker":"nme",
+	"speaker":"(!)",
 	"message":str("You became ",ana," [color=88ffcc]",str(system_job.j.keys()[select]).replace("_"," "),"!"),
-	"type":LateralNotification.nt.SYSTEM,
+	"type":LateralNotification.nt.SPECIAL,
 	"duration":4.0
 	})
 	SystemUI.sync_lateral({
@@ -75,9 +102,9 @@ func max_charge_up():
 	player.job.additional_max_pcache += 1
 	player.set_job()
 	SystemUI.push_lateral({
-	"speaker":"nme",
+	"speaker":"(!)",
 	"message":str("~max cache increased!"),
-	"type":LateralNotification.nt.SYSTEM,
+	"type":LateralNotification.nt.SPECIAL,
 	"duration":4.0
 	})
 
@@ -85,9 +112,9 @@ func charge_up():
 	player.job.additional_pcache_charge_amt += 1
 	player.set_job()
 	SystemUI.push_lateral({
-	"speaker":"nme",
+	"speaker":"(!)",
 	"message":str("~malloc size increased!"),
-	"type":LateralNotification.nt.SYSTEM,
+	"type":LateralNotification.nt.SPECIAL,
 	"duration":4.0
 	})
 
@@ -99,9 +126,9 @@ func health_up():
 	player.job.additional_health += increase
 	player.set_job()
 	SystemUI.push_lateral({
-	"speaker":"nme",
+	"speaker":"(!)",
 	"message":str("~health increased! (+",increase,")"),
-	"type":LateralNotification.nt.SYSTEM,
+	"type":LateralNotification.nt.SPECIAL,
 	"duration":4.0
 	})
 
@@ -111,30 +138,41 @@ func damage_up():
 	player.job.additional_damage += increase
 	player.set_job()
 	SystemUI.push_lateral({
-	"speaker":"nme",
+	"speaker":"(!)",
 	"message":str("~damage increased! (+",increase,")"),
-	"type":LateralNotification.nt.SYSTEM,
+	"type":LateralNotification.nt.SPECIAL,
 	"duration":4.0
 	})
 
 func nothing_happened():
 	SystemUI.push_lateral({
-	"speaker":"nme",
+	"speaker":"(!)",
 	"message":str("nothing seemed to happen"),
 	"type":LateralNotification.nt.SYSTEM,
 	"duration":4.0
 	})
 
+func sfx():
+	var sound = [SoundLib.sound_files.NOTIFICATION_E,SoundLib.sound_files.NOTIFICATION_F]
+	SystemAudio.play(SoundLib.get_file_sfx(sound.pick_random()))
+
 func on_click():
-	if clicked: return
+	if clicked:
+		App.can_job_change = false
+		hit_detector.disabled = true
+		await App.time_delay(0.25)
+		SystemUI.open_level_select(true)
+		return
 	player = get_tree().get_first_node_in_group("player_persistant")
 	clicked = true
 	pull_vfx.emitting = false
 	
+	var rand = RandomNumberGenerator.new()
+	var pick = rand.rand_weighted(weights)
+	if pick < 5: sfx()
 	await blurry()
 	
-	var rand = RandomNumberGenerator.new()
-	match rand.rand_weighted(weights):
+	match pick:
 		0: #Job Change
 			await new_job()
 			starburst.emitting = true
@@ -154,3 +192,11 @@ func on_click():
 			nothing_happened()
 		_: #Nothing again
 			nothing_happened()
+	
+	await App.time_delay(0.5)
+	SystemUI.push_lateral({
+		"speaker":"nme",
+		"message":str("click again to continue"),
+		"type":LateralNotification.nt.SYSTEM,
+		"duration":4.0
+	})

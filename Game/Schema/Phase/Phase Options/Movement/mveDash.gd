@@ -24,7 +24,14 @@ func move(monster : system_monster_controller):
 	var spd = (monster.global_position - npos).length() / dash_speed
 	var initpos = monster.global_position
 	
-	await App.time_delay(0.25 if monster.halfway_dead else 0.5) #cut in half?
+	SystemUI.sync_and_push_lateral({
+		"speaker":"nme",
+		"message":"Incoming!",
+		"type":LateralNotification.nt.DANGER,
+		"duration":2.0
+		})
+	await App.time_delay(0.125 if monster.halfway_dead else 0.25) #cut in half?
+	monster.stare(npos)
 	
 	mTween = monster.create_tween()
 	mTween.tween_property(monster,"global_position",npos,spd).set_ease(move_ease).set_trans(move_trans)

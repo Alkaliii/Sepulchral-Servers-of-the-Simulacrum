@@ -1,0 +1,216 @@
+[gd_scene load_steps=19 format=3 uid="uid://pylifl0rt476"]
+
+[ext_resource type="Shader" path="res://Assets/Shaders/soko.gdshader" id="1_f5pv1"]
+[ext_resource type="Script" path="res://Game/UI/job_select.gd" id="1_rufhv"]
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_w5l70"]
+[ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="2_xbt14"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_efnf2"]
+
+[sub_resource type="Gradient" id="Gradient_nws2d"]
+colors = PackedColorArray(0.168627, 0.168627, 0.14902, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vbwt6"]
+gradient = SubResource("Gradient_nws2d")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rqqsu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gftlq"]
+shader = ExtResource("1_f5pv1")
+shader_parameter/normal_offset = 1.5
+shader_parameter/time_influence = 3.0
+shader_parameter/y_div = 2.87
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5paq4"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rigl8"]
+content_margin_left = 8.0
+content_margin_top = 13.0
+content_margin_right = 8.0
+content_margin_bottom = 10.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d7fsd"]
+content_margin_left = 10.0
+content_margin_top = 15.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2jtsk"]
+content_margin_left = 10.0
+content_margin_top = 15.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ymo6e"]
+shader = ExtResource("1_f5pv1")
+shader_parameter/normal_offset = 1.5
+shader_parameter/time_influence = 3.0
+shader_parameter/y_div = 2.87
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lhs3r"]
+content_margin_left = 15.0
+content_margin_top = 2.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_235rk"]
+content_margin_left = 8.0
+content_margin_top = 15.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 0.784314)
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qk3ar"]
+content_margin_left = 10.0
+content_margin_top = 15.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yfp06"]
+content_margin_left = 10.0
+content_margin_top = 15.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[node name="JobSelect" type="PanelContainer"]
+custom_minimum_size = Vector2(340, 0)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_efnf2")
+script = ExtResource("1_rufhv")
+
+[node name="background" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.588235)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_vbwt6")
+expand_mode = 1
+
+[node name="main" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="info" type="PanelContainer" parent="main"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rqqsu")
+
+[node name="words" type="VBoxContainer" parent="main/info"]
+layout_mode = 2
+
+[node name="Header" type="RichTextLabel" parent="main/info/words"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("2_xbt14")
+theme_override_fonts/mono_font = ExtResource("1_w5l70")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[wave]Occult PSYCHIC"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[node name="Subtitle" type="RichTextLabel" parent="main/info/words"]
+clip_contents = false
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("1_w5l70")
+theme_override_fonts/bold_font = ExtResource("1_w5l70")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[right]Click on yourself others to regain health!"
+fit_content = true
+scroll_active = false
+
+[node name="Stats" type="RichTextLabel" parent="main/info/words"]
+clip_contents = false
+layout_mode = 2
+theme_override_colors/default_color = Color(0.745098, 0.745098, 0.745098, 1)
+theme_override_fonts/normal_font = ExtResource("1_w5l70")
+theme_override_fonts/bold_font = ExtResource("1_w5l70")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[right]bHP: 3 / bDMG: 3 / malloc: 3 / cache: 3"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="spacer" type="Control" parent="main"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Selector" type="VBoxContainer" parent="main"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="UP" type="Button" parent="main/Selector"]
+material = SubResource("ShaderMaterial_gftlq")
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("1_w5l70")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5paq4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_rigl8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_d7fsd")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2jtsk")
+text = "+"
+
+[node name="DOWN" type="Button" parent="main/Selector"]
+material = SubResource("ShaderMaterial_ymo6e")
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("1_w5l70")
+theme_override_styles/focus = SubResource("StyleBoxFlat_lhs3r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_235rk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qk3ar")
+theme_override_styles/normal = SubResource("StyleBoxFlat_yfp06")
+text = "-"
+
+[connection signal="pressed" from="main/Selector/UP" to="." method="_on_up_pressed"]
+[connection signal="pressed" from="main/Selector/DOWN" to="." method="_on_down_pressed"]

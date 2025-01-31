@@ -3,7 +3,8 @@ class_name system_monster
 
 @export var stitle : String = "vanguard of observation"
 @export var name : String = "System Unit Test"
-@export var base_health : int = 100
+@export var health_mod : float = 1.0
+@export var clamp_health : int = 0 #no clamp on 0
 @export var status : system_status
 @export var normal_music : SoundLib.music_files = SoundLib.music_files.BATTLE_DAWN
 @export var halfway_music : SoundLib.music_files = SoundLib.music_files.BATTLE_KANNAGI

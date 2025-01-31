@@ -59,14 +59,25 @@ enum ord {
 	WAIT, #waits
 }
 
+enum e { #phase exclusivity
+	NORMAL,
+	HALFWAY,
+	BOTH,
+	NEVER_RAND #won't be picked randomly ever (has to be picked through a set
+}
+
+@export var context_exclusive : e = e.BOTH
 @export var schedule : Array[ord] = [ord.MOVE,ord.SPECIAL,ord.SUB_ATTACK,ord.ATTACK,ord.WAIT]
+@export_subgroup("Heavy React")
 @export var on_heavy : r = r.NONE
-@export var on_end : r = r.NONE #will repeat
-@export var chance_to_stop : float = 0
 ## on heavy set phase idx
 @export var ohspi : int = -1
+@export_subgroup("End React")
+@export var on_end : r = r.NONE #will repeat
 ## on end set phase idx
 @export var oespi : int = -1
+@export var chance_to_stop : float = 0
+@export_subgroup("")
 @export var wait_range : Vector2 = Vector2(0.5,2.0)
 
 @export var MOVEMENT_OPTIONS : Array[phaseMovementOption] = []

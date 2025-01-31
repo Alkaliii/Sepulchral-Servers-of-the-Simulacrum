@@ -34,11 +34,14 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 	var l
 	var growth_index = 1
 	for p in _get_spawn_position(_monster):
+		print(p)
 		l = line(p, _monster)
 		#App.debug_line.emit(l)
-		#if shuffle_spawn_order and !bifurcate: l.shuffle()
+		if shuffle_spawn_order: l.shuffle() #and !bifurcate: l.shuffle()
+		growth_index = 1
 		for i : Vector2 in l:
-			var line_point_idx = l.find(i)
+			var line_point_idx = l.find(i) % attack_number
+			if line_point_idx == 0: growth_index = 1
 			var new = DAMAGE_RADIUS.instantiate()
 			new.settings = _get_settings(line_point_idx).duplicate()
 			if new.settings.movement_type == DamageRadiusSettings.mt.ORBIT and derive_dir != ld.POS:
@@ -91,33 +94,35 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 
 func line(origin : Vector2, _m : system_monster_controller) -> Array[Vector2]:
 	var dir : Vector2 = Vector2(1,0)
-	var tp : Vector2 = to_position
+	var tp : Array[Vector2] = [to_position]
 	var points : Array[Vector2] = [origin]
-	if derive_dir == ld.GAME_OBJECT: tp = _get_spawn_position_raw(_m, to_object_position).pick_random()
-	elif derive_dir == ld.RANDPOS: tp = Vector2.from_angle(randf_range(0, TAU))
+	if derive_dir == ld.GAME_OBJECT: tp = _get_spawn_position_raw(_m, to_object_position)
+	elif derive_dir == ld.RANDPOS: tp = [Vector2.from_angle(randf_range(0, TAU))]
 	
-	dir = (tp - origin).rotated(deg_to_rad(rotational_offset)).normalized()
 	
-	var inital_radius = _get_settings(0).radius
-	var corrected_radius = distance_to_ellipse_edge(inital_radius * 2.0, inital_radius, dir.x, dir.y)
-	
-	var last_point = origin
-	var last_radius = corrected_radius
-	for i in attack_number - 1:
-		var new_point : Vector2 = last_point
-		var add : Vector2 = Vector2.ZERO
-		if grow_factor != 1.0:
-			add.x = dir.x * ((last_radius / 2.0) + ((corrected_radius * (grow_factor * (i + 1))) / 2.0))
-			add.y = dir.y * ((last_radius / 2.0) + ((corrected_radius * (grow_factor * (i + 1))) / 2.0))
-			new_point += add
-			last_radius = corrected_radius * (grow_factor * (i + 1))
-		else: 
-			add.x = dir.x * corrected_radius
-			add.y = dir.y * corrected_radius
-			new_point += add
+	for tpp in tp:
+		dir = (tpp - origin).rotated(deg_to_rad(rotational_offset)).normalized()
 		
-		points.append(new_point)
-		last_point = new_point
+		var inital_radius = _get_settings(0).radius
+		var corrected_radius = distance_to_ellipse_edge(inital_radius * 2.0, inital_radius, dir.x, dir.y)
+		
+		var last_point = origin
+		var last_radius = corrected_radius
+		for i in attack_number - 1:
+			var new_point : Vector2 = last_point
+			var add : Vector2 = Vector2.ZERO
+			if grow_factor != 1.0:
+				add.x = dir.x * ((last_radius / 2.0) + ((corrected_radius * (grow_factor * (i + 1))) / 2.0))
+				add.y = dir.y * ((last_radius / 2.0) + ((corrected_radius * (grow_factor * (i + 1))) / 2.0))
+				new_point += add
+				last_radius = corrected_radius * (grow_factor * (i + 1))
+			else: 
+				add.x = dir.x * corrected_radius
+				add.y = dir.y * corrected_radius
+				new_point += add
+			
+			points.append(new_point)
+			last_point = new_point
 	
 	#if bifurcate: points = bifurcate_points(points)
 	

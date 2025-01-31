@@ -20,6 +20,7 @@ func move(monster : system_monster_controller):
 	
 	mTween.tween_property(self,"d",1.0,spd).set_ease(move_ease).set_trans(move_trans)
 	var idx = 0.0
+	monster.stare(npos)
 	while true:
 		if !mTween: break
 		if idx >= spd: break

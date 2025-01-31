@@ -10,7 +10,7 @@ shader = ExtResource("2_nsemn")
 shader_parameter/do_abs = true
 shader_parameter/do_quantize = false
 shader_parameter/quantize_to = 1.0
-shader_parameter/sine_amplitude = Vector2(0, -1)
+shader_parameter/sine_amplitude = Vector2(0, -2)
 shader_parameter/sine_speed = Vector2(0, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jngqg"]

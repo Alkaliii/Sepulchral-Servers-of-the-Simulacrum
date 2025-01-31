@@ -42,7 +42,7 @@ func onInsertCoin(args):
 	register_rpc()
 	connected = true
 	print("Coin Inserted! ",Playroom.getRoomCode())
-	blog(str("Coin Inserted! ",Playroom.getRoomCode()))
+	#blog(str("Coin Inserted! ",Playroom.getRoomCode()))
 	Playroom.onPlayerJoin(bridgeToJS(onPlayerJoin))
 	PR_INSERT_COIN.emit()
 	
@@ -56,6 +56,19 @@ func onInsertCoin(args):
 	"type":LateralNotification.nt.SYSTEM,
 	"duration":4.0
 	})
+	SystemUI.push_lateral({
+	"speaker":"nme",
+	"message":str("You have joined an online room!"),
+	"type":LateralNotification.nt.SYSTEM,
+	"duration":6.0
+	})
+	SystemUI.push_lateral({
+	"speaker":"nme",
+	"message":str("Invite a friend with this code: [color=8fc]",Playroom.getRoomCode(),"[/color]"),
+	"type":LateralNotification.nt.SYSTEM,
+	"duration":8.0
+	})
+	SystemUI.display_room_code(str(Playroom.getRoomCode()))
 
 func onSessionEnd(args):
 	connected = false
@@ -109,7 +122,7 @@ func _on_start_game_pressed():
 
 @onready var room_input = $PRUI/LobbyUI/VBoxContainer/RoomInput
 @onready var join_room = $PRUI/LobbyUI/VBoxContainer/JoinRoom
-func _on_join_room_pressed():
+func _on_join_room_pressed(room_code : String = ""):
 	join_room.release_focus()
 	join_room.disabled = true
 	JavaScriptBridge.eval("")
@@ -124,8 +137,8 @@ func _on_join_room_pressed():
 		return
 	
 	#Init Options
-	if room_input.text:
-		initOptions.roomCode = room_input.text
+	if room_code and room_code != "":#room_input.text:
+		initOptions.roomCode = room_code#room_input.text
 	initOptions.gameId = config.get_value("playroom/enviroment_variables","gameId")
 	initOptions.skipLobby = true
 	initOptions.maxPlayersPerRoom = 4
@@ -147,7 +160,8 @@ func _on_join_room_pressed():
 	}
 	PLAYER = pd
 	Playroom.onDisconnect(bridgeToJS(onDisconnect))
-	blog(str(pd))
+	#blog(str(pd))
+	print(pd)
 
 func register_rpc():
 	Playroom.RPC.register("game_state_update",bridgeToJS(game_state_update))
@@ -452,10 +466,10 @@ func game_state_update(data):
 			SystemUI.close_obj()
 			App.tutorial_end.emit()
 		App.gsu.SYNC_LEVEL:
-			if unpacked_data.size() < 2: 
+			if unpacked_data.size() < 3: 
 				print_debug("Not enough data")
 				return
-			if typeof(unpacked_data[1]) != TYPE_INT: 
+			if typeof(unpacked_data[1]) != TYPE_INT or typeof(unpacked_data[2]) != TYPE_INT: 
 				print_debug("Wrong Type")
 				return
-			App.load_level(unpacked_data[1])
+			App.load_level(unpacked_data[1],unpacked_data[2])

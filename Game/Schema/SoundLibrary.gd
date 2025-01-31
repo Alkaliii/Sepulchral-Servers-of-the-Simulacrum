@@ -63,6 +63,7 @@ enum sound_files {
 	BEEP_A,
 	NOTIFICATION_H, #not really notif but idk what else to call it lol
 	WHOOSH,
+	ERROR_A, #finally an error sound
 }
 
 static func get_file(key) -> String:
@@ -120,6 +121,7 @@ static func get_file_sfx(key) -> String:
 		sound_files.DOOR_SHUT: return "res://Assets/SFX/Dungeon Door - Shut.wav"
 		sound_files.BEEP_A: return "res://Assets/SFX/Fantasy_UI (10).wav"
 		sound_files.WHOOSH: return "res://Assets/SFX/SFX_swordSwing.wav" #cyberleaf
+		sound_files.ERROR_A: return "res://Assets/SFX/error_006.ogg" #kenny
 		sound_files:return""
 	
 	printerr(key, "NOT FOUND in sound lib")

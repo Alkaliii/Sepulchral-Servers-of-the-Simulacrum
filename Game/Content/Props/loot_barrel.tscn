@@ -1,0 +1,72 @@
+[gd_scene load_steps=9 format=3 uid="uid://beyd0j3xxlehj"]
+
+[ext_resource type="Texture2D" uid="uid://gm7mws5n4782" path="res://Assets/enviromentalAtlas.png" id="1_12aix"]
+[ext_resource type="Script" path="res://Game/Content/Props/loot_barrel.gd" id="1_ntjrh"]
+[ext_resource type="Shader" path="res://Assets/Shaders/highlight.gdshader" id="2_bvucn"]
+[ext_resource type="Script" path="res://Game/hit_detector.gd" id="4_8vvjd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_63pmy"]
+atlas = ExtResource("1_12aix")
+region = Rect2(161, 0, 30, 32)
+margin = Rect2(0, 3, 0, 3)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5lnxx"]
+shader = ExtResource("2_bvucn")
+shader_parameter/Line_Smoothness = 0.045
+shader_parameter/Line_Width = 0.09
+shader_parameter/Brightness = 3.0
+shader_parameter/Rotation_deg = 30.0
+shader_parameter/Distortion = 1.8
+shader_parameter/Speed = 0.7
+shader_parameter/Position = 0.0
+shader_parameter/Position_Min = 0.25
+shader_parameter/Position_Max = 0.5
+shader_parameter/Alpha = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7m3kb"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k13ih"]
+radius = 16.0
+
+[node name="LootBarrel" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_ntjrh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_63pmy")
+offset = Vector2(0, -11)
+
+[node name="highlight" type="Panel" parent="Sprite2D"]
+material = SubResource("ShaderMaterial_5lnxx")
+custom_minimum_size = Vector2(25, 31)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -27.5
+offset_top = -44.0
+offset_right = -2.5
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7m3kb")
+
+[node name="HitDetector" type="Area2D" parent="."]
+script = ExtResource("4_8vvjd")
+hd_for = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
+position = Vector2(0, -11)
+shape = SubResource("CircleShape2D_k13ih")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="dmgShape" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(10.7596, 1.14351, 10.049, 2.23705, 8.89919, 3.23282, 7.36044, 4.0873, 5.5, 4.76314, 3.39919, 5.23081, 1.14981, 5.46987, -1.14981, 5.46987, -3.39919, 5.23081, -5.5, 4.76314, -7.36044, 4.0873, -8.89919, 3.23282, -10.049, 2.23705, -10.7596, 1.14351, -11, -4.76837e-07, -10.7596, -1.14351, -10.049, -2.23705, -8.89919, -3.23282, -7.36044, -4.0873, -5.5, -4.76314, -3.39919, -5.23081, -1.14981, -5.46987, 1.14981, -5.46987, 3.39919, -5.23081, 5.5, -4.76314, 7.36044, -4.0873, 8.89919, -3.23282, 10.049, -2.23705, 10.7596, -1.14351, 11, 7.15256e-07)

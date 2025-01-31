@@ -68,6 +68,7 @@ func _ready():
 
 func set_job():
 	dead = false
+	pcs.call_deferred("set_disabled",false)
 	App.can_click = true
 	add_to_group("player")
 	await create_tween().tween_property(self,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK).finished
@@ -140,6 +141,7 @@ func on_afflict(effect : system_status.effects, duration : float):
 	disp_ftxt(str("[color=orange]&"),global_position + Vector2(0,25),FloatingText.a.POP)
 	status.add_effect(effect,duration)
 
+@onready var pcs = $CollisionShape2D
 var dead : bool = false
 func on_damage(amt : int):
 	if dead: return
@@ -198,6 +200,7 @@ func on_damage(amt : int):
 	
 	if status.health == 0:
 		dead = true
+		pcs.call_deferred("set_disabled",true)
 		SystemUI.sync_lateral({
 		"speaker":"nme",
 		"message":str("[color=e34262]",App.player_name,"[/color] has fallen!"),

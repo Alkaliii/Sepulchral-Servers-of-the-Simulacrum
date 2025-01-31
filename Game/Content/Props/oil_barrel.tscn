@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyhffvbddfb6f"]
+
+[ext_resource type="Texture2D" uid="uid://gm7mws5n4782" path="res://Assets/enviromentalAtlas.png" id="1_b1r6d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tpuj1"]
+atlas = ExtResource("1_b1r6d")
+region = Rect2(192, 0, 32, 31)
+margin = Rect2(0, 3, 0, 3)
+
+[node name="OilBarrel" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+texture = SubResource("AtlasTexture_tpuj1")
+offset = Vector2(0, -11)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="dmgShape" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(10.7596, 1.14351, 10.049, 2.23705, 8.89919, 3.23282, 7.36044, 4.0873, 5.5, 4.76314, 3.39919, 5.23081, 1.14981, 5.46987, -1.14981, 5.46987, -3.39919, 5.23081, -5.5, 4.76314, -7.36044, 4.0873, -8.89919, 3.23282, -10.049, 2.23705, -10.7596, 1.14351, -11, -4.76837e-07, -10.7596, -1.14351, -10.049, -2.23705, -8.89919, -3.23282, -7.36044, -4.0873, -5.5, -4.76314, -3.39919, -5.23081, -1.14981, -5.46987, 1.14981, -5.46987, 3.39919, -5.23081, 5.5, -4.76314, 7.36044, -4.0873, 8.89919, -3.23282, 10.049, -2.23705, 10.7596, -1.14351, 11, 7.15256e-07)

@@ -8,6 +8,14 @@ var floor_data : Array = [
 	"High complexity programs"
 ]
 
+var floor_size : Array = [
+	0,
+	1,
+	0,
+	0,
+	0,
+]
+
 var select_idx : int = 0
 
 @onready var upbtn = $LevelSelect/mcTwr/hbc/Selector/UP
@@ -33,12 +41,12 @@ func appear(state:bool):
 	match state:
 		true: #show
 			App.can_input = false
-			remove_boss()
 			if Plyrm.connected: Plyrm.PLAYER.state.setState("pREADY",false)
 			var music = [SoundLib.music_files.TOWER_OF_THE_ARCHMAGE, SoundLib.music_files.MYTHICAL_TOWN].pick_random()
 			SystemAudio.play_music(SoundLib.get_file(music))
 			await SystemUI.set_title(false)
 			await SystemUI.set_background(true,Color("#e34262"))
+			remove_boss()
 			position.y = get_viewport().size.y
 			show()
 			atw = create_tween()
@@ -175,7 +183,7 @@ func _on_start_pressed():
 			Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.HIDE_LEVEL_SELECT]),Plyrm.Playroom.RPC.Mode.OTHERS)
 			SystemUI.sync_and_push_lateral({
 			"speaker":"nme",
-			"message":"Please wait...",
+			"message":fTxt.tips.pick_random(),#"Please wait...",
 			"type":LateralNotification.nt.SYSTEM,
 			"duration":6.0
 			})
@@ -201,14 +209,18 @@ func _on_start_pressed():
 			
 			#announce and load new map
 			SystemUI.sync_and_set_background(true)
-			SystemUI.sync_and_push_lateral({
-			"speaker":"nme",
-			"message":str("f-",max_idx," was selected! (",max_count," votes)"),
-			"type":LateralNotification.nt.SYSTEM,
-			"duration":6.0
-			})
 			await App.time_delay(2.0)
-			App.sync_level(max_idx)
+			if App.well_apperance >= [2,3].pick_random():
+				App.well_apperance = 0
+				App.sync_level(-2)
+			else:
+				SystemUI.sync_and_push_lateral({
+				"speaker":"nme",
+				"message":str("f-",max_idx," was selected! (",max_count," votes)"),
+				"type":LateralNotification.nt.SYSTEM,
+				"duration":6.0
+				})
+				App.sync_level(max_idx,randi_range(0,floor_size[max_idx]))
 			
 			var timeout = 50.0
 			while true:
@@ -230,6 +242,10 @@ func _on_start_pressed():
 			App.start_boss.emit()
 	else:
 		#skip directly to loading new map
-		App.load_level(select_idx)
+		if App.well_apperance >= [2,3].pick_random():
+			App.well_apperance = 0
+			App.load_level(-2)
+		else:
+			App.load_level(select_idx,randi_range(0,floor_size[select_idx]))
 		pass
 	
