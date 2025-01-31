@@ -78,7 +78,7 @@ func intro():
 	await vfx_glitch()
 	
 	story_text.text = """
-	[color=orange]Networkus Firewalla[/color] has blocked your process.
+	[color=orange]Networkus Firewallis[/color] has blocked your process.
 		Authenthication failed, Access DENIED.
 		
 		ERR. 344 - Bad Token
