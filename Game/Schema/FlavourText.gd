@@ -18,7 +18,10 @@ static var victorySubtitles = [
 	"aight you win",
 	"balance restored",
 	"the king is dead",
-	"harmony blossoms"
+	"harmony blossoms",
+	"holy moly",
+	"one for the books",
+	"a star is born",
 ]
 
 static var defeattitle = "You are Dead"
@@ -41,7 +44,9 @@ static var defeatSubtitles = [
 	"olympus has fallen",
 	"objective failed",
 	"maybe next time",
-	"oof"
+	"oof",
+	"unlucky",
+	"that's gotta hurt"
 ]
 
 static var playerNames = [
@@ -111,6 +116,17 @@ static var playerNames = [
 	"num",
 	"del",
 	"alt",
+	"css",
+	"sfx",
+	"vfx",
+	"gfx",
+	"gdt",
+	"cap",
+	"lit",
+	"var",
+	"int",
+	"inf",
+	"def"
 ]
 
 static var tips = [
@@ -118,4 +134,8 @@ static var tips = [
 	"Some Barrels contain weapons, click to loot them.",
 	"Stay out of the red!",
 	"Wells contain surprises, try clicking on one.",
+	"Some weapons can heal you as you attack!",
+	"Some weapons can prevent damage or even, deal it back!?",
+	"Weapon damage is a cummulation of dice rolls!",
+	"Watch out for dashes and charges! They can stun you!",
 ]

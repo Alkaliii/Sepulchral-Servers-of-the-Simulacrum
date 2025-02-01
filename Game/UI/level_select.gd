@@ -41,6 +41,7 @@ func appear(state:bool):
 	match state:
 		true: #show
 			App.can_input = false
+			SystemUI.display_room_code("")
 			if Plyrm.connected: Plyrm.PLAYER.state.setState("pREADY",false)
 			var music = [SoundLib.music_files.TOWER_OF_THE_ARCHMAGE, SoundLib.music_files.MYTHICAL_TOWN].pick_random()
 			SystemAudio.play_music(SoundLib.get_file(music))

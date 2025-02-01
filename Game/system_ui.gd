@@ -192,7 +192,7 @@ func open_console():
 			App.can_input = true
 
 func open_w_inv():
-	if console.visible: open_console()
+	if console.visible: return #open_console()
 	weapon_inventory.visible = !weapon_inventory.visible
 	match weapon_inventory.visible:
 		true:
@@ -304,4 +304,12 @@ func open_config(state : bool):
 
 @onready var roomcode = $cl/Top/MarginContainer/ROOMCODE
 func display_room_code(code : String):
-	roomcode.text = code
+	if code != "":
+		roomcode.text = str("[wave]",code)
+		roomcode.show()
+	else:
+		roomcode.hide()
+
+@onready var settings = $cl/Top/Settings
+func open_settings(state : bool):
+	settings.appear(state)

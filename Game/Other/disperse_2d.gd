@@ -18,6 +18,7 @@ class_name Disperse2D
 ## Disperse radius in pixels
 @export var radius : float = 200
 @export var distort_circle : Vector2 = Vector2(1.0,1.0)
+@export var random_range : Vector2 = Vector2(0.0,1.0)
 @export var placement_seed : float = 0.0
 
 @export_group("Scene")
@@ -94,7 +95,7 @@ func disperse():
 		
 		# determine position
 		theta = pRNG.randf_range(0.0,TAU)
-		rah = pRNG.randf() * radius
+		rah = pRNG.randf_range(random_range.x,random_range.y) * radius
 		pos = Vector2(rah * cos(theta),rah * sin(theta))
 		pos *= distort_circle
 		

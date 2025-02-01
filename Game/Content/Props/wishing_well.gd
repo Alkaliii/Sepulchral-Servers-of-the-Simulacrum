@@ -51,9 +51,11 @@ func _process(delta):
 	pass
 
 func blurry():
+	hit_detector.disabled = true
 	await SystemUI.blur_effect(true)
 	await App.time_delay(0.5)
 	await SystemUI.blur_effect(false)
+	hit_detector.disabled = false
 
 const KNIGHT_TREE = [
 	system_job.j.KNIGHT, system_job.j.LEGIONNAIRE, system_job.j.MAGIC_KNIGHT, system_job.j.HIGH_PALADIN, system_job.j.GUARDIAN ]
@@ -78,6 +80,7 @@ func new_job():
 	var select = tree[rand.rand_weighted(JOB_WEIGHTS)]
 	
 	player.job.JOB = select
+	if !App.job_inventory.has(select): App.job_inventory.append(select)
 	player.set_job()
 	
 	await SystemUI.set_title(true,2,str(system_job.j.keys()[select]).replace("_"," "),"JOB CHANGED",Color("#8fc"))
@@ -166,6 +169,12 @@ func on_click():
 	player = get_tree().get_first_node_in_group("player_persistant")
 	clicked = true
 	pull_vfx.emitting = false
+	SystemUI.push_lateral({
+	"speaker":"(!)",
+	"message":str("You make a wish!"),
+	"type":LateralNotification.nt.SYSTEM,
+	"duration":4.0
+	})
 	
 	var rand = RandomNumberGenerator.new()
 	var pick = rand.rand_weighted(weights)

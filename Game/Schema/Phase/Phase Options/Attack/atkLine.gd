@@ -4,6 +4,8 @@ class_name lineAttack
 #spawns attacks down defined vectors, define vectors (can originate from game object), define line length
 #on client a specific position must be provided, the client will not derive one. Only the host will
 
+#Grow on multi object doesn't work
+
 enum ld { #LINE DIR (Line is drawn from spawn to this)
 	POS,
 	GAME_OBJECT,
@@ -21,6 +23,7 @@ enum ld { #LINE DIR (Line is drawn from spawn to this)
 # Pattern B
 @export var attack_number : int = 6
 @export var grow_factor : float = 1.0 #overrides radius if != 1.0
+#@export var inverse_growth : bool = false
 @export var bifurcate : bool = false
 
 # Spawning
@@ -40,7 +43,8 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 		if shuffle_spawn_order: l.shuffle() #and !bifurcate: l.shuffle()
 		growth_index = 1
 		for i : Vector2 in l:
-			var line_point_idx = l.find(i) % attack_number
+			var line_point_idx = l.find(i)
+			#if line_point_idx != 0: line_point_idx = (l.find(i) - 1) % attack_number
 			if line_point_idx == 0: growth_index = 1
 			var new = DAMAGE_RADIUS.instantiate()
 			new.settings = _get_settings(line_point_idx).duplicate()
@@ -56,7 +60,8 @@ func attack(_monster : system_monster_controller, _as_client : Dictionary = {}):
 					#growth_index += 1
 				#else:
 			if grow_factor != 1.0 and line_point_idx != 0:
-				new.settings.radius = new.settings.radius * (grow_factor * (growth_index))
+				var gmod = growth_index
+				new.settings.radius = new.settings.radius * (grow_factor * (gmod))
 				growth_index += 1
 					#if !bifurcate: growth_index += 1
 			
@@ -96,6 +101,7 @@ func line(origin : Vector2, _m : system_monster_controller) -> Array[Vector2]:
 	var dir : Vector2 = Vector2(1,0)
 	var tp : Array[Vector2] = [to_position]
 	var points : Array[Vector2] = [origin]
+	
 	if derive_dir == ld.GAME_OBJECT: tp = _get_spawn_position_raw(_m, to_object_position)
 	elif derive_dir == ld.RANDPOS: tp = [Vector2.from_angle(randf_range(0, TAU))]
 	

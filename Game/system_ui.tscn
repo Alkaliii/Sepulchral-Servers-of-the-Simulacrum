@@ -201,6 +201,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="objectivepanel" parent="cl/InGameMenu/MarginContainer" instance=ExtResource("3_nx2cb")]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0

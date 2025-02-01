@@ -56,17 +56,17 @@ func onInsertCoin(args):
 	"type":LateralNotification.nt.SYSTEM,
 	"duration":4.0
 	})
-	SystemUI.push_lateral({
-	"speaker":"nme",
-	"message":str("You have joined an online room!"),
-	"type":LateralNotification.nt.SYSTEM,
-	"duration":6.0
-	})
+	#SystemUI.push_lateral({
+	#"speaker":"nme",
+	#"message":str("You have joined an online room!"),
+	#"type":LateralNotification.nt.SYSTEM,
+	#"duration":6.0
+	#})
 	SystemUI.push_lateral({
 	"speaker":"nme",
 	"message":str("Invite a friend with this code: [color=8fc]",Playroom.getRoomCode(),"[/color]"),
 	"type":LateralNotification.nt.SYSTEM,
-	"duration":8.0
+	"duration":12.0
 	})
 	SystemUI.display_room_code(str(Playroom.getRoomCode()))
 

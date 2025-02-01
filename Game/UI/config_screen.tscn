@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://bky52y5s76k4a"]
+[gd_scene load_steps=24 format=3 uid="uid://bky52y5s76k4a"]
 
 [ext_resource type="Script" path="res://Game/UI/config_screen.gd" id="1_3vh1u"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="1_qhfdv"]
 [ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="2_sd8l0"]
 [ext_resource type="Shader" path="res://Assets/Shaders/bounce.gdshader" id="4_yx8vt"]
+[ext_resource type="Texture2D" uid="uid://ga5kr1hn7yih" path="res://Assets/IconAtlas@4x.png" id="5_os3d2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nm5o1"]
 
@@ -134,6 +135,21 @@ bg_color = Color(0.168627, 0.168627, 0.14902, 0.8)
 corner_radius_top_right = 1024
 corner_radius_bottom_right = 1024
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ox6ya"]
+content_margin_left = 15.0
+content_margin_top = 0.0
+content_margin_right = 15.0
+content_margin_bottom = 0.0
+bg_color = Color(0.168627, 0.168627, 0.14902, 1)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0u8dp"]
+atlas = ExtResource("5_os3d2")
+region = Rect2(386, 2, 128, 128)
+
 [node name="ConfigScreen" type="MarginContainer"]
 visible = false
 modulate = Color(1, 1, 1, 0)
@@ -213,7 +229,6 @@ visible_characters_behavior = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 0
 size_flags_vertical = 8
 theme_override_constants/separation = 8
 
@@ -259,6 +274,41 @@ max_length = 24
 expand_to_text_length = true
 caret_blink = true
 
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SETTINGS" type="Button" parent="VBoxContainer/HBoxContainer"]
+modulate = Color(1, 1, 1, 0.498039)
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_qhfdv")
+theme_override_styles/focus = SubResource("StyleBoxFlat_e3206")
+theme_override_styles/hover = SubResource("StyleBoxFlat_w7rbk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_amps5")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ox6ya")
+
+[node name="icn" type="TextureRect" parent="VBoxContainer/HBoxContainer/SETTINGS"]
+modulate = Color(0.745098, 0.745098, 0.745098, 1)
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.5
+offset_top = -12.5
+offset_right = 12.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+texture = SubResource("AtlasTexture_0u8dp")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Subtitle" type="RichTextLabel" parent="VBoxContainer"]
 clip_contents = false
 layout_mode = 2
@@ -293,3 +343,4 @@ autowrap_mode = 0
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/PLAY" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/MULTIPLAYER" to="." method="_on_multiplayer_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/SETTINGS" to="." method="_on_settings_pressed"]

@@ -32,12 +32,12 @@ class_name DamageRadiusSettings
 @export_group("Movement") #TODO write implementation in tscn
 enum mt {
 	NONE, #won't move
-	ORBIT, #will orbit defined position
-	PUSH, #will move away from defined position in the direction found by the difference between it and the position
-	PULL, #will move away from defined position in the direction found by the difference between it and the position
-	ORTHO_WIGGLE, #moves back and forth perpandicular to the vector derived from global_position - movement_origin, skewed for perspective
-	LATERAL_WIGGLE, #like ortho but not rotated
-	DIAXIS_WIGGLE, #ortho and lateral at the same time
+	ORBIT, #will orbit defined position (2 speed is good)
+	PUSH, #will move away from defined position in the direction found by the difference between it and the position (100 speed)
+	PULL, #will move away from defined position in the direction found by the difference between it and the position (100 speed)
+	ORTHO_WIGGLE, #moves back and forth perpandicular to the vector derived from global_position - movement_origin, skewed for perspective (5 speed)
+	LATERAL_WIGGLE, #like ortho but not rotated (5 speed)
+	DIAXIS_WIGGLE, #ortho and lateral at the same time (5 speed)
 }
 @export var movement_type : mt = mt.NONE
 var movement_origin : Vector2 = Vector2.ZERO #position in global space to calculate movement with

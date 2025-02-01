@@ -16,7 +16,12 @@ func _ready():
 func _process(delta):
 	pass
 
+var rtw : Tween
 func on_damage(amt,click):
+	if rtw: rtw.kill()
+	rtw = create_tween()
+	rtw.tween_property(self,"rotation_degrees",[randf_range(-8,-4),randf_range(4,8)].pick_random(),0.062).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	rtw.tween_property(self,"rotation_degrees",0.0,0.125).set_ease(Tween.EASE_IN_OUT)
 	disp_ftxt(str(amt,"!" if click == 1 else ""),global_position - Vector2(0,0),[FloatingText.a.POP,FloatingText.a.POP_SHOOT].pick_random())
 	var cam = get_tree().get_first_node_in_group("camera")
 	match click:

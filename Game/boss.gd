@@ -114,7 +114,10 @@ func change_phase(new_phase : int = -1):
 	await App.process_frame()
 	print("CHANGING PHASE!"," RANDOM" if new_phase == -1 else str(new_phase))
 	var phs : Phase
-	if new_phase and new_phase != -1: phs = phases[new_phase]
+	if new_phase and new_phase != -1: 
+		phs = phases[new_phase]
+		start_phase(phs)
+		return
 	else: 
 		var pick : Array[Phase] = []
 		for p in phases:
@@ -264,7 +267,9 @@ func check_progress():
 		#SystemAudio.sync_and_play_music(SoundLib.get_file(monster_data.halfway_music))
 		jukebox(monster_data.halfway_music)
 		await roar(str(monster_data.name," is weak!"))
-		if !phases.is_empty(): start_phase(phases.pick_random())
+		if !phases.is_empty(): 
+			#start_phase(phases.pick_random())
+			change_phase()
 
 
 func jukebox(filekey : SoundLib.music_files):

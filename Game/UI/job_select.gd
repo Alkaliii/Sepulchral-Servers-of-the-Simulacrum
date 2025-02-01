@@ -28,6 +28,9 @@ func appear(state:bool):
 	
 	match state:
 		true:
+			var player = get_tree().get_first_node_in_group("player_persistant")
+			idx = App.job_inventory.find(player.job.JOB)
+			focus_idx(false)
 			show()
 			atw.tween_property(self,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN_OUT)
 			await atw.finished
@@ -44,11 +47,11 @@ func sfx():
 	SystemAudio.play(SoundLib.get_file_sfx(sounds.pick_random()),0.5,"sfx",pitch)
 
 const stat_format = "[right]bHP: %d / bDMG: %d / malloc: %d / cache: %d"
-func focus_idx():
+func focus_idx(with_sfx := true):
 	#change UI
 	var j := App.job_inventory[idx]
 	var info : Dictionary = system_job.get_info(j)
-	sfx()
+	if with_sfx: sfx()
 	header.text = str("[wave]",info.name)
 	subtitle.text = info.desc
 	stats.text = stat_format % [info.bhealth,info.bdamage,info.malloc,info.cache]

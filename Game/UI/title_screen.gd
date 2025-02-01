@@ -15,7 +15,7 @@ extends Control
 #Authenthicating class.system_npc
 #Error
 #Your authenthication token is expired!
-#Your connection has been blocked by Firewallis
+#Your connection has been blocked by Firewalla
 #Retrying
 #Retrying
 #Retrying
@@ -40,6 +40,7 @@ func _ready():
 
 signal clicked
 var started : bool = false
+var skip : bool = false
 func _on_click_detect_gui_input(event : InputEvent):
 	if event is InputEventMouse and event.button_mask in [MOUSE_BUTTON_LEFT,MOUSE_BUTTON_RIGHT]:
 		if !started:
@@ -49,7 +50,8 @@ func _on_click_detect_gui_input(event : InputEvent):
 		if event.button_mask == MOUSE_BUTTON_LEFT: 
 			clicked.emit()
 			click_detect.hide()
-		elif event.button_mask == MOUSE_BUTTON_RIGHT:
+		elif event.button_mask == MOUSE_BUTTON_RIGHT and ! skip:
+			skip = true
 			SystemUI.push_lateral({
 			"speaker":"nme",
 			"message":str("Skip!"),
@@ -59,6 +61,15 @@ func _on_click_detect_gui_input(event : InputEvent):
 			await SystemUI.set_background(true)
 			App.to_config()
 			queue_free()
+
+func play_message(msg : String = ""):
+	if msg == "": return
+	SystemUI.push_lateral({
+	"speaker":"nme",
+	"message":msg,
+	"type":LateralNotification.nt.SELF,
+	"duration":3.0
+	})
 
 func intro():
 	SystemAudio.play(SoundLib.get_file_sfx(SoundLib.sound_files.NOTIFICATION_H))
@@ -78,7 +89,7 @@ func intro():
 	await vfx_glitch()
 	
 	story_text.text = """
-	[color=orange]Networkus Firewallis[/color] has blocked your process.
+	[color=orange]Networkus Firewalla[/color] has blocked your process.
 		Authenthication failed, Access DENIED.
 		
 		ERR. 344 - Bad Token
@@ -89,7 +100,9 @@ func intro():
 	center_st()
 	
 	await set_c2s("[color=orange]ERROR[/color]")
+	play_message("What!?")
 	await App.time_delay(1.0)
+	play_message("Why!")
 	
 	click_detect.show()
 	await clicked
@@ -103,6 +116,7 @@ func intro():
 	await App.time_delay(1.5)
 	await vfx_glitch()
 	await set_c2s("Failed. (1)")
+	play_message("Come on...")
 	await App.time_delay(0.5)
 	await vfx_glitch()
 	await set_c2s("Retrying[wave]...")
@@ -137,7 +151,9 @@ func intro():
 	center_st()
 	
 	await set_c2s("[color=orange]ERROR[/color]")
+	play_message("Oh no...")
 	await App.time_delay(1.0)
+	
 	
 	click_detect.show()
 	await clicked

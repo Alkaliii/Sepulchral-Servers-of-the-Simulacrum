@@ -37,6 +37,7 @@ var performance_screen_details : Dictionary = {
 
 var current_floor : int = 0
 var floors_completed : Dictionary = {}
+var attempts : int = 0
 
 enum gsu {
 	ASSERT_STATE,
@@ -102,7 +103,7 @@ func determine_boss_health(mod : float = 1.0, clamp_health : int = 0) -> int:
 			best_weapon = w
 	
 	var heavy = best_weapon.get_heavy_average()
-	boss_health = (heavy * (6.0 + randf_range(0.0,3.0))) * mod
+	boss_health = (heavy * (6.0 + randf_range(0.0,3.0) + (float(clamp_health - 1.0) / 2.0))) * mod
 	
 	match clamp_health:
 		1: boss_health = clampf(boss_health,0.0,555.0)
@@ -131,7 +132,9 @@ func validate_players() -> int:
 
 func assert_game_state():
 	var game_state
+	
 	if Plyrm.connected:
+		Plyrm.PLAYER.state.setState("pREADY",false)
 		if !Plyrm.Playroom.isHost():
 			#get host to validate, stay dead until reload or victory
 			Plyrm.Playroom.RPC.call("game_state_update",var_to_str([gsu.ASSERT_STATE]),Plyrm.Playroom.RPC.Mode.OTHERS)
@@ -143,12 +146,45 @@ func assert_game_state():
 	
 	if game_state == 0:
 		#Game over
-		if Plyrm.connected: 
-			Plyrm.Playroom.RPC.call("game_state_update",var_to_str([gsu.RELOAD_STATE]),Plyrm.Playroom.RPC.Mode.OTHERS)
-		await App.reload_game()
-	
-		if !Plyrm.connected or Plyrm.Playroom.isHost():
-			App.start_boss.emit()
+		if attempts < 3:
+			attempts += 1
+			if Plyrm.connected: 
+				Plyrm.Playroom.RPC.call("game_state_update",var_to_str([gsu.RELOAD_STATE]),Plyrm.Playroom.RPC.Mode.OTHERS)
+			await App.reload_game()
+		
+			if !Plyrm.connected or Plyrm.Playroom.isHost():
+				App.start_boss.emit()
+		else:
+			attempts = 0
+			helpful_tip()
+			SystemUI.sync_and_set_background(true)
+			await App.time_delay(2.0)
+			reload_boss.emit()
+			SystemUI.sync_and_set_title(false)
+			#await App.time_delay(2.0)
+			sync_level(-2)
+			if Plyrm.connected: 
+				await wait_ready()
+				SystemUI.sync_and_set_background(false)
+
+func wait_ready():
+	var timeout = 50.0
+	while true:
+		timeout -= get_process_delta_time()
+		await App.process_frame()
+		if !false in Plyrm.get_all_player_state("pREADY"):
+			break
+		if timeout <= 0.0:
+			SystemUI.sync_and_push_lateral({
+			"speaker":"nme",
+			"message":"Timeout",
+			"type":LateralNotification.nt.WARN,
+			"duration":4.0
+			})
+			break
+			
+	SystemUI.sync_and_set_background(false)
+	await App.time_delay(1.0)
 
 var reloading := false
 func reload_game():
@@ -173,6 +209,7 @@ func reset_performace_metrics():
 
 var well_apperance : int = 0
 func set_floor_complete(flr : int):
+	attempts = 0
 	well_apperance += 1
 	if floors_completed.has(flr): 
 		floors_completed[flr].amount += 1
@@ -222,6 +259,18 @@ func load_level(level : int,boss : int = 0):
 			match boss:
 				0: load_boss.emit("res://Game/Content/Bosses/boss_L1L.tscn")#load_boss.emit("res://Game/boss.tscn")
 				1: load_boss.emit("res://Game/Content/Bosses/boss_L1C.tscn")
+		2:
+			load_misc.emit("res://Game/Content/ArenaEnvironment/ForestB.tscn")
+			await App.load_complete
+			load_boss.emit("res://Game/Content/Bosses/boss_L2A.tscn")
+		3:
+			load_misc.emit("res://Game/Content/ArenaEnvironment/Field.tscn")
+			await App.load_complete
+			load_boss.emit("res://Game/Content/Bosses/boss_L3A.tscn")
+		5:
+			load_misc.emit("res://Game/Content/ArenaEnvironment/Field.tscn")
+			await App.load_complete
+			load_boss.emit("res://Game/Content/Bosses/boss_L3A.tscn")
 		_:
 			load_boss.emit("res://Game/scarecrow.tscn")
 	await App.load_complete
@@ -229,6 +278,14 @@ func load_level(level : int,boss : int = 0):
 	await time_delay(0.5)
 	if Plyrm.connected: Plyrm.PLAYER.state.setState("pREADY",true)
 	else: SystemUI.set_background(false)
+
+func helpful_tip():
+	SystemUI.sync_and_push_lateral({
+	"speaker":"nme",
+	"message":fTxt.tips.pick_random(),#"Please wait...",
+	"type":LateralNotification.nt.SYSTEM,
+	"duration":6.0
+	})
 
 func to_config():
 	SystemUI.sync_and_push_lateral({

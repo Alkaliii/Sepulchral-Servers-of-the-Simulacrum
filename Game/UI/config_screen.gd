@@ -52,7 +52,7 @@ func _on_play_pressed():
 	set_player_name(name_input.text)
 	playbtn.release_focus()
 	appear(false)
-	App.load_level(0)
+	App.load_level(0) #THIS SHOULD BE ZERO
 
 @onready var multiplayerbtn = $VBoxContainer/HBoxContainer/HBoxContainer/MULTIPLAYER
 @onready var room_input = $VBoxContainer/HBoxContainer/HBoxContainer/roomInput
@@ -67,3 +67,9 @@ func _on_multiplayer_pressed():
 		rc = ""
 	
 	Plyrm._on_join_room_pressed(room_input.text)
+
+
+@onready var settings = $VBoxContainer/HBoxContainer/SETTINGS
+func _on_settings_pressed():
+	settings.release_focus()
+	SystemUI.open_settings(true)

@@ -486,6 +486,34 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_q8n7p")
 theme_override_styles/normal = SubResource("StyleBoxFlat_edadu")
 text = "QUIT"
 
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+z_index = 1
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 377.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 213
+
+[node name="esc2unpause" type="RichTextLabel" parent="MarginContainer2"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("3_nwgv4")
+theme_override_fonts/bold_font = ExtResource("3_nwgv4")
+theme_override_font_sizes/normal_font_size = 13
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "press [ESC] to unpause"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
 [connection signal="drag_ended" from="MarginContainer/VBoxContainer/ScrollContainer/vbc/MasterVolume/mastersldr" to="." method="_on_mastersldr_drag_ended"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/ScrollContainer/vbc/MasterVolume/mastersldr" to="." method="_on_mastersldr_value_changed"]
 [connection signal="drag_ended" from="MarginContainer/VBoxContainer/ScrollContainer/vbc/MusicVolume/musicsldr" to="." method="_on_musicsldr_drag_ended"]

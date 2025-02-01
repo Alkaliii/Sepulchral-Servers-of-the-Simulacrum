@@ -64,10 +64,10 @@ corner_radius_top_right = 1024
 corner_radius_bottom_right = 1024
 corner_radius_bottom_left = 1024
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hpsei"]
-content_margin_left = 30.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wpra2"]
+content_margin_left = 15.0
 content_margin_top = 2.0
-content_margin_right = 30.0
+content_margin_right = 15.0
 content_margin_bottom = 0.0
 bg_color = Color(0.168627, 0.168627, 0.14902, 1)
 corner_radius_top_left = 1024
@@ -132,7 +132,7 @@ theme_override_fonts/font = ExtResource("2_0r5cx")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ubir2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_pvux3")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_l7krc")
-theme_override_styles/normal = SubResource("StyleBoxFlat_hpsei")
-text = "?"
+theme_override_styles/normal = SubResource("StyleBoxFlat_wpra2")
+text = "INFO"
 
 [connection signal="pressed" from="Control/help" to="." method="_on_help_pressed"]

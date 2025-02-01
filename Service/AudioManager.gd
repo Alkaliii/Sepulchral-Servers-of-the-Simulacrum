@@ -26,10 +26,12 @@ func _ready():
 	music_player_a = AudioStreamPlayer.new()
 	add_child(music_player_a)
 	music_player_a.bus = "Music"
+	music_player_a.volume_db = linear_to_db(0.6)
 	
 	music_player_b = AudioStreamPlayer.new()
 	add_child(music_player_b)
 	music_player_b.bus = "Music"
+	music_player_b.volume_db = linear_to_db(0.6)
 	set_music_volume(0.0)
 
 func _stream_finished(stream):
@@ -111,11 +113,13 @@ func play_music(sound_path,fade : Vector2 = Vector2(2.0,2.0)):
 	print("play: ",sound_path)
 	var cross_to : int = 1 #0 is A, 1 is B
 	if music_player_a.playing:
+		if music_player_a.stream.resource_path == sound_path: return
 		cross_to = 1
 		music_player_b.stream = load(sound_path)
 		await App.process_frame()
 		music_player_b.play()
 	elif music_player_b.playing:
+		if music_player_b.stream.resource_path == sound_path: return
 		cross_to = 0
 		music_player_a.stream = load(sound_path)
 		await App.process_frame()
