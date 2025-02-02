@@ -15,9 +15,10 @@ func perform_special(monster : system_monster_controller):
 	monster.pull(true, 1.0 + (strength / 10.0))
 	while true:
 		if dur <= 0: break
-		if cancel: 
-			monster.pull(false)
-			monster.sync_drag(false)
+		if cancel:
+			if is_instance_valid(monster):
+				monster.pull(false)
+				monster.sync_drag(false)
 			return
 		if p: p.drag(monster.global_position,30 * strength)
 		dur -= monster.get_process_delta_time()

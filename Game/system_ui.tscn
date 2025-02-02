@@ -22,7 +22,7 @@
 offsets = PackedFloat32Array(0, 0.6, 0.8, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.745098, 0.745098, 0.745098, 1, 0.2, 0.2, 0.2, 1, 0.745098, 0.745098, 0.745098, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_aeq4l"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_x4al0"]
 gradient = SubResource("Gradient_q0prr")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hx6f5"]
@@ -42,7 +42,7 @@ shader_parameter/time_scale = Vector2(0.05, 0.1)
 shader_parameter/time_scale_b = Vector2(0.02, 0.05)
 shader_parameter/edges = Vector2(1, 0)
 shader_parameter/use_color_lookup = true
-shader_parameter/color_lookup = SubResource("GradientTexture1D_aeq4l")
+shader_parameter/color_lookup = SubResource("GradientTexture1D_x4al0")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vijd3"]
 

@@ -61,7 +61,7 @@ func add_trauma(amount : float, dec := decay):
 		shake()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	#if Input.is_action_just_pressed("ACTIONA"): add_trauma(10.0)
 	
 	if target and is_instance_valid(target):

@@ -37,6 +37,7 @@ enum nt { #Notification Types
 	WARN, #orange, replace speaker with (!)
 	DANGER, #e34262, replace speaker with (!)
 	SPECIAL, #rainbow tag, will not replace speaker
+	ERROR, #like actual ones
 }
 
 const basicfs = "%s: %s" #% [Spkr,Msg]
@@ -46,6 +47,7 @@ const systemfs = "[wave][color=777777]%s[/color][/wave]: %s"
 const warnfs = "[wave][color=orange]%s[/color][/wave]: %s"
 const dangerfs = "[wave][color=e34262]%s[/color][/wave]: %s"
 const specialfs = "[wave][rainbow]%s[/rainbow][/wave]: %s"
+const errorfs = "[wave][color=e34262]%s[/color][/wave]: %s"
 
 func set_noti(data : Dictionary = {
 	"speaker":"nme",
@@ -90,6 +92,10 @@ func set_noti(data : Dictionary = {
 			print_rich(msg)
 		nt.SPECIAL:
 			notitext.text = specialfs % [spkr,msg]
+		nt.ERROR:
+			spkr = "(ERR)"
+			notitext.text = errorfs % [spkr,msg]
+			print_rich(msg)
 	
 	id = msg
 	size = Vector2.ZERO
@@ -97,7 +103,7 @@ func set_noti(data : Dictionary = {
 
 func remove():
 	follow = false
-	if assign:
+	if is_instance_valid(assign):
 		if assign.get_parent():
 			assign.get_parent().remove_child(assign)
 		assign.queue_free()

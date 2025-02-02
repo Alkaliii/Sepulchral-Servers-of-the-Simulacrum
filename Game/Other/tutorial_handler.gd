@@ -189,7 +189,7 @@ func next_objective():
 		4: #HEAVY ATTACK
 			watch_HEAVY_ATTACK = true
 		5: #WEAPON
-			if App.weapon_inventory.is_empty():
+			if App.weapon_inventory.size() <= 1:
 				App.weapon_inventory.append(OLD_DAGGER)
 				App.weapon_inventory.append(OLD_BLADE)
 				App.weapon_inventory.append(OLD_STAFF)

@@ -300,5 +300,11 @@ func cancel_movement(caller = null):
 func validate_damage(click : int) -> bool:
 	for con in CONDITION_OPTIONS:
 		if !con.validate_on_condition(click):
+			SystemUI.sync_and_push_lateral({
+			"speaker":"nme",
+			"message":"Restricted!",
+			"type":LateralNotification.nt.WARN,
+			"duration":2.0
+			})
 			return false
 	return true

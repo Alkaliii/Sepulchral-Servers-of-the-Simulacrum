@@ -225,7 +225,7 @@ func set_radius():
 	if settings: rad = settings.radius
 	else: rad = 180
 	var txt = ImageTexture.new()
-	var img = Image.new().create_empty(rad * 2,rad * 2,true,Image.FORMAT_L8)
+	var img = Image.create_empty(rad * 2,rad * 2,true,Image.FORMAT_L8)
 	img.fill(Color("#ffffff"))
 	txt.set_image(img)
 	warning.texture = txt

@@ -20,13 +20,14 @@ func move(monster : system_monster_controller):
 	
 	mTween.tween_property(self,"d",1.0,spd).set_ease(move_ease).set_trans(move_trans)
 	var idx = 0.0
-	monster.stare(npos)
+	monster.stare((npos - monster.global_position))
 	while true:
 		if !mTween: break
 		if idx >= spd: break
 		if App.get_tree().paused: 
 			await App.process_frame()
 			continue
+		if !is_instance_valid(monster): return
 		monster.velocity = lerp(monster.velocity,(npos - monster.global_position).normalized() * roam_speeddd,0.5)
 		monster.move_and_slide()
 		await App.process_frame()

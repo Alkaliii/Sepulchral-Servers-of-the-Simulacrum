@@ -30,7 +30,7 @@ func appear(state:bool):
 			hide()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 @onready var playbtn = $VBoxContainer/HBoxContainer/PLAY
@@ -73,3 +73,7 @@ func _on_multiplayer_pressed():
 func _on_settings_pressed():
 	settings.release_focus()
 	SystemUI.open_settings(true)
+
+
+func _on_room_input_text_submitted(new_text):
+	room_input.release_focus()

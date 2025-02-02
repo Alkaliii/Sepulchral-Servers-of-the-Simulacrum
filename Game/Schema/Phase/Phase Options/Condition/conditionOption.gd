@@ -24,4 +24,6 @@ func get_afflication() -> system_status.effects:
 	return inflict
 
 func damage_increase(weap : system_weapon) -> int:
-	return weap.calc_damage(1)
+	if is_clutch:
+		return weap.calc_damage(1)
+	return 0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://d3bnbbp8xtqxj"]
+[gd_scene load_steps=75 format=3 uid="uid://d3bnbbp8xtqxj"]
 
 [ext_resource type="Script" path="res://Game/boss.gd" id="1_eqdc0"]
 [ext_resource type="Script" path="res://Game/Schema/Monster.gd" id="2_0ko2f"]
@@ -21,9 +21,9 @@
 [ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveTeleport.gd" id="16_xusyd"]
 [ext_resource type="Shader" path="res://Assets/Shaders/ProceduralGleam.gdshader" id="17_fqqav"]
 [ext_resource type="Shader" path="res://Assets/Shaders/flash.gdshader" id="18_yx71w"]
-[ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="19_tjj4t"]
-[ext_resource type="PackedScene" uid="uid://oas5aab7on8x" path="res://Game/damage_radius.tscn" id="20_tt513"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="21_tders"]
+[ext_resource type="Texture2D" uid="uid://c4ph36rdixnte" path="res://Assets/Boss/l2atlas.png" id="22_gyj0f"]
+[ext_resource type="Texture2D" uid="uid://86lcot3iin8p" path="res://Assets/shadows.png" id="24_8p72q"]
 
 [sub_resource type="Resource" id="Resource_2fgso"]
 script = ExtResource("3_e14db")
@@ -39,7 +39,7 @@ name = "Managua Taski"
 health_mod = 1.0
 clamp_health = 2
 status = SubResource("Resource_2fgso")
-normal_music = 3
+normal_music = 6
 halfway_music = 1
 roar = 2
 
@@ -196,6 +196,13 @@ damage_settings = Array[ExtResource("7_0di81")]([SubResource("Resource_pyg3x")])
 multi_ds_behaviour = 0
 attack_start_delay = 1.0
 
+[sub_resource type="Resource" id="Resource_58yio"]
+script = ExtResource("16_xusyd")
+teleport_to = 1
+tele_global = Vector2(0, 0)
+tele_limit = Vector2(200, 200)
+hold = 0.5
+
 [sub_resource type="Resource" id="Resource_eh6qs"]
 script = ExtResource("5_ebbk2")
 context_exclusive = 0
@@ -206,7 +213,7 @@ on_end = 2
 oespi = 0
 chance_to_stop = 0.0
 wait_range = Vector2(0.5, 2)
-MOVEMENT_OPTIONS = Array[ExtResource("10_n7fnq")]([SubResource("Resource_peux0")])
+MOVEMENT_OPTIONS = Array[ExtResource("10_n7fnq")]([SubResource("Resource_peux0"), SubResource("Resource_58yio")])
 ATTACK_OPTIONS = Array[ExtResource("6_pqpkk")]([SubResource("Resource_t6f0m")])
 SUB_ATTACK_OPTIONS = Array[ExtResource("6_pqpkk")]([])
 SPECIAL_OPTIONS = Array[ExtResource("12_pxtbt")]([])
@@ -391,8 +398,8 @@ shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ot7aj")
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_yofi6"]
-radius = 15.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_bvm1p"]
+radius = 24.0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_11fkc"]
 noise_type = 2
@@ -568,8 +575,9 @@ shader = ExtResource("18_yx71w")
 shader_parameter/active = false
 shader_parameter/tint = Color(1, 1, 1, 1)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_k8ypm"]
-radius = 25.0
+[sub_resource type="AtlasTexture" id="AtlasTexture_rbxe5"]
+atlas = ExtResource("24_8p72q")
+region = Rect2(128, 256, 256, 256)
 
 [node name="Boss" type="CharacterBody2D"]
 y_sort_enabled = true
@@ -602,13 +610,14 @@ gravity = Vector2(0, 0)
 scale_amount_curve = SubResource("Curve_pb35b")
 
 [node name="HitDetector" type="Area2D" parent="."]
+position = Vector2(0, -60)
 scale = Vector2(4, 4)
 script = ExtResource("15_epxq3")
 hd_for = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
-position = Vector2(0, -13)
-shape = SubResource("CircleShape2D_yofi6")
+visible = false
+shape = SubResource("CircleShape2D_bvm1p")
 
 [node name="HitImpactVFX" type="ColorRect" parent="."]
 show_behind_parent = true
@@ -693,23 +702,16 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Sprite" type="Sprite2D" parent="."]
-modulate = Color(0.627451, 0.12549, 0.941176, 1)
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_w14ld")
-scale = Vector2(4, 4)
-texture = ExtResource("19_tjj4t")
-offset = Vector2(0, -14)
-hframes = 3
-vframes = 3
-frame = 1
+texture = ExtResource("22_gyj0f")
+offset = Vector2(0, -44)
+vframes = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -15)
-shape = SubResource("CircleShape2D_k8ypm")
-debug_color = Color(1, 0, 0, 0.0784314)
-
-[node name="DamageRadius" parent="." instance=ExtResource("20_tt513")]
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
 visible = false
+position = Vector2(0, -8)
+polygon = PackedVector2Array(88.0333, 9.35603, 82.2191, 18.3032, 72.8115, 26.4503, 60.2218, 33.4415, 45, 38.9711, 27.8115, 42.7975, 9.40756, 44.7535, -9.40756, 44.7535, -27.8115, 42.7975, -45, 38.9711, -60.2218, 33.4415, -72.8115, 26.4503, -82.2191, 18.3031, -88.0333, 9.35602, -90, -3.8147e-06, -88.0333, -9.35603, -82.2191, -18.3032, -72.8115, -26.4503, -60.2217, -33.4415, -45, -38.9711, -27.8115, -42.7975, -9.40755, -44.7535, 9.40755, -44.7535, 27.8115, -42.7975, 45, -38.9711, 60.2218, -33.4415, 72.8115, -26.4503, 82.2191, -18.3031, 88.0333, -9.35603, 90, 5.72205e-06)
 
 [node name="Sight" type="RayCast2D" parent="."]
 collision_mask = 7
@@ -761,3 +763,9 @@ text = "Unit Test"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+z_index = -1
+position = Vector2(0, -8)
+texture = SubResource("AtlasTexture_rbxe5")

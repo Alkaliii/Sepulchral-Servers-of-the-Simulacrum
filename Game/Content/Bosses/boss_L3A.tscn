@@ -20,9 +20,9 @@
 [ext_resource type="Shader" path="res://Assets/Shaders/ProceduralSpark.gdshader" id="16_6xnnh"]
 [ext_resource type="Shader" path="res://Assets/Shaders/ProceduralGleam.gdshader" id="17_psdks"]
 [ext_resource type="Shader" path="res://Assets/Shaders/flash.gdshader" id="18_d8luj"]
-[ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="19_un0ke"]
-[ext_resource type="PackedScene" uid="uid://oas5aab7on8x" path="res://Game/damage_radius.tscn" id="20_x1yqf"]
+[ext_resource type="Texture2D" uid="uid://dn4qbs5baybob" path="res://Assets/Boss/l3atlas.png" id="21_5tai2"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="21_knoom"]
+[ext_resource type="Texture2D" uid="uid://86lcot3iin8p" path="res://Assets/shadows.png" id="23_jeir0"]
 
 [sub_resource type="Resource" id="Resource_csk3s"]
 script = ExtResource("3_bmqe5")
@@ -432,8 +432,8 @@ shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ot7aj")
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_yofi6"]
-radius = 15.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_xvry7"]
+radius = 22.0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_11fkc"]
 noise_type = 2
@@ -609,8 +609,9 @@ shader = ExtResource("18_d8luj")
 shader_parameter/active = false
 shader_parameter/tint = Color(1, 1, 1, 1)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_k8ypm"]
-radius = 25.0
+[sub_resource type="AtlasTexture" id="AtlasTexture_sra5p"]
+atlas = ExtResource("23_jeir0")
+region = Rect2(128, 0, 256, 256)
 
 [node name="Boss" type="CharacterBody2D"]
 y_sort_enabled = true
@@ -643,13 +644,14 @@ gravity = Vector2(0, 0)
 scale_amount_curve = SubResource("Curve_pb35b")
 
 [node name="HitDetector" type="Area2D" parent="."]
+position = Vector2(0, -52)
 scale = Vector2(4, 4)
 script = ExtResource("15_t88cj")
 hd_for = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
-position = Vector2(0, -13)
-shape = SubResource("CircleShape2D_yofi6")
+visible = false
+shape = SubResource("CircleShape2D_xvry7")
 
 [node name="HitImpactVFX" type="ColorRect" parent="."]
 show_behind_parent = true
@@ -734,23 +736,16 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Sprite" type="Sprite2D" parent="."]
-modulate = Color(0, 0.501961, 0.501961, 1)
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_w14ld")
-scale = Vector2(4, 4)
-texture = ExtResource("19_un0ke")
-offset = Vector2(0, -14)
-hframes = 3
-vframes = 3
-frame = 1
+texture = ExtResource("21_5tai2")
+offset = Vector2(0, -54)
+vframes = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -15)
-shape = SubResource("CircleShape2D_k8ypm")
-debug_color = Color(1, 0, 0, 0.0784314)
-
-[node name="DamageRadius" parent="." instance=ExtResource("20_x1yqf")]
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
 visible = false
+position = Vector2(0, -7)
+polygon = PackedVector2Array(58.6889, 6.23735, 54.8127, 12.2021, 48.541, 17.6336, 40.1478, 22.2943, 30, 25.9808, 18.541, 28.5317, 6.2717, 29.8357, -6.27171, 29.8357, -18.541, 28.5317, -30, 25.9808, -40.1478, 22.2943, -48.541, 17.6336, -54.8127, 12.2021, -58.6889, 6.23735, -60, -2.86102e-06, -58.6889, -6.23735, -54.8127, -12.2021, -48.541, -17.6336, -40.1478, -22.2943, -30, -25.9808, -18.541, -28.5317, -6.2717, -29.8357, 6.2717, -29.8357, 18.541, -28.5317, 30, -25.9808, 40.1478, -22.2943, 48.541, -17.6336, 54.8127, -12.2021, 58.6889, -6.23735, 60, 4.76837e-06)
 
 [node name="Sight" type="RayCast2D" parent="."]
 collision_mask = 7
@@ -802,3 +797,9 @@ text = "Unit Test"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+z_index = -1
+position = Vector2(0, -4)
+texture = SubResource("AtlasTexture_sra5p")

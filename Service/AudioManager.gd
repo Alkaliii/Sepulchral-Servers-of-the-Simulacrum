@@ -109,7 +109,7 @@ func play_intro_then_loop(intro_sound_path,loop_sound_path,fade_in : Vector2 = V
 	play_music(loop_sound_path,Vector2(0.0,0.0))
 
 var mtw : Tween
-func play_music(sound_path,fade : Vector2 = Vector2(2.0,2.0)):
+func play_music(sound_path,fade : Vector2 = Vector2(2.0,2.0),match_time := false):
 	print("play: ",sound_path)
 	var cross_to : int = 1 #0 is A, 1 is B
 	if music_player_a.playing:
@@ -117,13 +117,17 @@ func play_music(sound_path,fade : Vector2 = Vector2(2.0,2.0)):
 		cross_to = 1
 		music_player_b.stream = load(sound_path)
 		await App.process_frame()
-		music_player_b.play()
+		if match_time: 
+			music_player_b.play(music_player_a.get_playback_position() + AudioServer.get_time_since_last_mix())
+		else: music_player_b.play()
 	elif music_player_b.playing:
 		if music_player_b.stream.resource_path == sound_path: return
 		cross_to = 0
 		music_player_a.stream = load(sound_path)
 		await App.process_frame()
-		music_player_a.play()
+		if match_time: 
+			music_player_a.play(music_player_b.get_playback_position() + AudioServer.get_time_since_last_mix())
+		else: music_player_a.play()
 	else:
 		cross_to = 0
 		music_player_a.stream = load(sound_path)

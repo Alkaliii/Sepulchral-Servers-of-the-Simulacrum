@@ -5,7 +5,7 @@ var stroke : Line2D
 signal circle_drawn
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_pressed("ACTIONC"):
 		var pos = get_local_mouse_position()
 		if !stroke:

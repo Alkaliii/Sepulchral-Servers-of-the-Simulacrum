@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://dgyaxcfmcseek"]
+[gd_scene load_steps=66 format=3 uid="uid://dgyaxcfmcseek"]
 
 [ext_resource type="Script" path="res://Game/player.gd" id="1_75war"]
 [ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="2_7yrue"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Game/Other/gestureRecog.gd" id="4_udhv3"]
 [ext_resource type="Script" path="res://Game/hit_detector.gd" id="5_ew3k5"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="5_pn2lt"]
+[ext_resource type="Texture2D" uid="uid://86lcot3iin8p" path="res://Assets/shadows.png" id="11_w6dqu"]
 [ext_resource type="Texture2D" uid="uid://ci1wy6dekujgw" path="res://Assets/Temp/circle_guide.png" id="12_bum1a"]
 [ext_resource type="Script" path="res://Game/tracker.gd" id="13_cb3h4"]
 [ext_resource type="Texture2D" uid="uid://ga5kr1hn7yih" path="res://Assets/IconAtlas@4x.png" id="14_jo0vm"]
@@ -267,8 +268,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_w7mlu"]
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_h07ks"]
 radius = 20.0
 
@@ -443,6 +442,10 @@ corner_radius_top_right = 1024
 corner_radius_bottom_right = 1024
 corner_radius_bottom_left = 1024
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ud5av"]
+atlas = ExtResource("11_w6dqu")
+region = Rect2(0, 0, 128, 128)
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 3
@@ -472,9 +475,10 @@ offset = Vector2(0, -14)
 [node name="Gesture" type="Node2D" parent="."]
 script = ExtResource("4_udhv3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -8)
-shape = SubResource("CircleShape2D_w7mlu")
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+visible = false
+position = Vector2(0, -1)
+polygon = PackedVector2Array(5.86889, 0.623735, 5.48127, 1.22021, 4.8541, 1.76336, 4.01478, 2.22943, 3, 2.59808, 1.8541, 2.85317, 0.62717, 2.98357, -0.627171, 2.98357, -1.8541, 2.85317, -3, 2.59808, -4.01478, 2.22943, -4.8541, 1.76336, -5.48127, 1.22021, -5.86889, 0.623735, -6, -3.57628e-07, -5.86889, -0.623735, -5.48127, -1.22021, -4.8541, -1.76336, -4.01478, -2.22943, -3, -2.59808, -1.8541, -2.85317, -0.62717, -2.98357, 0.62717, -2.98357, 1.8541, -2.85317, 3, -2.59808, 4.01478, -2.22943, 4.8541, -1.76336, 5.48127, -1.22021, 5.86889, -0.623735, 6, 4.76837e-07)
 
 [node name="HitDetector" type="Area2D" parent="."]
 script = ExtResource("5_ew3k5")
@@ -731,3 +735,10 @@ theme = SubResource("Theme_0ipor")
 theme_override_styles/fill = SubResource("StyleBoxFlat_7ofaw")
 value = 50.0
 show_percentage = false
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.3, 0.3)
+texture = SubResource("AtlasTexture_ud5av")

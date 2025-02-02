@@ -83,6 +83,7 @@ func reload():
 	halfway_dead = false
 	monster_data.status.reload()
 	global_position = Vector2.ZERO
+	stare(Vector2(-1,1))
 	if is_physics_processing(): SystemAudio.sync_and_stop_music()
 	App.purge_attacks.emit()
 	if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.PURGE_ATTACKS]),Plyrm.Playroom.RPC.Mode.OTHERS)
@@ -114,8 +115,9 @@ func change_phase(new_phase : int = -1):
 	await App.process_frame()
 	print("CHANGING PHASE!"," RANDOM" if new_phase == -1 else str(new_phase))
 	var phs : Phase
-	if new_phase and new_phase != -1: 
+	if new_phase != -1: 
 		phs = phases[new_phase]
+		print("phase: ",phases.find(phs))
 		start_phase(phs)
 		return
 	else: 
@@ -128,6 +130,7 @@ func change_phase(new_phase : int = -1):
 		if pick.is_empty(): pick.append(phases[0])
 		phs = pick.pick_random()
 	
+	print("phase: ",phases.find(phs))
 	start_phase(phs)
 
 func start_phase(phs : Phase):
@@ -227,7 +230,7 @@ func sync_damage(amt : int, click : int):
 	Plyrm.Playroom.RPC.call("dmg_boss",var_to_str(data),Plyrm.Playroom.RPC.Mode.HOST)
 
 func remote_damage(amt : int, click : int):
-	if dead: return
+	if dead or !App.can_click: return
 	if active_phase and !active_phase.validate_damage(click): 
 		return
 	
@@ -253,6 +256,8 @@ func check_progress():
 		App.performance_screen_details["time"] = time_elapsed
 		App.performance_screen_details["total_time"] = total_time_elapsed
 		App.performance_screen_details["bhp"] = monster_data.status.max_health
+		dissolve() #need an RPC
+		if Plyrm.connected: Plyrm.Playroom.RPC.call("game_state_update",var_to_str([App.gsu.DISSOLVE_FX]),Plyrm.Playroom.RPC.Mode.OTHERS)
 		await roar(str(monster_data.name," has been defeated."))
 		
 		#Things like this should be one gsu call... It doesn't change so you can just tell the client to do it on their side
@@ -297,6 +302,7 @@ func jukebox(filekey : SoundLib.music_files):
 
 func roar(msg : String = "!!!"):
 	App.can_click = false
+	stare(Vector2(-1,1))
 	var cam = get_tree().get_first_node_in_group("camera")
 	cam.set_target(boss_sprite,Vector2(0,-45))
 	if Plyrm.connected: cam.sync_target()
@@ -464,9 +470,33 @@ func stare(dir : Vector2 = Vector2.ZERO):
 		boss_sprite.flip_h = [true,false].pick_random()
 		print("rand flip")
 		return
-	if dir.x < 0.0: 
-		boss_sprite.flip_h = false
-	else: boss_sprite.flip_h = true
+	
+	var is_down : bool = true
+	if dir.y < 0.0: #UP
+		boss_sprite.frame = 1
+		is_down = false
+	else: 
+		boss_sprite.frame = 0
+		is_down = true
+	
+	await App.process_frame()
+	
+	if dir.x < 0.0: #LEFT
+		boss_sprite.flip_h = false if is_down else true
+	else: boss_sprite.flip_h = true if is_down else false
+
+
+const PIXEL_DISSOLVE = preload("res://Assets/Materials/pixel_dissolve.tres")
+@onready var shadow = $shadow
+func dissolve():
+	var dmat = PIXEL_DISSOLVE.duplicate()
+	boss_sprite.material = dmat
+	shadow.material = dmat
+	
+	var spdt = func(nv : float):
+		boss_sprite.material.set_shader_parameter("time",nv)
+	
+	create_tween().tween_method(spdt,1.57,0.0,3.5).set_ease(Tween.EASE_IN_OUT)
 
 #func set_behaviour_time(new_dura : float):
 	#behaviour_time_elapse = 0.0

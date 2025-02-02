@@ -33,6 +33,7 @@ noise = SubResource("FastNoiseLite_c756u")
 shader = ExtResource("1_a2h1r")
 shader_parameter/mm_str = 1.5
 shader_parameter/edge_ctrl = Vector2(0.9, 1)
+shader_parameter/polar = false
 shader_parameter/mask_texture = SubResource("NoiseTexture2D_dv484")
 shader_parameter/UVscale = Vector2(6.75, 6.75)
 shader_parameter/main_texture_mix = Color(0.329412, 0.329412, 0.329412, 1)

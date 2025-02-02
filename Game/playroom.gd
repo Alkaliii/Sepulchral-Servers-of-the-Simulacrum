@@ -13,10 +13,10 @@ signal PR_DISCONNECT
 var PLAYER : Dictionary = {}
 #var sync_objs : Array = []
 
-var connected_players : Array = []
+var connected_players : Dictionary = {}
 var connected : bool = false
 
-var debug_blog := true
+var debug_blog := false
 
 # Keep a reference to the callback so it doesn't get garbage collected
 var jsBridgeReferences = []
@@ -38,7 +38,7 @@ func blog(txt : String):
 	})
 
 # Called when the host has started the game
-func onInsertCoin(args):
+func onInsertCoin(_args):
 	register_rpc()
 	connected = true
 	print("Coin Inserted! ",Playroom.getRoomCode())
@@ -91,24 +91,28 @@ func clear_playroom_data():
 # Called when a new player joins the game
 func onPlayerJoin(args):
 	var state = args[0]
-	var replace = false
-	for p in connected_players:
-		if p.id == state.id: 
-			connected_players.insert(connected_players.find(p),state)
-			replace = true
-	if !replace: 
-		connected_players.append(state)
+	#var replace = false
+	#for p in connected_players:
+		#if p.id == state.id: 
+			#connected_players.insert(connected_players.find(p),state)
+			#replace = true
+	if !connected_players.has(state.id):
 		blog(str("new npc joined: ", state.id))
 		PR_PLAYER_JOIN.emit(args)
+	connected_players[state.id] = state
+	#if !replace: 
+		#connected_players.append(state)
+		#blog(str("new npc joined: ", state.id))
+		#PR_PLAYER_JOIN.emit(args)
 	print("new npc joined: ", state.id)
 	# Listen to onQuit event
 	state.onQuit(bridgeToJS(onPlayerQuit))
  
 func onPlayerQuit(args):
 	var state = args[0];
-	connected_players.erase(state)
-	for p in connected_players:
-		if p.id == state.id: connected_players.erase(p)
+	connected_players.erase(state.id)
+	#for p in connected_players:
+		#if p.id == state.id: connected_players.erase(p)
 	print("npc quit: ", state.id)
 	blog(str("npc quit: ", state.id))
 	PR_PLAYER_QUIT.emit(args)
@@ -342,7 +346,7 @@ func spawn_dmg(data):
 func get_all_player_state(state := "") -> Array:
 	var all_state : Array = []
 	for p in connected_players:
-		all_state.append(p.getState(state))
+		all_state.append(connected_players[p].getState(state))
 	
 	return all_state
 
@@ -447,6 +451,10 @@ func game_state_update(data):
 				print_debug("Wrong Type")
 				return
 			SystemUI.roar_effect(unpacked_data[1])
+		App.gsu.DISSOLVE_FX:
+			var mnstr = get_tree().get_first_node_in_group("monster")
+			if !mnstr: return
+			mnstr.dissolve()
 		App.gsu.PURGE_ATTACKS:
 			App.purge_attacks.emit()
 		App.gsu.STASH_METRICS:
@@ -457,7 +465,7 @@ func game_state_update(data):
 				"rev":App.revolutions_made,
 				"click":App.clicks_made
 			}
-			Plyrm.PLAYER.state.setState("pMetrics",JSON.stringify(metrics))
+			Plyrm.PLAYER.state.setState("pMetrics",JSON.stringify(metrics),true)
 		App.gsu.SHOW_PERFORMANCE:
 			SystemUI.remote_perf()
 		App.gsu.HIDE_LEVEL_SELECT:
@@ -473,3 +481,14 @@ func game_state_update(data):
 				print_debug("Wrong Type")
 				return
 			App.load_level(unpacked_data[1],unpacked_data[2])
+		App.gsu.DISCONNECT:
+			if unpacked_data.size() < 2: 
+				print_debug("Not enough data")
+				return
+			#if typeof(unpacked_data[1]) != TYPE_STRING: 
+				#print_debug("Wrong Type")
+				#return
+			if connected_players.has(unpacked_data[1]):
+				connected_players[unpacked_data[1]].kick()
+			else: 
+				printerr("Kick failed")

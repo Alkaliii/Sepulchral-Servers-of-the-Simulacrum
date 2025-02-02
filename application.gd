@@ -52,15 +52,39 @@ enum gsu {
 	REMOTE_BACKGROUND,
 	DISABLE_CLIENT_BOSS,
 	ROAR_FX,
+	DISSOLVE_FX,
 	PURGE_ATTACKS,
 	STASH_METRICS,
 	SHOW_PERFORMANCE,
 	HIDE_LEVEL_SELECT,
 	SYNC_LEVEL,
+	DISCONNECT,
 }
 
 var uptime : float = 0.0
 
+#Credits
+
+## Music
+# Andrea Baroni
+# Chris Logsdon
+# Ryan Smith
+# ユーフルカ
+
+## Sound
+# Atelier Magicae
+# BlinnAudio
+# Denisse Takes
+# Kenney
+# Noam Guterman
+
+## Design, Art, Program
+# Ali
+
+## Special Thanks
+# Playroom
+# Godot Engine Contributors & Community
+# Aaron Shaw & Playtesters
 
 func _ready():
 	process_mode = PROCESS_MODE_ALWAYS
@@ -69,11 +93,20 @@ func _ready():
 
 func _process(_delta):
 	uptime += _delta
-	if Input.is_action_just_pressed("debug_reload"):
-		get_tree().reload_current_scene()
-	if Input.is_action_just_pressed("debug_shader_precomp"):
-		SystemAudio.play_intro_then_loop(SoundLib.get_file(SoundLib.music_files.BATTLE_ARIADNE_INTRO),SoundLib.get_file(SoundLib.music_files.BATTLE_ARIADNE))
+	if Input.is_action_just_pressed("screenshot") and OS.has_feature("pc"):
+		var capture = get_viewport().get_texture().get_image()
+		var _time = Time.get_datetime_string_from_system().replace(":","-")
+		var filename = "user://screenshot_{0}.png".format({"0":_time})
+		
+		capture.save_png(filename)
+
+	#if Input.is_action_just_pressed("debug_reload"):
+		#get_tree().reload_current_scene()
+	#if Input.is_action_just_pressed("debug_shader_precomp"):
+		#SystemAudio.play_intro_then_loop(SoundLib.get_file(SoundLib.music_files.BATTLE_ARIADNE_INTRO),SoundLib.get_file(SoundLib.music_files.BATTLE_ARIADNE))
 		#load_misc.emit("res://Game/Other/precompile_shader.tscn")
+		#load_level(5)
+		#pass
 
 func isometrize(v : Vector2) -> Vector2:
 	var new : Vector2 = Vector2()
@@ -175,12 +208,13 @@ func wait_ready():
 		if !false in Plyrm.get_all_player_state("pREADY"):
 			break
 		if timeout <= 0.0:
-			SystemUI.sync_and_push_lateral({
-			"speaker":"nme",
-			"message":"Timeout",
-			"type":LateralNotification.nt.WARN,
-			"duration":4.0
-			})
+			#SystemUI.sync_and_push_lateral({
+			#"speaker":"nme",
+			#"message":"Timeout",
+			#"type":LateralNotification.nt.WARN,
+			#"duration":4.0
+			#})
+			_log_err(["Timeout"])
 			break
 			
 	SystemUI.sync_and_set_background(false)
@@ -202,6 +236,8 @@ func reload_game():
 	reloading = false
 
 func reset_performace_metrics():
+	if Plyrm.connected:
+		Plyrm.PLAYER.state.setState("pMetrics",null)
 	dmg_dealt = 0
 	healing_performed = 0
 	clicks_made = 0
@@ -240,7 +276,7 @@ func remove_environment():
 
 func load_level(level : int,boss : int = 0):
 	remove_boss()
-	if level != -2: remove_environment()
+	if !level in [-2,6]: remove_environment()
 	var plyr = get_tree().get_first_node_in_group("player_persistant")
 	plyr.set_job()
 	plyr.random_start_position()
@@ -264,13 +300,19 @@ func load_level(level : int,boss : int = 0):
 			await App.load_complete
 			load_boss.emit("res://Game/Content/Bosses/boss_L2A.tscn")
 		3:
-			load_misc.emit("res://Game/Content/ArenaEnvironment/Field.tscn")
+			load_misc.emit("res://Game/Content/ArenaEnvironment/Ruins.tscn")
 			await App.load_complete
 			load_boss.emit("res://Game/Content/Bosses/boss_L3A.tscn")
-		5:
+		4:
+			load_misc.emit("res://Game/Content/ArenaEnvironment/RuinsB.tscn")
+			await App.load_complete
+			load_boss.emit("res://Game/Content/Bosses/boss_L4A.tscn")
+		5: #DEBUG
 			load_misc.emit("res://Game/Content/ArenaEnvironment/Field.tscn")
 			await App.load_complete
-			load_boss.emit("res://Game/Content/Bosses/boss_L3A.tscn")
+			load_boss.emit("res://Game/Content/l_4a_cutscene.tscn")
+		6: #Ending
+			load_boss.emit("res://Game/Content/l_4a_cutscene.tscn")
 		_:
 			load_boss.emit("res://Game/scarecrow.tscn")
 	await App.load_complete
@@ -298,6 +340,10 @@ func to_config():
 	await _load("res://Game/arena.tscn")
 	SystemUI.open_config(true)
 
+func disp_credits():
+	await time_delay(1.0)
+	await _load("res://Game/credits.tscn")
+
 func _load(file : String):
 	if !file.is_absolute_path(): 
 		printerr("What the fuck is, ",file,"?")
@@ -318,15 +364,25 @@ func _load(file : String):
 			break
 		elif status == ResourceLoader.THREAD_LOAD_FAILED:
 			printerr("load failed")
-			SystemUI.push_lateral({
-			"speaker":"nme",
-			"message":"err: Background loading failed",
-			"type":LateralNotification.nt.DANGER,
-			"duration":18.0
-			})
+			_log_err(["Background loading failed"])
+			#SystemUI.push_lateral({
+			#"speaker":"nme",
+			#"message":"err: Background loading failed",
+			#"type":LateralNotification.nt.DANGER,
+			#"duration":18.0
+			#})
 			break
 	
 	if load_file and load_file is PackedScene:
 		get_tree().change_scene_to_packed(load_file)
 		#var new = load_file.instantiate()
 		#add_child(new)
+
+func _log_err(err_msg : Array):
+	for e in err_msg:
+		SystemUI.sync_and_push_lateral({
+		"speaker":"nme",
+		"message":str(e),
+		"type":LateralNotification.nt.ERROR,
+		"duration":8.0
+		})

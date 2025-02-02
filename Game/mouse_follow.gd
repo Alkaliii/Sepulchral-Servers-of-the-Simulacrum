@@ -4,7 +4,7 @@ extends Node2D
 @onready var click_burst = $ClickBurst
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if !App.can_click: return
 	global_position = get_global_mouse_position()
 	if Input.is_action_just_pressed("ACTIONB"):

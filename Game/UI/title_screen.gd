@@ -11,6 +11,8 @@ extends Control
 @onready var glitch = $Glitch
 
 @onready var click_2_continue = $ClickDetect/click2continue
+@onready var system_time = $MarginContainer2/HBoxContainer/systemTime
+@onready var status_bar = $MarginContainer2/HBoxContainer
 
 #Authenthicating class.system_npc
 #Error
@@ -31,12 +33,17 @@ func _ready():
 	starttw.tween_property(title,"position:y",156,1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	starttw.parallel().tween_property(title,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN_OUT).set_delay(0.5)
 	starttw.parallel().tween_property(story_text,"visible_ratio",1.0,0.25).set_ease(Tween.EASE_IN_OUT).set_delay(0.5)
+	starttw.parallel().tween_property(status_bar,"modulate:a",1.0,0.25).set_ease(Tween.EASE_IN_OUT)
 	await starttw.finished
 	
 	c2stw = create_tween()
 	c2stw.tween_property(click_2_start,"modulate:a",1.0,0.125).set_ease(Tween.EASE_IN_OUT)
 	await c2stw.finished
 	click_detect.show()
+
+func _process(delta):
+	var t = Time.get_datetime_dict_from_system()
+	system_time.text = "%02d:%02d" % [t.hour,t.minute]
 
 signal clicked
 var started : bool = false

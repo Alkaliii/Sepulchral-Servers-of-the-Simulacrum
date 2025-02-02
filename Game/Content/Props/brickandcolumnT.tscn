@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://ygqg142y7c4c"]
+
+[ext_resource type="Texture2D" uid="uid://gm7mws5n4782" path="res://Assets/enviromentalAtlas.png" id="1_e7ng0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oos1n"]
+atlas = ExtResource("1_e7ng0")
+region = Rect2(103, 138, 50, 81)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vi3y2"]
+atlas = ExtResource("1_e7ng0")
+region = Rect2(103, 138, 50, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1ens"]
+atlas = ExtResource("1_e7ng0")
+region = Rect2(104, 100, 48, 40)
+
+[node name="TallerBrick&Column" type="Node2D"]
+
+[node name="Bottom" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_oos1n")
+offset = Vector2(0, -25)
+
+[node name="Middle" type="Sprite2D" parent="."]
+position = Vector2(0, -75)
+texture = SubResource("AtlasTexture_vi3y2")
+
+[node name="Middle2" type="Sprite2D" parent="."]
+position = Vector2(0, -95)
+texture = SubResource("AtlasTexture_vi3y2")
+
+[node name="Middle4" type="Sprite2D" parent="."]
+position = Vector2(0, -115)
+texture = SubResource("AtlasTexture_vi3y2")
+
+[node name="Middle5" type="Sprite2D" parent="."]
+position = Vector2(0, -135)
+texture = SubResource("AtlasTexture_vi3y2")
+
+[node name="Top" type="Sprite2D" parent="."]
+position = Vector2(0, -165)
+texture = SubResource("AtlasTexture_t1ens")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(-24, 0, 0, 12, 24, 0, 0, -12)

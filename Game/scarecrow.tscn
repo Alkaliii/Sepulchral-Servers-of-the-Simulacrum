@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Game/Other/tutorial_handler.gd" id="4_oellp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s2su6"]
-radius = 22.0
+radius = 32.0
 
 [node name="Scarecrow" type="Node2D"]
 script = ExtResource("1_60tn0")
@@ -14,10 +14,10 @@ script = ExtResource("1_60tn0")
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(2, 0)
 texture = ExtResource("2_lccv0")
-offset = Vector2(0, -28)
+offset = Vector2(0, -42)
 
 [node name="HitDetector" parent="." instance=ExtResource("2_qjvwk")]
-position = Vector2(0, -37)
+position = Vector2(-1, -51)
 hd_for = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
@@ -27,6 +27,7 @@ shape = SubResource("CircleShape2D_s2su6")
 script = ExtResource("4_oellp")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(-2, 0)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(-4, 0, 0, -4, 4, 0, 0, 4)
+polygon = PackedVector2Array(-8, 0, 0, -4, 8, 0, 0, 4)

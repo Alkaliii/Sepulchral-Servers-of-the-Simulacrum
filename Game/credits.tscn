@@ -1,0 +1,384 @@
+[gd_scene load_steps=11 format=3 uid="uid://d0426iv8b14wr"]
+
+[ext_resource type="Script" path="res://Game/credits.gd" id="1_cqh52"]
+[ext_resource type="Shader" path="res://Assets/Shaders/slipgate.gdshader" id="1_sj5ph"]
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="2_jd2yv"]
+[ext_resource type="FontFile" uid="uid://bbqf6kpwhmj81" path="res://Assets/Fonts/M_PLUS_1_Code/MPLUS1Code-SemiBold.ttf" id="3_felcy"]
+[ext_resource type="Script" path="res://Game/creditbtn.gd" id="4_em43g"]
+[ext_resource type="FontFile" uid="uid://k7glwdc6nu4l" path="res://Assets/Fonts/itsadzoke/itsadzoke-046.otf" id="4_o3j5g"]
+
+[sub_resource type="Gradient" id="Gradient_xahw2"]
+offsets = PackedFloat32Array(0, 0.6, 0.8, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.745098, 0.745098, 0.745098, 1, 0.2, 0.2, 0.2, 1, 0.745098, 0.745098, 0.745098, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_aeq4l"]
+gradient = SubResource("Gradient_xahw2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beevm"]
+shader = ExtResource("1_sj5ph")
+shader_parameter/polar_coordinates = true
+shader_parameter/polar_center = Vector2(0.5, 0.5)
+shader_parameter/fisheye_amt = 1.0
+shader_parameter/fbm_octaves = 4
+shader_parameter/center_bias = 1.0
+shader_parameter/swirl_str = 0.02
+shader_parameter/swirl_arms = -3
+shader_parameter/swirl_size = 5.0
+shader_parameter/marble_multipliers = Vector2(5, 3.5)
+shader_parameter/rotation_speed = -0.01
+shader_parameter/rotation_speed_b = -0.1
+shader_parameter/time_scale = Vector2(0.05, 0.1)
+shader_parameter/time_scale_b = Vector2(0.02, 0.05)
+shader_parameter/edges = Vector2(1, 0)
+shader_parameter/use_color_lookup = true
+shader_parameter/color_lookup = SubResource("GradientTexture1D_aeq4l")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0vdgj"]
+
+[node name="Credits" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cqh52")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0, 360)
+color = Color(0.831373, 0.854902, 0.831373, 1)
+
+[node name="BackTexture" type="ColorRect" parent="Background"]
+modulate = Color(1, 1, 1, 0.0980392)
+material = SubResource("ShaderMaterial_beevm")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 30
+
+[node name="Me" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 5
+
+[node name="Header" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Me"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("2_jd2yv")
+theme_override_fonts/bold_font = ExtResource("2_jd2yv")
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "Developed by"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="ali" type="Button" parent="MarginContainer/HBoxContainer/Me"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Ali"
+flat = true
+script = ExtResource("4_em43g")
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="firstcol" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Musicians" type="VBoxContainer" parent="MarginContainer/HBoxContainer/firstcol"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="MusicHeader" type="RichTextLabel" parent="MarginContainer/HBoxContainer/firstcol/Musicians"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("2_jd2yv")
+theme_override_fonts/bold_font = ExtResource("2_jd2yv")
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "[wave]Music"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="andrea" type="Button" parent="MarginContainer/HBoxContainer/firstcol/Musicians"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Andrea Baroni"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="chris" type="Button" parent="MarginContainer/HBoxContainer/firstcol/Musicians"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Chris Logsdon"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="ryan" type="Button" parent="MarginContainer/HBoxContainer/firstcol/Musicians"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Ryan Smith"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="youfulca" type="Button" parent="MarginContainer/HBoxContainer/firstcol/Musicians"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("3_felcy")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "ユーフルカ"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/firstcol"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="SoundDesigners" type="VBoxContainer" parent="MarginContainer/HBoxContainer/firstcol"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="SoundHeader" type="RichTextLabel" parent="MarginContainer/HBoxContainer/firstcol/SoundDesigners"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("2_jd2yv")
+theme_override_fonts/bold_font = ExtResource("2_jd2yv")
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "[wave]Sound"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="atelier" type="Button" parent="MarginContainer/HBoxContainer/firstcol/SoundDesigners"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Atelier Magicae"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="ryan" type="Button" parent="MarginContainer/HBoxContainer/firstcol/SoundDesigners"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Ryan Smith"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="denisse" type="Button" parent="MarginContainer/HBoxContainer/firstcol/SoundDesigners"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Denisse Takes"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="kenney" type="Button" parent="MarginContainer/HBoxContainer/firstcol/SoundDesigners"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Kenney"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="noam" type="Button" parent="MarginContainer/HBoxContainer/firstcol/SoundDesigners"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Noam Guterman"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="seccol" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="SpecialThanks" type="VBoxContainer" parent="MarginContainer/HBoxContainer/seccol"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ThanksHeader" type="RichTextLabel" parent="MarginContainer/HBoxContainer/seccol/SpecialThanks"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("2_jd2yv")
+theme_override_fonts/bold_font = ExtResource("2_jd2yv")
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "[wave][font_size=15]Special[/font_size]
+Thanks"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="playroom" type="Button" parent="MarginContainer/HBoxContainer/seccol/SpecialThanks"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Playroom"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="godot" type="Button" parent="MarginContainer/HBoxContainer/seccol/SpecialThanks"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Godot Engine 
+ Contributors 
+ & Community"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="playtesters" type="Button" parent="MarginContainer/HBoxContainer/seccol/SpecialThanks"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0.501961, 0.501961, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_jd2yv")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0vdgj")
+text = "Aaron Shaw
+ & Playtesters"
+flat = true
+alignment = 0
+script = ExtResource("4_em43g")
+
+[node name="HeaderVbc" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = -5
+
+[node name="Subtitle" type="RichTextLabel" parent="MarginContainer/HeaderVbc"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/normal_font = ExtResource("2_jd2yv")
+theme_override_fonts/bold_font = ExtResource("2_jd2yv")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "[wave]Thanks for Playing!"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Header" type="RichTextLabel" parent="MarginContainer/HeaderVbc"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("4_o3j5g")
+theme_override_fonts/mono_font = ExtResource("2_jd2yv")
+theme_override_font_sizes/mono_font_size = 12
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "Credits"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters_behavior = 1
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Me/ali" to="." method="_on_ali_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/Musicians/andrea" to="." method="_on_andrea_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/Musicians/chris" to="." method="_on_chris_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/Musicians/ryan" to="." method="_on_ryan_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/Musicians/youfulca" to="." method="_on_youfulca_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/SoundDesigners/atelier" to="." method="_on_atelier_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/SoundDesigners/ryan" to="." method="_on_ryan_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/SoundDesigners/denisse" to="." method="_on_denisse_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/SoundDesigners/kenney" to="." method="_on_kenney_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/firstcol/SoundDesigners/noam" to="." method="_on_noam_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/seccol/SpecialThanks/playroom" to="." method="_on_playroom_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/seccol/SpecialThanks/godot" to="." method="_on_godot_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/seccol/SpecialThanks/playtesters" to="." method="_on_playtesters_pressed"]

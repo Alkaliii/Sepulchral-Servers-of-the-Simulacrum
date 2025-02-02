@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://brwt5agw1bgb"]
+
+[ext_resource type="Shader" path="res://Assets/Shaders/soko.gdshader" id="1_1mcvy"]
+
+[resource]
+shader = ExtResource("1_1mcvy")
+shader_parameter/normal_offset = 1.5
+shader_parameter/time_influence = 3.0
+shader_parameter/y_div = 2.87

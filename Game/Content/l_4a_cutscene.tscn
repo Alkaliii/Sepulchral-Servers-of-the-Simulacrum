@@ -1,0 +1,92 @@
+[gd_scene load_steps=13 format=3 uid="uid://bjlxh555s8y52"]
+
+[ext_resource type="Script" path="res://Game/Content/l_4a_cutscene.gd" id="1_es41x"]
+[ext_resource type="Script" path="res://Game/hit_detector.gd" id="2_f8h8a"]
+[ext_resource type="Shader" path="res://Assets/Shaders/pxdissolve.gdshader" id="3_gixqa"]
+[ext_resource type="Texture2D" uid="uid://dkgibvkbvviyi" path="res://Assets/Boss/l4atlas.png" id="4_i8vvu"]
+[ext_resource type="Shader" path="res://Assets/Shaders/glitchB.gdshader" id="5_3fqx6"]
+[ext_resource type="Shader" path="res://Assets/Shaders/glitchSprite.gdshader" id="5_h1ben"]
+[ext_resource type="Texture2D" uid="uid://86lcot3iin8p" path="res://Assets/shadows.png" id="6_31xga"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_olm34"]
+radius = 24.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eqlvt"]
+shader = ExtResource("3_gixqa")
+shader_parameter/time = 0.7
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_is38l"]
+shader = ExtResource("5_3fqx6")
+shader_parameter/resolution = Vector2(260, 260)
+shader_parameter/noise = 0.2
+shader_parameter/distort = 0.06
+shader_parameter/offset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_amf4d"]
+shader = ExtResource("5_h1ben")
+shader_parameter/shake_power = 0.03
+shader_parameter/shake_rate = 0.1
+shader_parameter/shake_speed = 2.0
+shader_parameter/shake_block_size = 4.0
+shader_parameter/shake_color_rate = 0.01
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjs0g"]
+atlas = ExtResource("6_31xga")
+region = Rect2(128, 256, 256, 256)
+
+[node name="L4ACutscene" type="Node2D"]
+script = ExtResource("1_es41x")
+
+[node name="HitDetector" type="Area2D" parent="."]
+position = Vector2(0, -52)
+scale = Vector2(4, 4)
+script = ExtResource("2_f8h8a")
+hd_for = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
+visible = false
+shape = SubResource("CircleShape2D_olm34")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_eqlvt")
+texture = ExtResource("4_i8vvu")
+offset = Vector2(0, -58)
+vframes = 2
+
+[node name="Sprite2" type="Sprite2D" parent="Sprite"]
+show_behind_parent = true
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_is38l")
+texture = ExtResource("4_i8vvu")
+offset = Vector2(0, -58)
+vframes = 2
+
+[node name="ColorRect" type="ColorRect" parent="Sprite"]
+z_index = 1
+material = SubResource("ShaderMaterial_amf4d")
+custom_minimum_size = Vector2(260, 260)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -317.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+visible = false
+position = Vector2(0, -24)
+polygon = PackedVector2Array(83.1425, 8.83625, 77.6514, 17.2863, 68.7664, 24.9809, 56.8761, 31.5837, 42.5, 36.8061, 26.2664, 40.4199, 8.88491, 42.2672, -8.88492, 42.2672, -26.2665, 40.4199, -42.5, 36.8061, -56.8761, 31.5837, -68.7664, 24.9809, -77.6514, 17.2863, -83.1425, 8.83624, -85, -3.8147e-06, -83.1425, -8.83625, -77.6514, -17.2863, -68.7664, -24.9809, -56.8761, -31.5837, -42.5, -36.8061, -26.2665, -40.4199, -8.88491, -42.2672, 8.88491, -42.2672, 26.2665, -40.4199, 42.5, -36.8061, 56.8761, -31.5837, 68.7664, -24.9809, 77.6514, -17.2863, 83.1425, -8.83625, 85, 5.72205e-06)
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+z_index = -1
+position = Vector2(0, -28)
+texture = SubResource("AtlasTexture_qjs0g")

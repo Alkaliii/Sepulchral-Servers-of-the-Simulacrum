@@ -2,11 +2,15 @@ extends Node2D
 
 @onready var hit_detector = $HitDetector
 
+var loot_state : bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if [true,true,false].pick_random():
-		queue_free()
-		return
+	add_to_group("loot")
+	loot_state = [true,true,false].pick_random()
+	#await get_tree().process_frame
+	#if [true,true,false].pick_random():
+		#queue_free()
+		#return
 	
 	hit_detector.CLICKED.connect(on_click)
 

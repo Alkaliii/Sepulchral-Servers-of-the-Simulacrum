@@ -56,7 +56,6 @@ noise = SubResource("FastNoiseLite_f7y7t")
 position = Vector2(-200, 0)
 script = ExtResource("8_ff12j")
 distort_circle = Vector2(1, 0.5)
-random_range = null
 disperse_amount = 300
 nodes_to_disperse = Array[PackedScene]([ExtResource("8_wemvu"), ExtResource("9_ijorx"), ExtResource("10_rb8xx"), ExtResource("11_erjov")])
 select_node_by_distance = true

@@ -13,7 +13,7 @@ func _ready():
 	App.tutorial_start.emit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 var rtw : Tween

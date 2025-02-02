@@ -1,0 +1,1124 @@
+[gd_scene load_steps=102 format=3 uid="uid://dqpytjvqrnw40"]
+
+[ext_resource type="Script" path="res://Game/boss.gd" id="1_fk1qu"]
+[ext_resource type="Script" path="res://Game/Schema/Monster.gd" id="2_s4m0e"]
+[ext_resource type="Script" path="res://Game/Schema/Status.gd" id="3_rjqmv"]
+[ext_resource type="Script" path="res://Game/Schema/Weapon.gd" id="4_h1gxp"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase.gd" id="4_ojvrv"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/attackOption.gd" id="5_hs2yw"]
+[ext_resource type="Script" path="res://Game/Schema/DamageSettings.gd" id="6_57ttt"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkLine.gd" id="7_pvdiw"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkFocus.gd" id="8_5ie53"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Condition/conditionOption.gd" id="8_8w5wx"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/movementOption.gd" id="9_hslg0"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveRoam.gd" id="10_wv8fy"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/specialOption.gd" id="11_g3arw"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveTeleport.gd" id="12_apj78"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Movement/mveDash.gd" id="13_e73pi"]
+[ext_resource type="Shader" path="res://Assets/Shaders/circpulse.gdshader" id="14_br00b"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Attack/atkCircle.gd" id="14_ooxmq"]
+[ext_resource type="Script" path="res://Game/hit_detector.gd" id="15_s0wgw"]
+[ext_resource type="Shader" path="res://Assets/Shaders/ProceduralSpark.gdshader" id="16_b25oa"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPull.gd" id="17_c3lbh"]
+[ext_resource type="Shader" path="res://Assets/Shaders/ProceduralGleam.gdshader" id="17_fuers"]
+[ext_resource type="Script" path="res://Game/Schema/Phase/Phase Options/Special/spcPush.gd" id="18_gmsxq"]
+[ext_resource type="Shader" path="res://Assets/Shaders/flash.gdshader" id="18_mlkp7"]
+[ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="21_yfa46"]
+[ext_resource type="Texture2D" uid="uid://dkgibvkbvviyi" path="res://Assets/Boss/l4atlas.png" id="24_pokb8"]
+[ext_resource type="Texture2D" uid="uid://86lcot3iin8p" path="res://Assets/shadows.png" id="26_ieknf"]
+
+[sub_resource type="Resource" id="Resource_r3s8d"]
+script = ExtResource("3_rjqmv")
+health = 5
+current_effects = {}
+immunity = Array[int]([])
+for_player = false
+
+[sub_resource type="Resource" id="Resource_4md7q"]
+script = ExtResource("2_s4m0e")
+stitle = "quintessence of authority"
+name = "Networkus Firewalla"
+health_mod = 2.0
+clamp_health = 4
+status = SubResource("Resource_r3s8d")
+normal_music = 8
+halfway_music = 1
+roar = 4
+
+[sub_resource type="Resource" id="Resource_i2yr6"]
+script = ExtResource("4_h1gxp")
+icon = 1
+primary_damage = 1
+secondary_damage = 0
+tertiary_damage = 0
+inflict_status = 0
+
+[sub_resource type="Resource" id="Resource_0cm56"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 60
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_pg3db"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 30
+inflict = 0
+pre_warn = 0.25
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_mf1j0"]
+script = ExtResource("8_5ie53")
+attack_number = 6
+intra_spawn_delay = 0.5
+spawn_position = 1
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_0cm56"), SubResource("Resource_pg3db")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_yv4bt"]
+script = ExtResource("10_wv8fy")
+roam_limit = Vector2(200, 200)
+roam_speed = 30.0
+move_ease = 2
+move_trans = 4
+
+[sub_resource type="Resource" id="Resource_afkfj"]
+script = ExtResource("4_ojvrv")
+context_exclusive = 3
+schedule = Array[int]([0, 1, 0, 1])
+on_heavy = 1
+ohspi = -1
+on_end = 0
+oespi = -1
+chance_to_stop = 0.0
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_hslg0")]([SubResource("Resource_yv4bt")])
+ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_mf1j0")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([])
+SPECIAL_OPTIONS = Array[ExtResource("11_g3arw")]([])
+CONDITION_OPTIONS = Array[ExtResource("8_8w5wx")]([])
+
+[sub_resource type="Resource" id="Resource_8e2y5"]
+script = ExtResource("6_57ttt")
+dmg = 0
+radius = 480
+inflict = 3
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_y7cnc"]
+script = ExtResource("6_57ttt")
+dmg = 0
+radius = 480
+inflict = 4
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_4x2ng"]
+script = ExtResource("6_57ttt")
+dmg = 0
+radius = 480
+inflict = 5
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_2jshy"]
+script = ExtResource("6_57ttt")
+dmg = 0
+radius = 480
+inflict = 6
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_mw40q"]
+script = ExtResource("6_57ttt")
+dmg = 0
+radius = 480
+inflict = 7
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_5107t"]
+script = ExtResource("6_57ttt")
+dmg = 0
+radius = 480
+inflict = 8
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_q8x36"]
+script = ExtResource("8_5ie53")
+attack_number = 1
+intra_spawn_delay = 1.0
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_8e2y5"), SubResource("Resource_y7cnc"), SubResource("Resource_4x2ng"), SubResource("Resource_2jshy"), SubResource("Resource_mw40q"), SubResource("Resource_5107t")])
+multi_ds_behaviour = 1
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_1ia4w"]
+script = ExtResource("12_apj78")
+teleport_to = 0
+tele_global = Vector2(0, 0)
+tele_limit = Vector2(200, 200)
+hold = 0.5
+
+[sub_resource type="Resource" id="Resource_y8a2e"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 60
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 3.0
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 6
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_0ttgh"]
+script = ExtResource("14_ooxmq")
+attack_points = 12
+radius = 240.0
+intra_spawn_delay = 0.125
+shuffle_spawn_order = true
+spawn_position = 1
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_y8a2e")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_v7ud8"]
+script = ExtResource("4_ojvrv")
+context_exclusive = 0
+schedule = Array[int]([2, 0, 1])
+on_heavy = 0
+ohspi = -1
+on_end = 1
+oespi = -1
+chance_to_stop = 0.0
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_hslg0")]([SubResource("Resource_1ia4w")])
+ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_q8x36")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_0ttgh")])
+SPECIAL_OPTIONS = Array[ExtResource("11_g3arw")]([])
+CONDITION_OPTIONS = Array[ExtResource("8_8w5wx")]([])
+
+[sub_resource type="Resource" id="Resource_eyt8t"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 60
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 3.0
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 4
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_sj2nd"]
+script = ExtResource("7_pvdiw")
+derive_dir = 1
+to_object_position = 5
+to_position = Vector2(1, 0)
+rotational_offset = 0.0
+attack_number = 9
+grow_factor = 1.0
+bifurcate = false
+intra_spawn_delay = 0.062
+shuffle_spawn_order = true
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_eyt8t")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_ybdfc"]
+script = ExtResource("13_e73pi")
+dash_speed = 1900.0
+move_ease = 1
+move_trans = 5
+
+[sub_resource type="Resource" id="Resource_va8co"]
+script = ExtResource("4_ojvrv")
+context_exclusive = 0
+schedule = Array[int]([0, 1, 4])
+on_heavy = 0
+ohspi = -1
+on_end = 1
+oespi = -1
+chance_to_stop = 0.0
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_hslg0")]([SubResource("Resource_ybdfc")])
+ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_sj2nd")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([])
+SPECIAL_OPTIONS = Array[ExtResource("11_g3arw")]([])
+CONDITION_OPTIONS = Array[ExtResource("8_8w5wx")]([])
+
+[sub_resource type="Resource" id="Resource_hswcr"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 30
+inflict = 0
+pre_warn = 0.25
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_wsug6"]
+script = ExtResource("8_5ie53")
+attack_number = 8
+intra_spawn_delay = 0.5
+spawn_position = 2
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_hswcr")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_ad7rp"]
+script = ExtResource("12_apj78")
+teleport_to = 1
+tele_global = Vector2(0, 0)
+tele_limit = Vector2(200, 200)
+hold = 0.5
+
+[sub_resource type="Resource" id="Resource_elwbt"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 60
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 0.1
+repeat = 1
+slow = true
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_v23gt"]
+script = ExtResource("7_pvdiw")
+derive_dir = 1
+to_object_position = 1
+to_position = Vector2(1, 0)
+rotational_offset = 0.0
+attack_number = 6
+grow_factor = 1.5
+bifurcate = false
+intra_spawn_delay = 0.0
+shuffle_spawn_order = false
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_elwbt")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_758qq"]
+script = ExtResource("4_ojvrv")
+context_exclusive = 0
+schedule = Array[int]([0, 1, 2, 2, 2, 4])
+on_heavy = 0
+ohspi = -1
+on_end = 1
+oespi = -1
+chance_to_stop = 0.0
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_hslg0")]([SubResource("Resource_ad7rp")])
+ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_wsug6")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_v23gt")])
+SPECIAL_OPTIONS = Array[ExtResource("11_g3arw")]([])
+CONDITION_OPTIONS = Array[ExtResource("8_8w5wx")]([])
+
+[sub_resource type="Resource" id="Resource_iajyr"]
+script = ExtResource("8_8w5wx")
+condition = 1
+inflict = 0
+is_clutch = false
+
+[sub_resource type="Resource" id="Resource_h0rk8"]
+script = ExtResource("12_apj78")
+teleport_to = 1
+tele_global = Vector2(0, 0)
+tele_limit = Vector2(200, 200)
+hold = 0.5
+
+[sub_resource type="Resource" id="Resource_5bi67"]
+script = ExtResource("17_c3lbh")
+length = 3.0
+strength = 1.2
+
+[sub_resource type="Resource" id="Resource_lyjwi"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 80
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 2.0
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_83y38"]
+script = ExtResource("14_ooxmq")
+attack_points = 6
+radius = 160.0
+intra_spawn_delay = 0.0
+shuffle_spawn_order = false
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_lyjwi")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_trkg6"]
+script = ExtResource("4_ojvrv")
+context_exclusive = 1
+schedule = Array[int]([0, 2, 3])
+on_heavy = 0
+ohspi = -1
+on_end = 1
+oespi = -1
+chance_to_stop = 0.0
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_hslg0")]([SubResource("Resource_h0rk8")])
+ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_83y38")])
+SPECIAL_OPTIONS = Array[ExtResource("11_g3arw")]([SubResource("Resource_5bi67")])
+CONDITION_OPTIONS = Array[ExtResource("8_8w5wx")]([SubResource("Resource_iajyr")])
+
+[sub_resource type="Resource" id="Resource_w56t3"]
+script = ExtResource("12_apj78")
+teleport_to = 1
+tele_global = Vector2(0, 0)
+tele_limit = Vector2(200, 200)
+hold = 0.5
+
+[sub_resource type="Resource" id="Resource_rdy7k"]
+script = ExtResource("18_gmsxq")
+length = 3.0
+strength = 1.0
+
+[sub_resource type="Resource" id="Resource_37cmn"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 80
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 2.0
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 0
+movement_speed = 5.0
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_py5d4"]
+script = ExtResource("14_ooxmq")
+attack_points = 16
+radius = 472.0
+intra_spawn_delay = 0.0
+shuffle_spawn_order = false
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_37cmn")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_0geux"]
+script = ExtResource("4_ojvrv")
+context_exclusive = 1
+schedule = Array[int]([0, 2, 3])
+on_heavy = 0
+ohspi = -1
+on_end = 1
+oespi = -1
+chance_to_stop = 0.0
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_hslg0")]([SubResource("Resource_w56t3")])
+ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_py5d4")])
+SPECIAL_OPTIONS = Array[ExtResource("11_g3arw")]([SubResource("Resource_rdy7k")])
+CONDITION_OPTIONS = Array[ExtResource("8_8w5wx")]([SubResource("Resource_iajyr")])
+
+[sub_resource type="Resource" id="Resource_pbtvv"]
+script = ExtResource("6_57ttt")
+dmg = 1
+radius = 70
+inflict = 0
+pre_warn = 0.5
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 2.0
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 6
+movement_speed = 5.0
+spawn_sound = 1
+
+[sub_resource type="Resource" id="Resource_ugqal"]
+script = ExtResource("8_5ie53")
+attack_number = 6
+intra_spawn_delay = 1.0
+spawn_position = 1
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_pbtvv")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_0gy8c"]
+script = ExtResource("4_ojvrv")
+context_exclusive = 1
+schedule = Array[int]([1, 2, 4, 4])
+on_heavy = 0
+ohspi = -1
+on_end = 1
+oespi = -1
+chance_to_stop = 0.0
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_hslg0")]([])
+ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_q8x36")])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_ugqal")])
+SPECIAL_OPTIONS = Array[ExtResource("11_g3arw")]([])
+CONDITION_OPTIONS = Array[ExtResource("8_8w5wx")]([])
+
+[sub_resource type="Resource" id="Resource_mcaiy"]
+script = ExtResource("12_apj78")
+teleport_to = 1
+tele_global = Vector2(0, 0)
+tele_limit = Vector2(200, 200)
+hold = 0.5
+
+[sub_resource type="Resource" id="Resource_l5ngk"]
+script = ExtResource("6_57ttt")
+dmg = 3
+radius = 70
+inflict = 0
+pre_warn = 1.0
+warn_activation_time = 1.0
+dmg_activation_time = 0.5
+hold_time = 16.0
+repeat = 1
+slow = false
+prevent_attack = false
+invert_controls = false
+movement_type = 1
+movement_speed = 0.5
+spawn_sound = 4
+
+[sub_resource type="Resource" id="Resource_owbba"]
+script = ExtResource("7_pvdiw")
+derive_dir = 0
+to_object_position = 1
+to_position = Vector2(1, 0)
+rotational_offset = 0.0
+attack_number = 12
+grow_factor = 1.0
+bifurcate = false
+intra_spawn_delay = 0.062
+shuffle_spawn_order = true
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_l5ngk")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_pi0nv"]
+script = ExtResource("7_pvdiw")
+derive_dir = 0
+to_object_position = 1
+to_position = Vector2(1, 0)
+rotational_offset = 0.0
+attack_number = 12
+grow_factor = 1.0
+bifurcate = false
+intra_spawn_delay = 0.062
+shuffle_spawn_order = false
+spawn_position = 0
+spawn_position_offset = Vector2(0, 0)
+damage_settings = Array[ExtResource("6_57ttt")]([SubResource("Resource_l5ngk")])
+multi_ds_behaviour = 0
+attack_start_delay = 1.0
+
+[sub_resource type="Resource" id="Resource_y6e4a"]
+script = ExtResource("4_ojvrv")
+context_exclusive = 1
+schedule = Array[int]([0, 2, 4])
+on_heavy = 0
+ohspi = -1
+on_end = 1
+oespi = -1
+chance_to_stop = 0.0
+wait_range = Vector2(0.5, 2)
+MOVEMENT_OPTIONS = Array[ExtResource("9_hslg0")]([SubResource("Resource_mcaiy")])
+ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([])
+SUB_ATTACK_OPTIONS = Array[ExtResource("5_hs2yw")]([SubResource("Resource_owbba"), SubResource("Resource_pi0nv")])
+SPECIAL_OPTIONS = Array[ExtResource("11_g3arw")]([])
+CONDITION_OPTIONS = Array[ExtResource("8_8w5wx")]([])
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_toek4"]
+noise_type = 2
+fractal_type = 3
+fractal_octaves = 4
+fractal_gain = 2.0
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j8aok"]
+width = 256
+invert = true
+seamless = true
+noise = SubResource("FastNoiseLite_toek4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6mmno"]
+shader = ExtResource("14_br00b")
+shader_parameter/mask = false
+shader_parameter/mask_scroll = Vector2(0, 0)
+shader_parameter/wscale = 1.0
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 1.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/auto_fade = true
+shader_parameter/direction = 1.0
+shader_parameter/modulate = Color(0.745098, 0.745098, 0.745098, 1)
+shader_parameter/pulse_max_scale = 0.35
+shader_parameter/pulse_offset = 0.0
+shader_parameter/outer_feather = 0.1
+shader_parameter/inner_feather = 0.05
+shader_parameter/ss_edges = Vector2(0, 0.4)
+shader_parameter/mix_strength = 0.0
+shader_parameter/col_ovr_dis_str = 0.0
+shader_parameter/polarize_opacity_noise = true
+shader_parameter/animate_opacity_noise = Vector3(0, 0, -1)
+shader_parameter/scale_opacity_noise = Vector2(1, 0.2)
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_j8aok")
+
+[sub_resource type="Gradient" id="Gradient_ickkg"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_op2kc"]
+gradient = SubResource("Gradient_ickkg")
+width = 800
+height = 400
+
+[sub_resource type="Curve" id="Curve_21qdy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cmudy"]
+noise_type = 2
+fractal_type = 3
+fractal_octaves = 4
+fractal_gain = 2.0
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ot7aj"]
+width = 256
+invert = true
+seamless = true
+noise = SubResource("FastNoiseLite_cmudy")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t0pa2"]
+shader = ExtResource("14_br00b")
+shader_parameter/mask = false
+shader_parameter/mask_scroll = Vector2(0, 0)
+shader_parameter/wscale = 1.0
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 1.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/auto_fade = true
+shader_parameter/direction = 0.0
+shader_parameter/modulate = Color(0.745098, 0.745098, 0.745098, 1)
+shader_parameter/pulse_max_scale = 0.35
+shader_parameter/pulse_offset = 0.0
+shader_parameter/outer_feather = 0.1
+shader_parameter/inner_feather = 0.05
+shader_parameter/ss_edges = Vector2(0, 0.4)
+shader_parameter/mix_strength = 0.0
+shader_parameter/col_ovr_dis_str = 0.0
+shader_parameter/polarize_opacity_noise = true
+shader_parameter/animate_opacity_noise = Vector3(0, 0, -1)
+shader_parameter/scale_opacity_noise = Vector2(1, 0.2)
+shader_parameter/opacity_noise = SubResource("NoiseTexture2D_ot7aj")
+
+[sub_resource type="Curve" id="Curve_pb35b"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1dp00"]
+radius = 24.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_11fkc"]
+noise_type = 2
+frequency = 0.05
+fractal_weighted_strength = 1.0
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_br3dr"]
+seamless = true
+noise = SubResource("FastNoiseLite_11fkc")
+
+[sub_resource type="Gradient" id="Gradient_lmfs7"]
+offsets = PackedFloat32Array(0.2, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qckk8"]
+gradient = SubResource("Gradient_lmfs7")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wq0bb"]
+shader = ExtResource("16_b25oa")
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 1.0
+shader_parameter/time_scale = 1.0
+shader_parameter/spark_origin = Vector2(0.5, 0.5)
+shader_parameter/spark_zoom = 0.1
+shader_parameter/spark_rotate = 90.0
+shader_parameter/spark_color = Color(1, 1, 1, 1)
+shader_parameter/mix_strength = null
+shader_parameter/emission_strength = null
+shader_parameter/base_noise = SubResource("NoiseTexture2D_br3dr")
+shader_parameter/radial_mask = SubResource("GradientTexture2D_qckk8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c5mmf"]
+shader = ExtResource("16_b25oa")
+shader_parameter/progress = 0.0
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 1.0
+shader_parameter/time_scale = 1.0
+shader_parameter/spark_origin = Vector2(0.5, 0.5)
+shader_parameter/spark_zoom = 0.1
+shader_parameter/spark_rotate = 90.0
+shader_parameter/spark_color = Color(1, 1, 1, 1)
+shader_parameter/mix_strength = null
+shader_parameter/emission_strength = null
+shader_parameter/base_noise = SubResource("NoiseTexture2D_br3dr")
+shader_parameter/radial_mask = SubResource("GradientTexture2D_qckk8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_03wo7"]
+shader = ExtResource("17_fuers")
+shader_parameter/billboard = false
+shader_parameter/progress = 0.5
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/index_rot = 0.0
+shader_parameter/shimer_speed = 8.0
+shader_parameter/shimer_amt = 0.2
+shader_parameter/points = 8.0
+shader_parameter/arc = 0.1
+shader_parameter/feather = 0.0
+shader_parameter/radi = Vector2(1.5, 0.1)
+shader_parameter/gleam_position = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation = 0.062
+shader_parameter/edge = Vector2(0, 1)
+shader_parameter/ptedt = Vector2(1, 1)
+shader_parameter/ptedtofst = 0.0
+shader_parameter/uvn_str = 0.0
+shader_parameter/enabled_b = 0.0
+shader_parameter/points_b = 3.0
+shader_parameter/arc_b = 0.1
+shader_parameter/radi_b = Vector2(2, 0.25)
+shader_parameter/gleam_position_b = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation_b = null
+shader_parameter/edge_b = Vector2(0, 1)
+shader_parameter/ptedt_b = Vector2(1, 1)
+shader_parameter/ptedtofst_b = 0.0
+shader_parameter/mix_str = 1.0
+shader_parameter/rotate_lookup = 0.0
+shader_parameter/chromatic_offset = Projection(1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_ajayp"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pbrue"]
+gradient = SubResource("Gradient_ajayp")
+width = 16
+height = 16
+
+[sub_resource type="Curve" id="Curve_1rtex"]
+max_value = 3.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.254005, 3), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mprdl"]
+shader = ExtResource("17_fuers")
+shader_parameter/billboard = false
+shader_parameter/progress = 0.5
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/index_rot = 0.0
+shader_parameter/shimer_speed = 8.0
+shader_parameter/shimer_amt = 0.2
+shader_parameter/points = 8.0
+shader_parameter/arc = 0.1
+shader_parameter/feather = 0.1
+shader_parameter/radi = Vector2(2, 0.1)
+shader_parameter/gleam_position = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation = 0.062
+shader_parameter/edge = Vector2(0, 1)
+shader_parameter/ptedt = Vector2(1, 1)
+shader_parameter/ptedtofst = 0.0
+shader_parameter/uvn_str = 0.0
+shader_parameter/enabled_b = 0.0
+shader_parameter/points_b = 3.0
+shader_parameter/arc_b = 0.1
+shader_parameter/radi_b = Vector2(2, 0.25)
+shader_parameter/gleam_position_b = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation_b = null
+shader_parameter/edge_b = Vector2(0, 1)
+shader_parameter/ptedt_b = Vector2(1, 1)
+shader_parameter/ptedtofst_b = 0.0
+shader_parameter/mix_str = 1.0
+shader_parameter/rotate_lookup = 0.0
+shader_parameter/chromatic_offset = Projection(1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dpkxl"]
+shader = ExtResource("17_fuers")
+shader_parameter/billboard = false
+shader_parameter/progress = 0.5
+shader_parameter/derive_progress = 0.0
+shader_parameter/ease_progress = 0.0
+shader_parameter/time_scale = 1.0
+shader_parameter/index_rot = 0.0
+shader_parameter/shimer_speed = 8.0
+shader_parameter/shimer_amt = 0.02
+shader_parameter/points = 4.0
+shader_parameter/arc = 0.25
+shader_parameter/feather = 0.0
+shader_parameter/radi = Vector2(2, 0.5)
+shader_parameter/gleam_position = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation = 0.0
+shader_parameter/edge = Vector2(0, 1)
+shader_parameter/ptedt = Vector2(1, 1)
+shader_parameter/ptedtofst = 0.0
+shader_parameter/uvn_str = 0.0
+shader_parameter/enabled_b = 0.0
+shader_parameter/points_b = 3.0
+shader_parameter/arc_b = 0.1
+shader_parameter/radi_b = Vector2(2, 0.25)
+shader_parameter/gleam_position_b = Vector2(0.5, 0.5)
+shader_parameter/gleam_rotation_b = null
+shader_parameter/edge_b = Vector2(0, 1)
+shader_parameter/ptedt_b = Vector2(1, 1)
+shader_parameter/ptedtofst_b = 0.0
+shader_parameter/mix_str = 1.0
+shader_parameter/rotate_lookup = 0.0
+shader_parameter/chromatic_offset = Projection(1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_7sbh5"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_i0nhs"]
+gradient = SubResource("Gradient_7sbh5")
+width = 8
+height = 8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w14ld"]
+shader = ExtResource("18_mlkp7")
+shader_parameter/active = false
+shader_parameter/tint = Color(1, 1, 1, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0kbk1"]
+atlas = ExtResource("26_ieknf")
+region = Rect2(128, 256, 256, 256)
+
+[node name="Boss" type="CharacterBody2D"]
+y_sort_enabled = true
+motion_mode = 1
+script = ExtResource("1_fk1qu")
+monster_data = SubResource("Resource_4md7q")
+monster_weapon = SubResource("Resource_i2yr6")
+phases = Array[ExtResource("4_ojvrv")]([SubResource("Resource_afkfj"), SubResource("Resource_v7ud8"), SubResource("Resource_va8co"), SubResource("Resource_758qq"), SubResource("Resource_trkg6"), SubResource("Resource_0geux"), SubResource("Resource_0gy8c"), SubResource("Resource_y6e4a")])
+
+[node name="PullVFX" type="CPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+show_behind_parent = true
+material = SubResource("ShaderMaterial_6mmno")
+emitting = false
+amount = 4
+speed_scale = 0.5
+texture = SubResource("GradientTexture2D_op2kc")
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_21qdy")
+
+[node name="PushVFX" type="CPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+show_behind_parent = true
+material = SubResource("ShaderMaterial_t0pa2")
+emitting = false
+amount = 4
+speed_scale = 0.5
+texture = SubResource("GradientTexture2D_op2kc")
+gravity = Vector2(0, 0)
+scale_amount_curve = SubResource("Curve_pb35b")
+
+[node name="HitDetector" type="Area2D" parent="."]
+position = Vector2(0, -52)
+scale = Vector2(4, 4)
+script = ExtResource("15_s0wgw")
+hd_for = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
+visible = false
+shape = SubResource("CircleShape2D_1dp00")
+
+[node name="HitImpactVFX" type="ColorRect" parent="."]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_wq0bb")
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -175.0
+offset_right = 125.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 125)
+mouse_filter = 2
+
+[node name="HitImpactVFXB" type="ColorRect" parent="."]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_c5mmf")
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -175.0
+offset_right = 125.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 125)
+mouse_filter = 2
+
+[node name="Starburst" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_03wo7")
+position = Vector2(0, -50)
+scale = Vector2(4, 4)
+emitting = false
+one_shot = true
+speed_scale = 6.0
+explosiveness = 0.5
+fixed_fps = 60
+texture = SubResource("GradientTexture2D_pbrue")
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 25.0
+scale_amount_curve = SubResource("Curve_1rtex")
+
+[node name="ColorRect" type="ColorRect" parent="Starburst"]
+visible = false
+material = SubResource("ShaderMaterial_mprdl")
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Starburst2" type="CPUParticles2D" parent="."]
+material = SubResource("ShaderMaterial_dpkxl")
+position = Vector2(0, -50)
+scale = Vector2(4, 4)
+emitting = false
+one_shot = true
+speed_scale = 6.0
+explosiveness = 0.5
+fixed_fps = 60
+texture = SubResource("GradientTexture2D_i0nhs")
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+scale_amount_curve = SubResource("Curve_1rtex")
+
+[node name="ColorRect" type="ColorRect" parent="Starburst2"]
+visible = false
+material = SubResource("ShaderMaterial_mprdl")
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_w14ld")
+texture = ExtResource("24_pokb8")
+offset = Vector2(0, -58)
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+visible = false
+position = Vector2(0, -24)
+polygon = PackedVector2Array(83.1425, 8.83625, 77.6514, 17.2863, 68.7664, 24.9809, 56.8761, 31.5837, 42.5, 36.8061, 26.2664, 40.4199, 8.88491, 42.2672, -8.88492, 42.2672, -26.2665, 40.4199, -42.5, 36.8061, -56.8761, 31.5837, -68.7664, 24.9809, -77.6514, 17.2863, -83.1425, 8.83624, -85, -3.8147e-06, -83.1425, -8.83625, -77.6514, -17.2863, -68.7664, -24.9809, -56.8761, -31.5837, -42.5, -36.8061, -26.2665, -40.4199, -8.88491, -42.2672, 8.88491, -42.2672, 26.2665, -40.4199, 42.5, -36.8061, 56.8761, -31.5837, 68.7664, -24.9809, 77.6514, -17.2863, 83.1425, -8.83625, 85, 5.72205e-06)
+
+[node name="Sight" type="RayCast2D" parent="."]
+collision_mask = 7
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="stats" type="Control" parent="CanvasLayer"]
+visible = false
+z_index = 1
+custom_minimum_size = Vector2(640, 360)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/stats"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 90
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 90
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/stats/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="healthbar" type="ProgressBar" parent="CanvasLayer/stats/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+show_percentage = false
+
+[node name="namelbl" type="RichTextLabel" parent="CanvasLayer/stats/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_fonts/normal_font = ExtResource("21_yfa46")
+theme_override_fonts/bold_font = ExtResource("21_yfa46")
+theme_override_font_sizes/normal_font_size = 13
+theme_override_font_sizes/bold_font_size = 13
+bbcode_enabled = true
+text = "Unit Test"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+z_index = -1
+position = Vector2(0, -28)
+texture = SubResource("AtlasTexture_0kbk1")

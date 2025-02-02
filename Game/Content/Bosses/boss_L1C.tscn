@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://ckk6r7mp3cdn7"]
+[gd_scene load_steps=67 format=3 uid="uid://ckk6r7mp3cdn7"]
 
 [ext_resource type="Script" path="res://Game/boss.gd" id="1_tyejs"]
 [ext_resource type="Script" path="res://Game/Schema/Monster.gd" id="2_r544h"]
@@ -18,9 +18,10 @@
 [ext_resource type="Shader" path="res://Assets/Shaders/ProceduralSpark.gdshader" id="16_sme67"]
 [ext_resource type="Shader" path="res://Assets/Shaders/ProceduralGleam.gdshader" id="17_5dm8p"]
 [ext_resource type="Shader" path="res://Assets/Shaders/flash.gdshader" id="18_sel01"]
-[ext_resource type="Texture2D" uid="uid://ciwha02jt854a" path="res://testss.png" id="19_2y6qc"]
+[ext_resource type="Texture2D" uid="uid://cnnvfijrq4q0y" path="res://Assets/Boss/l1atlas.png" id="19_ylbje"]
 [ext_resource type="PackedScene" uid="uid://oas5aab7on8x" path="res://Game/damage_radius.tscn" id="20_0ir1c"]
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="21_xojne"]
+[ext_resource type="Texture2D" uid="uid://86lcot3iin8p" path="res://Assets/shadows.png" id="22_ocfm6"]
 
 [sub_resource type="Resource" id="Resource_ikso4"]
 script = ExtResource("3_hcdf8")
@@ -484,6 +485,10 @@ shader_parameter/tint = Color(1, 1, 1, 1)
 [sub_resource type="CircleShape2D" id="CircleShape2D_k8ypm"]
 radius = 25.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1xax"]
+atlas = ExtResource("22_ocfm6")
+region = Rect2(0, 0, 128, 128)
+
 [node name="Boss" type="CharacterBody2D"]
 y_sort_enabled = true
 motion_mode = 1
@@ -520,6 +525,7 @@ script = ExtResource("15_6wicq")
 hd_for = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
+visible = false
 position = Vector2(0, -13)
 shape = SubResource("CircleShape2D_yofi6")
 
@@ -606,17 +612,14 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Sprite" type="Sprite2D" parent="."]
-self_modulate = Color(1, 0, 0, 1)
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_w14ld")
-scale = Vector2(4, 4)
-texture = ExtResource("19_2y6qc")
-offset = Vector2(0, -14)
-hframes = 3
-vframes = 3
-frame = 1
+texture = ExtResource("19_ylbje")
+offset = Vector2(0, -48)
+vframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -15)
 shape = SubResource("CircleShape2D_k8ypm")
 debug_color = Color(1, 0, 0, 0.0784314)
@@ -674,3 +677,9 @@ text = "Unit Test"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+z_index = -1
+position = Vector2(0, -4)
+texture = SubResource("AtlasTexture_v1xax")

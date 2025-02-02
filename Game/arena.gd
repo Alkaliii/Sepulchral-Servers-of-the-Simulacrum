@@ -16,6 +16,19 @@ func _ready():
 	
 	App.debug_line.connect(debug_draw_line)
 
+func gen_loot():
+	await App.process_frame()
+	var states : Array = []
+	var barrels = get_tree().get_nodes_in_group("loot")
+	for l in barrels:
+		states.append(l.loot_state)
+	
+	if states.has(false):
+		for l in barrels:
+			if l.loot_state:
+				l.queue_free()
+	else: #delete 1
+		barrels.pick_random().queue_free()
 
 func spawn_dmg(pos : Vector2, data : DamageRadiusSettings):
 	var new = DAMAGE_RADIUS.instantiate()
@@ -92,6 +105,7 @@ func load_misc(file : String):
 		add_child(new)
 	App.load_complete.emit()
 	print("loaded ",file)
+	gen_loot()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

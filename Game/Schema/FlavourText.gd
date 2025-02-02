@@ -131,11 +131,14 @@ static var playerNames = [
 
 static var tips = [
 	"Some jobs let you click on players to perform a support skill.",
-	"Some Barrels contain weapons, click to loot them.",
+	"Some barrels contain weapons, click to loot them!",
 	"Stay out of the red!",
 	"Wells contain surprises, try clicking on one.",
 	"Some weapons can heal you as you attack!",
 	"Some weapons can prevent damage or even, deal it back!?",
-	"Weapon damage is a cummulation of dice rolls!",
+	"Weapon damage is an accumulation of dice rolls!",
 	"Watch out for dashes and charges! They can stun you!",
+	"Heavy attacks can interrupt bosses! Time them wisely!",
+	"Once you take on a boss, you can't leave voluntarily!",
+	"Weapon abilities may activate during a light attack!"
 ]

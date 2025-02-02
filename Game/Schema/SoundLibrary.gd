@@ -16,6 +16,8 @@ enum music_files {
 	TOWER_OF_THE_ARCHMAGE, #(HB) Ryan Smith https://audiojungle.net/user/blinnaudio?ref=Blinn
 	NIGHTTIME, #(HB) Andrea Baroni https://andreabaroni.com/ - tutorial 
 	NIGHTTIMENOPERC, #(HB) Andrea Baroni https://andreabaroni.com/ - title screen and ambient
+	BEYOND_SCORCHED_SKIES, #credits
+	BEYOND_SCORCHED_SKIES_NO_VOCAL #end cutscene
 }
 
 static var has_intro : Array[music_files] = [
@@ -30,7 +32,11 @@ static var has_intro : Array[music_files] = [
 ]
 
 #https://ateliermagicae.itch.io/monster-sound-effects-vol1
+#https://ateliermagicae.itch.io/fantasy-ui-sound-effects
 #https://denissetakes.itch.io/crystalcaves # NOTICE needs credit
+#https://kenney.nl/assets/interface-sounds
+#Noam Guterman / Epic Stock Media https://noamguterman.dev/
+
 
 enum sound_files {
 	MONSTER_GROWL_A,
@@ -83,6 +89,8 @@ static func get_file(key) -> String:
 		music_files.TOWER_OF_THE_ARCHMAGE: return "res://Assets/Music/Tower of the Archmage.wav"
 		music_files.NIGHTTIME: return "res://Assets/Music/NightTime_Short(loop)(78).wav"
 		music_files.NIGHTTIMENOPERC: return "res://Assets/Music/NightTime_ShortNoPerc(loop)(78).wav"
+		music_files.BEYOND_SCORCHED_SKIES: return "res://Assets/Music/Beyond_Scorched_Skies.ogg"
+		music_files.BEYOND_SCORCHED_SKIES_NO_VOCAL: return "res://Assets/Music/Beyond_Scorched_Skies-inst.ogg"
 		music_files:return""
 	
 	printerr(key, "NOT FOUND in sound lib")

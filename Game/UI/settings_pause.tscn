@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cfovd0vcbsc4m"]
+[gd_scene load_steps=29 format=3 uid="uid://cfovd0vcbsc4m"]
 
 [ext_resource type="Script" path="res://Game/UI/settings_pause.gd" id="1_pdb2y"]
 [ext_resource type="Texture2D" uid="uid://ga5kr1hn7yih" path="res://Assets/IconAtlas@4x.png" id="1_q03ld"]
@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="3_nwgv4"]
 [ext_resource type="Texture2D" uid="uid://bwg3bhhu8g3le" path="res://Assets/checkOFF.png" id="4_sdnf0"]
 [ext_resource type="Shader" path="res://Assets/Shaders/bounce.gdshader" id="8_0pgh1"]
+[ext_resource type="Shader" path="res://Assets/Shaders/invert.gdshader" id="9_44yad"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kqdru"]
 shader = ExtResource("3_lf2ux")
@@ -133,6 +134,9 @@ corner_radius_top_left = 1024
 corner_radius_top_right = 1024
 corner_radius_bottom_right = 1024
 corner_radius_bottom_left = 1024
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q2fn1"]
+shader = ExtResource("9_44yad")
 
 [node name="Settings" type="Control"]
 custom_minimum_size = Vector2(213, 360)
@@ -498,12 +502,13 @@ mouse_filter = 2
 theme_override_constants/margin_left = 213
 
 [node name="esc2unpause" type="RichTextLabel" parent="MarginContainer2"]
+material = SubResource("ShaderMaterial_q2fn1")
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_fonts/normal_font = ExtResource("3_nwgv4")
 theme_override_fonts/bold_font = ExtResource("3_nwgv4")
 theme_override_font_sizes/normal_font_size = 13

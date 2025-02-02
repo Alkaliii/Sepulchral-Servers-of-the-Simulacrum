@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dqpv64vj40eal"]
+[gd_scene load_steps=16 format=3 uid="uid://dqpv64vj40eal"]
 
 [ext_resource type="Script" path="res://Game/UI/title_screen.gd" id="1_63vr5"]
 [ext_resource type="Shader" path="res://Assets/Shaders/bounce.gdshader" id="1_b65uj"]
@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://b8jarpe87jnne" path="res://Assets/Fonts/white_rabbit/whitrabt.ttf" id="4_drrjm"]
 [ext_resource type="Script" path="res://Game/Schema/Other/Ghost.gd" id="6_4788y"]
 [ext_resource type="Shader" path="res://Assets/Shaders/glitch.gdshader" id="7_1dg58"]
+[ext_resource type="Texture2D" uid="uid://ga5kr1hn7yih" path="res://Assets/IconAtlas@4x.png" id="8_xtw0g"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fxt0"]
 bg_color = Color(1, 1, 1, 1)
@@ -21,6 +22,18 @@ shader_parameter/sine_speed = Vector2(0, 1)
 
 [sub_resource type="RichTextEffect" id="RichTextEffect_jsal6"]
 script = ExtResource("6_4788y")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5jjed"]
+atlas = ExtResource("8_xtw0g")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1tpbl"]
+atlas = ExtResource("8_xtw0g")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrys7"]
+atlas = ExtResource("8_xtw0g")
+region = Rect2(256, 0, 128, 128)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a66rk"]
 shader = ExtResource("7_1dg58")
@@ -195,6 +208,68 @@ theme_override_font_sizes/bold_font_size = 10
 bbcode_enabled = true
 text = "[center]LEFT CLICK TO CONTINUE
 [color=555]RIGHT CLICK TO SKIP"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+custom_effects = [SubResource("RichTextEffect_jsal6")]
+visible_characters_behavior = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2"]
+modulate = Color(0.745098, 0.745098, 0.745098, 0)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = -1
+
+[node name="icn" type="TextureRect" parent="MarginContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+texture = SubResource("AtlasTexture_5jjed")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="icn2" type="TextureRect" parent="MarginContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+texture = SubResource("AtlasTexture_1tpbl")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="icn3" type="TextureRect" parent="MarginContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+texture = SubResource("AtlasTexture_mrys7")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Control" type="Control" parent="MarginContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="systemTime" type="RichTextLabel" parent="MarginContainer2/HBoxContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("4_drrjm")
+theme_override_fonts/bold_font = ExtResource("4_drrjm")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "00:00"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0

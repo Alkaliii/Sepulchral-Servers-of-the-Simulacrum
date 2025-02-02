@@ -347,10 +347,10 @@ func _process(delta):
 
 func _physics_process(delta):
 	#WACKY
-	if Input.is_action_just_pressed("recognize_gesture"):
-		var nw = system_weapon.new()
-		nw.generate_random()
-		App.weapon_inventory.append(nw)
+	#if Input.is_action_just_pressed("recognize_gesture"):
+		#var nw = system_weapon.new()
+		#nw.generate_random()
+		#App.weapon_inventory.append(nw)
 		
 		#job.JOB = [system_job.j.KNIGHT,system_job.j.MAGE,system_job.j.SAINT].pick_random()
 		#SystemUI.push_lateral({

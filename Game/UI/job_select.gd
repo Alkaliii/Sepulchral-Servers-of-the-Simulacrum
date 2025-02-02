@@ -16,7 +16,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if visible:
 		if Input.is_action_just_pressed("MUP"): _on_up_pressed()
 		if Input.is_action_just_pressed("MDOWN"): _on_down_pressed()

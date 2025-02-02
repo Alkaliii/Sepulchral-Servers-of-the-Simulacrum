@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dr1mecmrimbhv"]
+
+[ext_resource type="Texture2D" uid="uid://gm7mws5n4782" path="res://Assets/enviromentalAtlas.png" id="1_w14fv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ku1tg"]
+atlas = ExtResource("1_w14fv")
+region = Rect2(531, 460, 89, 172)
+
+[node name="BigPillar" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_ku1tg")
+offset = Vector2(0, -57)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="dmgShape" type="CollisionPolygon2D" parent="StaticBody2D"]
+z_index = 2
+polygon = PackedVector2Array(42.0603, 4.4701, 39.2825, 8.74484, 34.7877, 12.6374, 28.7726, 15.9776, 21.5, 18.6195, 13.2877, 20.4477, 4.49472, 21.3822, -4.49472, 21.3822, -13.2877, 20.4477, -21.5, 18.6195, -28.7726, 15.9776, -34.7877, 12.6374, -39.2825, 8.74484, -42.0603, 4.4701, -43, -1.90735e-06, -42.0603, -4.4701, -39.2825, -8.74484, -34.7877, -12.6374, -28.7726, -15.9776, -21.5, -18.6195, -13.2877, -20.4477, -4.49472, -21.3822, 4.49472, -21.3822, 13.2877, -20.4477, 21.5, -18.6195, 28.7726, -15.9776, 34.7877, -12.6374, 39.2825, -8.74483, 42.0603, -4.4701, 43, 2.86102e-06)

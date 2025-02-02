@@ -42,6 +42,7 @@ noise = SubResource("FastNoiseLite_2rqqs")
 shader = ExtResource("2_gf0ll")
 shader_parameter/mm_str = 1.5
 shader_parameter/edge_ctrl = Vector2(0.9, 1)
+shader_parameter/polar = false
 shader_parameter/mask_texture = SubResource("NoiseTexture2D_1tpsy")
 shader_parameter/UVscale = Vector2(6.75, 6.75)
 shader_parameter/main_texture_mix = Color(0.329412, 0.329412, 0.329412, 1)
@@ -8205,568 +8206,428 @@ position = Vector2(-68.5042, 65.3803)
 y_sort_enabled = true
 metadata/from_disperse = true
 
-[node name="Tree" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="Tree" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(194.988, 315.3)
 
-[node name="@Node2D@105401" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105401" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-420.574, 258.859)
 
-[node name="@Node2D@105402" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105402" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(453.611, -276.685)
 
-[node name="@Node2D@105403" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105403" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-185.384, -349.382)
 
-[node name="@Node2D@105404" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105404" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(593.864, 162.626)
 
-[node name="@Node2D@105405" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105405" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(468.985, 323.119)
 
-[node name="@Node2D@105406" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105406" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-485.92, -283.067)
 
-[node name="@Node2D@105407" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105407" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-622.737, -205.616)
 
-[node name="@Node2D@105408" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105408" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(229.977, 362.715)
 
-[node name="@Node2D@105409" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105409" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-436.864, -315.447)
 
-[node name="@Node2D@105410" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105410" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(413.864, 291.251)
 
-[node name="@Node2D@105411" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105411" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(183.794, 344.371)
 
-[node name="@Node2D@105412" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105412" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(588.545, 150.803)
 
-[node name="@Node2D@105413" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105413" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(56.1269, 393.904)
 
-[node name="@Node2D@105414" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105414" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(697.343, 193.243)
 
-[node name="@Node2D@105415" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105415" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-647.627, 119.092)
 
-[node name="@Node2D@105416" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105416" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(620.629, -183.323)
 
-[node name="@Node2D@105417" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105417" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(264.063, -310.182)
 
-[node name="@Node2D@105418" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105418" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-593.523, -155.19)
 
-[node name="@Node2D@105419" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105419" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-749.478, -55.4956)
 
-[node name="@Node2D@105420" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105420" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-583.191, -184.103)
 
-[node name="@Node2D@105421" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105421" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(559.135, 191.032)
 
-[node name="@Node2D@105422" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105422" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(515.645, -299.149)
 
-[node name="@Node2D@105423" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105423" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(423.509, -264.787)
 
-[node name="@Node2D@105424" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105424" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-464.565, 308.924)
 
-[node name="@Node2D@105425" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105425" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(165.771, 313.791)
 
-[node name="@Node2D@105426" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105426" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-86.7816, 349.663)
 
-[node name="@Node2D@105427" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105427" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(187.689, -385.55)
 
-[node name="@Node2D@105428" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105428" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-349.13, -358.458)
 
-[node name="@Node2D@105429" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105429" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-659.457, -178.92)
 
-[node name="@Node2D@105430" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105430" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-355.925, 361.719)
 
-[node name="@Node2D@105431" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105431" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-434.525, -268.535)
 
-[node name="@Node2D@105432" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105432" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-307.311, 294.94)
 
-[node name="@Node2D@105433" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105433" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(645.129, 91.7332)
 
-[node name="@Node2D@105434" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105434" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-759.704, 42.9462)
 
-[node name="@Node2D@105435" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105435" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-710.777, -47.6401)
 
-[node name="@Node2D@105436" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105436" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-626.644, -71.6883)
 
-[node name="@Node2D@105437" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105437" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(743.428, 67.0501)
 
-[node name="@Node2D@105438" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105438" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(237.932, -317.662)
 
-[node name="@Node2D@105439" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105439" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(473.28, 293.445)
 
-[node name="@Node2D@105440" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105440" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(567.307, -227.454)
 
-[node name="@Node2D@105441" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105441" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(322.546, 327.078)
 
-[node name="@Node2D@105442" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105442" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-43.2532, -373.13)
 
-[node name="@Node2D@105443" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105443" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(480.492, -254.874)
 
-[node name="@Node2D@105444" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105444" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-171.143, -323.679)
 
-[node name="@Node2D@105445" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105445" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(580.192, 162.156)
 
-[node name="@Node2D@105446" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105446" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-686.716, -83.7725)
 
-[node name="@Node2D@105447" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105447" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-22.4589, 376.104)
 
-[node name="@Node2D@105448" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105448" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(617.695, -154.872)
 
-[node name="@Node2D@105449" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105449" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-689.99, 95.6749)
 
-[node name="@Node2D@105450" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105450" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-51.3463, 333.896)
 
-[node name="@Node2D@105451" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105451" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(552.794, 218.922)
 
-[node name="@Node2D@105452" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105452" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-736.743, 67.0431)
 
-[node name="@Node2D@105453" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105453" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-613.205, -132.09)
 
-[node name="@Node2D@105454" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105454" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(447.772, -209.391)
 
-[node name="@Node2D@105455" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105455" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(425.268, -321.607)
 
-[node name="@Node2D@105456" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105456" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(514.938, -193.844)
 
-[node name="@Node2D@105457" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105457" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(476.677, 259.506)
 
-[node name="@Node2D@105458" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105458" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(323.566, -351.222)
 
-[node name="@Node2D@105459" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105459" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(684.016, -127.833)
 
-[node name="@Node2D@105460" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105460" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(388.081, 302.851)
 
-[node name="@Node2D@105461" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105461" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-290.52, 353.676)
 
-[node name="@Node2D@105462" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105462" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-104.365, 369.237)
 
-[node name="@Node2D@105463" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105463" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(456.822, 289.918)
 
-[node name="@Node2D@105464" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105464" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-71.332, -352.603)
 
-[node name="@Node2D@105465" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105465" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-444.879, -273.043)
 
-[node name="@Node2D@105466" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105466" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(150.766, -363.292)
 
-[node name="@Node2D@105467" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105467" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(-193.053, 382.182)
 
-[node name="@Node2D@105468" type="Node2D" parent="Trees" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@105468" parent="Trees" instance=ExtResource("13_wyar6")]
 position = Vector2(-260.55, 331.15)
 
-[node name="@Node2D@105469" type="Node2D" parent="Trees" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@105469" parent="Trees" instance=ExtResource("12_y7rbx")]
 position = Vector2(717.779, -1.58856)
 
 [node name="Trees2" type="Node2D" parent="."]
 y_sort_enabled = true
 metadata/from_disperse = true
 
-[node name="Tree" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="Tree" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(268.108, 433.537)
 
-[node name="@Node2D@127744" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127744" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-578.289, 355.931)
 
-[node name="@Node2D@127745" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127745" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(623.716, -380.441)
 
-[node name="@Node2D@127746" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127746" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-254.903, -480.4)
 
-[node name="@Node2D@127747" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127747" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(816.563, 223.611)
 
-[node name="@Node2D@127748" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127748" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(644.854, 444.288)
 
-[node name="@Node2D@127749" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127749" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-668.141, -389.217)
 
-[node name="@Node2D@127750" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127750" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-878.263, -255.222)
 
-[node name="@Node2D@127751" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127751" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(305.219, 482.234)
 
-[node name="@Node2D@127752" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127752" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-600.687, -433.74)
 
-[node name="@Node2D@127753" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127753" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(569.063, 400.471)
 
-[node name="@Node2D@127754" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127754" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(252.716, 473.51)
 
-[node name="@Node2D@127755" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127755" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(809.25, 207.354)
 
-[node name="@Node2D@127756" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127756" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(77.1745, 541.619)
 
-[node name="@Node2D@127757" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127757" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(958.847, 265.709)
 
-[node name="@Node2D@127758" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127758" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-890.487, 163.751)
 
-[node name="@Node2D@127759" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127759" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(853.365, -252.069)
 
-[node name="@Node2D@127760" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127760" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(363.087, -426.501)
 
-[node name="@Node2D@127761" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127761" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-816.094, -213.386)
 
-[node name="@Node2D@127762" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127762" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-1025.03, -59.8065)
 
-[node name="@Node2D@127763" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127763" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-801.888, -253.141)
 
-[node name="@Node2D@127764" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127764" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(768.811, 262.669)
 
-[node name="@Node2D@127765" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127765" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(709.012, -411.33)
 
-[node name="@Node2D@127766" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127766" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(582.324, -364.082)
 
-[node name="@Node2D@127767" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127767" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-638.777, 424.771)
 
-[node name="@Node2D@127768" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127768" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(227.935, 431.462)
 
-[node name="@Node2D@127769" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127769" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-119.325, 480.786)
 
-[node name="@Node2D@127770" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127770" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(258.072, -530.131)
 
-[node name="@Node2D@127771" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127771" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-480.053, -492.88)
 
-[node name="@Node2D@127772" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127772" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-906.754, -246.015)
 
-[node name="@Node2D@127773" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127773" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-478.397, 486.364)
 
-[node name="@Node2D@127774" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127774" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-597.472, -369.235)
 
-[node name="@Node2D@127775" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127775" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-422.553, 405.542)
 
-[node name="@Node2D@127776" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127776" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(887.053, 126.133)
 
-[node name="@Node2D@127777" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127777" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-1044.59, 59.0511)
 
-[node name="@Node2D@127778" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127778" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-977.318, -65.5052)
 
-[node name="@Node2D@127779" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127779" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-861.636, -115.071)
 
-[node name="@Node2D@127780" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127780" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(1022.21, 92.1939)
 
-[node name="@Node2D@127781" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127781" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(327.157, -436.785)
 
-[node name="@Node2D@127782" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127782" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(650.76, 403.487)
 
-[node name="@Node2D@127783" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127783" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(780.047, -312.75)
 
-[node name="@Node2D@127784" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127784" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(443.501, 449.732)
 
-[node name="@Node2D@127785" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127785" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-59.4732, -513.054)
 
-[node name="@Node2D@127786" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127786" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(660.676, -350.451)
 
-[node name="@Node2D@127787" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127787" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-235.322, -445.059)
 
-[node name="@Node2D@127788" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127788" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(797.763, 222.965)
 
-[node name="@Node2D@127789" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127789" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-944.234, -115.187)
 
-[node name="@Node2D@127790" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127790" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-52.8809, 484.142)
 
-[node name="@Node2D@127791" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127791" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(849.331, -212.949)
 
-[node name="@Node2D@127792" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127792" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-948.736, 131.553)
 
-[node name="@Node2D@127793" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127793" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-70.6012, 459.106)
 
-[node name="@Node2D@127794" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127794" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(754.592, 279.018)
 
-[node name="@Node2D@127795" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127795" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-1013.02, 70.1843)
 
-[node name="@Node2D@127796" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127796" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-843.157, -181.623)
 
-[node name="@Node2D@127797" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127797" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(604.687, -337.413)
 
-[node name="@Node2D@127798" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127798" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(584.743, -442.21)
 
-[node name="@Node2D@127799" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127799" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(708.04, -266.535)
 
-[node name="@Node2D@127800" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127800" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(655.43, 356.821)
 
-[node name="@Node2D@127801" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127801" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(444.904, -482.93)
 
-[node name="@Node2D@127802" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127802" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(940.523, -175.771)
 
-[node name="@Node2D@127803" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127803" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(533.611, 416.42)
 
-[node name="@Node2D@127804" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127804" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-382.965, 464.304)
 
-[node name="@Node2D@127805" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127805" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-143.501, 507.701)
 
-[node name="@Node2D@127806" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127806" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(628.13, 398.638)
 
-[node name="@Node2D@127807" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127807" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-98.0816, -484.83)
 
-[node name="@Node2D@127808" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127808" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-611.708, -375.435)
 
-[node name="@Node2D@127809" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127809" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(207.303, -499.526)
 
-[node name="@Node2D@127810" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127810" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(-265.448, 525.5)
 
-[node name="@Node2D@127811" type="Node2D" parent="Trees2" instance=ExtResource("13_wyar6")]
-y_sort_enabled = true
+[node name="@Node2D@127811" parent="Trees2" instance=ExtResource("13_wyar6")]
 position = Vector2(-358.257, 455.331)
 
-[node name="@Node2D@127812" type="Node2D" parent="Trees2" instance=ExtResource("12_y7rbx")]
-y_sort_enabled = true
+[node name="@Node2D@127812" parent="Trees2" instance=ExtResource("12_y7rbx")]
 position = Vector2(986.946, -2.18428)
 
 [node name="Disperse2D" type="Node2D" parent="."]
@@ -8868,4 +8729,4 @@ position = Vector2(-382, 260)
 position = Vector2(-316, -132)
 
 [node name="FencePost11" parent="." instance=ExtResource("15_naob5")]
-position = Vector2(-28, 29)
+position = Vector2(846, -64)

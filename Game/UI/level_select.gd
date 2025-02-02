@@ -161,7 +161,7 @@ func _on_start_pressed():
 				"speaker":"nme",
 				"message":"Voting will end in 30 seconds!",
 				"type":LateralNotification.nt.WARN,
-				"duration":4.0
+				"duration":25.0
 				})
 			var timer = 30.0
 			var second_warning := false
@@ -230,12 +230,13 @@ func _on_start_pressed():
 				if !false in Plyrm.get_all_player_state("pREADY"):
 					break
 				if timeout <= 0.0:
-					SystemUI.sync_and_push_lateral({
-					"speaker":"nme",
-					"message":"Timeout",
-					"type":LateralNotification.nt.WARN,
-					"duration":4.0
-					})
+					App._log_err(["Timeout"])
+					#SystemUI.sync_and_push_lateral({
+					#"speaker":"nme",
+					#"message":"Timeout",
+					#"type":LateralNotification.nt.WARN,
+					#"duration":4.0
+					#})
 					break
 			
 			SystemUI.sync_and_set_background(false)

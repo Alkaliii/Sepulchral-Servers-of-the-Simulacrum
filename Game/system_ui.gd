@@ -75,6 +75,11 @@ func set_background(state : bool, colr : Color = Color.BLACK):
 			#background_texture.material.set_shader_parameter("polar_coordinates",[true,false].pick_random())
 			#background_texture.material.set_shader_parameter("spin_rotation",randf_range(5,-5))
 
+func fade_background():
+	await create_tween().tween_property(background,"modulate:a",0.0,1.0).set_ease(Tween.EASE_IN_OUT)
+	background.hide()
+	background.scale.y = -1
+
 func sync_and_set_title(state : bool = true, shake : int = 2, title : String = "", subtitle : String = "", s_colr : Color = Color("#e34262")):
 	var data = {
 		"state":state,
@@ -106,7 +111,7 @@ func set_title(state : bool = true, shake : int = 2, title : String = "", subtit
 			if weapon_inventory.visible: open_w_inv()
 			titlecont.show()
 			titletext.clear()
-			if s_colr == Color.BLACK:
+			if s_colr == Color.BLACK or title.contains("the end"):
 				title_background.hide()
 			else: title_background.show()
 			if subtitle != "":
@@ -243,6 +248,13 @@ func remove_lateral(id : String):
 	for n : LateralNotification in lat_notifications.get_children():
 		if n.id == id:
 			n.remove()
+
+func lat_pop_back():
+	lat_notifications.get_child(0).remove()
+
+func clear_lateral():
+	for n : LateralNotification in lat_notifications.get_children():
+		n.remove()
 
 func set_lateral_duration(id : String, new_duration : float):
 	for n : LateralNotification in lat_notifications.get_children():

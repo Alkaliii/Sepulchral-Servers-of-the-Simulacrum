@@ -279,7 +279,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="SETTINGS" type="Button" parent="VBoxContainer/HBoxContainer"]
-modulate = Color(1, 1, 1, 0.498039)
+self_modulate = Color(1, 1, 1, 0.498039)
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_qhfdv")
@@ -343,4 +343,5 @@ autowrap_mode = 0
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/PLAY" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/MULTIPLAYER" to="." method="_on_multiplayer_pressed"]
+[connection signal="text_submitted" from="VBoxContainer/HBoxContainer/HBoxContainer/roomInput" to="." method="_on_room_input_text_submitted"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/SETTINGS" to="." method="_on_settings_pressed"]

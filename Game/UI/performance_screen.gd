@@ -24,10 +24,14 @@ func _ready():
 	nextbtn.pressed.connect(on_next_pressed)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 func on_next_pressed():
+	if App.current_floor == 4:
+		await appear(false)
+		App.load_level(6)
+		return
 	nextbtn.release_focus()
 	#show level select
 	await appear(false)
@@ -76,6 +80,8 @@ func appear(state:bool):
 			position.x = get_viewport().size.x
 
 func setlist():
+	#A better way to do this is to RPC clients to send their data to others
+	#and have others set data into this screen as RPC calls come in
 	size_list()
 	
 	App.set_floor_complete(App.current_floor)
@@ -96,7 +102,7 @@ func setlist():
 		var all_rev : Array = []
 		var all_click : Array = []
 		for i in Plyrm.connected_players:
-			var metric = i.getState("pMetrics")
+			var metric = Plyrm.connected_players[i].getState("pMetrics")
 			var data
 			if metric:
 				data = JSON.parse_string(metric)
@@ -147,6 +153,10 @@ func setlist():
 	
 	var idx = 0
 	for i : perfStatListing in list.get_children():
+		if idx >= perfdata.size(): 
+			printerr("Missing Metric Data, skipping rows")
+			App._log_err(["Missing Metric Data, skipping rows"])
+			continue
 		i.setlisting(perfdata[idx])
 		idx += 1
 	

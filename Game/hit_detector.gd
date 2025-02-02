@@ -30,7 +30,7 @@ func _ready():
 		sight_subject = get_parent()
 
 var exit : bool = false
-func _input_event(viewport, event, shape_idx):
+func _input_event(_viewport, event, _shape_idx):
 	if disabled: return
 	if !App.can_click: return
 	if event is InputEventMouseButton:

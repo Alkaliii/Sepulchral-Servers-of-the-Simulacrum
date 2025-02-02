@@ -102,7 +102,10 @@ func line(origin : Vector2, _m : system_monster_controller) -> Array[Vector2]:
 	var tp : Array[Vector2] = [to_position]
 	var points : Array[Vector2] = [origin]
 	
-	if derive_dir == ld.GAME_OBJECT: tp = _get_spawn_position_raw(_m, to_object_position)
+	if derive_dir == ld.GAME_OBJECT: 
+		tp = _get_spawn_position_raw(_m, to_object_position)
+		if to_object_position in [phaseAttackOption.s.RANDOM_PLAYER,phaseAttackOption.s.POSITION_BETWEEN_BOSS_AND_PLAYER]:
+			_m.stare(tp.pick_random() - _m.global_position)
 	elif derive_dir == ld.RANDPOS: tp = [Vector2.from_angle(randf_range(0, TAU))]
 	
 	
