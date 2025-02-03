@@ -1,6 +1,7 @@
-
-![bannerA](https://github.com/user-attachments/assets/e3cb69f6-f51a-4b64-b90f-ffb1d4a81e80)
-![screenshot_2025-02-02T06-51-49](https://github.com/user-attachments/assets/bde3d6dd-b26a-4f8b-82b4-3db1acf109cf)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8c440dd9-70c2-4c1b-9d33-9c217f267d73" />
+  <img src="https://github.com/user-attachments/assets/bde3d6dd-b26a-4f8b-82b4-3db1acf109cf" />
+</p>
 
 # Sepulchral Servers of the Simulacrum
 Welcome, this repository contains the source code for my game jam game SSS. A game about an NPC in an MMO. It was made for the 2025 Boss Rush Jam with the theme "spin". You probably already knew that if you're here. Maybe. I don't know why you're here. Regardless you are. 
